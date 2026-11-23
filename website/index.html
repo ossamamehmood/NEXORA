@@ -5,59 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NEXORA — Your system. Under control.</title>
   <meta name="description" content="NEXORA is a high-performance Windows PC cleaner, privacy manager, and system maintenance suite built with native Rust and Tauri 2. 100% transparent with zero background services.">
-  <meta name="keywords" content="PC cleaner, Windows 11 cleaner, privacy manager, system maintenance, duplicate finder, disk analyzer, gaming mode">
-  
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="NEXORA — Your system. Under control.">
-  <meta property="og:description" content="High-performance PC cleaner and system maintenance suite for Windows 11 & 10. Built with Rust and Tauri 2.">
-  <meta property="og:url" content="https://nexoraexe-beta.vercel.app/">
-  
+  <meta name="keywords" content="PC cleaner, Windows 11 cleaner, privacy manager, system maintenance, duplicate finder, disk analyzer, gaming mode, open source clean architecture">
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Ambient Dot Grid & Hyperflow Neon Ribbon Background -->
-  <div class="hyperflow-bg">
+  <!-- Ambient Atmosphere: Dots, Volumetric Ribbon & Kinetic Marquee -->
+  <div class="hyperflow-bg" aria-hidden="true">
     <div class="hyperflow-dots"></div>
+
+    <!-- Volumetric Fluid Glowing Ribbon -->
     <svg class="hyperflow-ribbon" viewBox="0 0 1440 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M-200 800 C 300 1200, 600 200, 1000 300 C 1400 400, 1300 900, 1600 1000" stroke="url(#ribbonGrad1)" stroke-width="220" stroke-linecap="round"/>
-      <path d="M 1600 200 C 1200 -100, 900 800, 500 700 C 100 600, 200 100, -200 0" stroke="url(#ribbonGrad2)" stroke-width="220" stroke-linecap="round"/>
+      <path d="M-200 800 C 300 1200, 600 200, 1000 300 C 1400 400, 1300 900, 1600 1000" stroke="url(#brandGradientBg)" stroke-width="140" stroke-linecap="round" fill="none" />
+      <path d="M 1600 200 C 1200 -100, 900 800, 500 700 C 100 600, 200 100, -200 0" stroke="url(#brandGradientBg)" stroke-width="140" stroke-linecap="round" fill="none" />
       <defs>
-        <linearGradient id="ribbonGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#02FEDC"/>
-          <stop offset="50%" stop-color="#5A5CFF"/>
-          <stop offset="100%" stop-color="#F502FD"/>
-        </linearGradient>
-        <linearGradient id="ribbonGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#F502FD"/>
-          <stop offset="50%" stop-color="#5A5CFF"/>
-          <stop offset="100%" stop-color="#02FEDC"/>
+        <linearGradient id="brandGradientBg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#02FEDC" stop-opacity="0.9" />
+          <stop offset="50%" stop-color="#5A5CFF" stop-opacity="0.85" />
+          <stop offset="100%" stop-color="#F502FD" stop-opacity="0.75" />
         </linearGradient>
       </defs>
     </svg>
+
+    <!-- Kinetic Scrolling Typography Marquee -->
+    <div class="kinetic-marquee" aria-hidden="true">
+      NEXORA • SYSTEM INTEGRITY • NATIVE RUST • ZERO TELEMETRY • HIGH PERFORMANCE GAMING • CLEAN ARCHITECTURE • 
+    </div>
   </div>
 
-  <!-- Header -->
+  <!-- Navigation Header -->
   <header>
     <div class="container nav-wrapper">
       <a href="index.html" class="brand-logo">
-        <svg width="28" height="28" viewBox="0 0 512 512" fill="none">
-          <rect width="512" height="512" rx="100" fill="#11131A"/>
-          <path d="M 256,68 L 406,144 L 406,306 C 406,380 342,434 256,456 C 170,434 106,380 106,306 L 106,144 Z" fill="#171A23" stroke="#02FEDC" stroke-width="12"/>
-          <path d="M 184,176 L 220,176 L 220,336 L 184,336 Z" fill="#02FEDC"/>
-          <path d="M 292,176 L 328,176 L 328,336 L 292,336 Z" fill="#F502FD"/>
-          <path d="M 184,176 L 230,176 L 328,336 L 282,336 Z" fill="url(#brandGrad)"/>
-          <defs>
-            <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#02FEDC"/>
-              <stop offset="50%" stop-color="#5A5CFF"/>
-              <stop offset="100%" stop-color="#F502FD"/>
-            </linearGradient>
-          </defs>
-        </svg>
-        NEX<span class="gradient-text">ORA</span>
+        <div class="brand-icon">
+          <div class="brand-icon-inner">N</div>
+        </div>
+        <span>NEX<span class="gradient-text">ORA</span></span>
       </a>
 
       <nav>
@@ -67,7 +52,6 @@
           <li><a href="docs.html">Documentation</a></li>
           <li><a href="support.html">Support</a></li>
           <li><a href="download.html">Download</a></li>
-          <li><a href="app/" target="_blank" style="color: #02FEDC; font-weight: 600;">Live Web Demo</a></li>
         </ul>
       </nav>
 
@@ -82,188 +66,199 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="container">
-      <div class="hero-badge">
+      <div class="energy-badge">
         <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#00E699; box-shadow: 0 0 8px #00E699;"></span>
-        Production Release Candidate v1.0.0-rc.1 — Windows 11 & 10 Certified
+        Production Release v1.0.0 — Native 64-bit Architecture
       </div>
 
       <h1>Your system. <span class="gradient-text">Under control.</span></h1>
       <p>
-        The modern, transparent PC maintenance suite engineered in native Rust and Tauri 2. Reclaim disk storage, protect browser privacy, and optimize gaming performance without scare tactics, background surveillance, or registry corruption.
+        The uncompromising Windows PC maintenance and performance suite engineered in native Rust and Tauri 2. Reclaim disk space, secure privacy, and optimize gaming threads with mathematical safety, zero background telemetry, and zero registry corruption.
       </p>
 
       <div class="hero-actions">
         <a href="download.html" class="btn-primary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download for Windows (64-bit)
+          Download for Windows 11 & 10
         </a>
-        <a href="app/" target="_blank" class="btn-secondary">
-          Try Live Web Demo →
+        <a href="features.html" class="btn-secondary">
+          Explore System Engine →
         </a>
       </div>
 
-      <!-- Interactive App Window Preview -->
-      <div class="app-window-preview spotlight-card">
-        <div class="window-titlebar">
-          <div class="dot dot-red"></div>
-          <div class="dot dot-yellow"></div>
-          <div class="dot dot-green"></div>
-          <span class="window-title">NEXORA Desktop Suite — Interactive System Telemetry</span>
-        </div>
-
-        <!-- Interactive Feature Tabs -->
-        <div class="feature-tabs-bar">
-          <button class="tab-pill active" data-feature-tab="cleaner">Smart Cleaner</button>
-          <button class="tab-pill" data-feature-tab="gaming">Gaming Mode</button>
-          <button class="tab-pill" data-feature-tab="privacy">Privacy Center</button>
-          <button class="tab-pill" data-feature-tab="monitor">Process Monitor</button>
-          <button class="tab-pill" data-feature-tab="quarantine">Quarantine Vault</button>
-        </div>
-
-        <!-- Tab Panel 1: Smart Cleaner -->
-        <div data-feature-preview="cleaner">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
-            <div>
-              <h3 style="font-size: 17px; font-weight: 700; color: #F5F7FA;">Smart Storage & Cache Engine</h3>
-              <p style="font-size: 13px; color: #969BAA;">Pre-validated temporary file candidate identification with 1-click dry-run rollback quarantine.</p>
-            </div>
-            <span style="background: rgba(2, 254, 220, 0.1); border: 1px solid rgba(2, 254, 220, 0.25); color: #02FEDC; font-family: monospace; font-size: 11px; padding: 4px 10px; border-radius: 6px;">
-              Anti-TOCTOU Active
-            </span>
+      <!-- 3D Perspective Desktop Application Showcase -->
+      <div class="perspective-stage">
+        <div class="perspective-showcase">
+          <div class="window-titlebar">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <span class="window-title">NEXORA Desktop Suite — Native Engine Console</span>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Reclaimable Space</span>
-              <p style="font-size: 24px; font-weight: 800; color: #02FEDC; font-family: monospace; margin-top: 4px;">4.89 GB</p>
-            </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Candidate Files</span>
-              <p style="font-size: 24px; font-weight: 800; color: #F5F7FA; font-family: monospace; margin-top: 4px;">3,412</p>
-            </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Scan Latency</span>
-              <p style="font-size: 24px; font-weight: 800; color: #5A5CFF; font-family: monospace; margin-top: 4px;">470 ms</p>
-            </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Safety Guarantee</span>
-              <p style="font-size: 24px; font-weight: 800; color: #00E699; font-family: monospace; margin-top: 4px;">100% Rollback</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab Panel 2: Gaming Mode -->
-        <div data-feature-preview="gaming" class="hidden">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
-            <div>
-              <h3 style="font-size: 17px; font-weight: 700; color: #F5F7FA;">Deterministic Gaming Mode</h3>
-              <p style="font-size: 13px; color: #969BAA;">Elevates game thread priority to High and applies Windows High Performance power scheme reversibly.</p>
-            </div>
-            <span style="background: rgba(245, 2, 253, 0.1); border: 1px solid rgba(245, 2, 253, 0.25); color: #F502FD; font-family: monospace; font-size: 11px; padding: 4px 10px; border-radius: 6px;">
-              Crash Recovery Journal Active
-            </span>
+          <!-- Feature Showcase Selector Tabs -->
+          <div class="showcase-tabs">
+            <button class="showcase-tab active" data-feature-tab="smart-cleaner">⚡ Smart Cleaner</button>
+            <button class="showcase-tab" data-feature-tab="gaming-mode">🎮 Reversible Gaming Mode</button>
+            <button class="showcase-tab" data-feature-tab="privacy-center">🛡️ Privacy Shield</button>
+            <button class="showcase-tab" data-feature-tab="system-monitor">📊 Process Inspector</button>
+            <button class="showcase-tab" data-feature-tab="quarantine-vault">🗄️ Quarantine Vault</button>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Process Priority</span>
-              <p style="font-size: 24px; font-weight: 800; color: #02FEDC; font-family: monospace; margin-top: 4px;">HIGH (Elevated)</p>
+          <!-- Interactive Viewport -->
+          <div class="showcase-viewport">
+            <!-- 1. Smart Cleaner View -->
+            <div data-feature-preview="smart-cleaner">
+              <div class="telemetry-row">
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Reclaimable Storage</div>
+                  <div class="telemetry-box-val" style="color: #02FEDC;">14.82 GB</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Target Files</div>
+                  <div class="telemetry-box-val">18,421</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Safety Mode</div>
+                  <div class="telemetry-box-val" style="color: #00E699;">Dry-Run Verified</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Anti-TOCTOU</div>
+                  <div class="telemetry-box-val">Active</div>
+                </div>
+              </div>
+              <div class="card" style="padding: 20px; background: rgba(18,22,34,0.4);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+                  <span style="font-weight: 700; font-size: 14px;">High-Yield Safe Target Categories</span>
+                  <span style="font-size: 11px; color: #02FEDC; font-family: monospace;">Quarantine Staging Enabled</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--text-secondary);">
+                  <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 6px;">
+                    <span>%TEMP% & Windows Temp Remnants</span>
+                    <span style="font-family: monospace; color: #F5F7FA;">6.14 GB (10,410 files)</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 6px;">
+                    <span>Windows Update Staging Download Cache</span>
+                    <span style="font-family: monospace; color: #F5F7FA;">4.92 GB (1,240 files)</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 6px;">
+                    <span>Application Crash Dumps & Diagnostic Traces</span>
+                    <span style="font-family: monospace; color: #F5F7FA;">2.48 GB (85 files)</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Power Scheme</span>
-              <p style="font-size: 24px; font-weight: 800; color: #5A5CFF; font-family: monospace; margin-top: 4px;">High Performance</p>
-            </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Background Latency</span>
-              <p style="font-size: 24px; font-weight: 800; color: #00E699; font-family: monospace; margin-top: 4px;">Zero Contention</p>
-            </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Rollback Invariant</span>
-              <p style="font-size: 24px; font-weight: 800; color: #F502FD; font-family: monospace; margin-top: 4px;">100% Reversible</p>
-            </div>
-          </div>
-        </div>
 
-        <!-- Tab Panel 3: Privacy Center -->
-        <div data-feature-preview="privacy" class="hidden">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
-            <div>
-              <h3 style="font-size: 17px; font-weight: 700; color: #F5F7FA;">Privacy Center & Browser Hygiene</h3>
-              <p style="font-size: 13px; color: #969BAA;">Clears stale web caches across Chrome, Edge, Firefox, and Brave without ever touching stored passwords or active logins.</p>
+            <!-- 2. Gaming Mode View -->
+            <div data-feature-preview="gaming-mode" class="hidden">
+              <div class="telemetry-row">
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Active Process</div>
+                  <div class="telemetry-box-val" style="color: #02FEDC;">cs2.exe</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Thread Priority</div>
+                  <div class="telemetry-box-val" style="color: #00E699;">High Priority</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Power Scheme</div>
+                  <div class="telemetry-box-val">High Performance</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Recovery Journal</div>
+                  <div class="telemetry-box-val" style="color: #5A5CFF;">Armed</div>
+                </div>
+              </div>
+              <div class="card" style="padding: 20px; background: rgba(18,22,34,0.4);">
+                <span style="font-weight: 700; font-size: 14px; display: block; margin-bottom: 8px;">Reversible Windows System Scheduling</span>
+                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                  Elevates active game thread priority using native Win32 <code>SetPriorityClass</code> without intrusive kernel hooks or anti-cheat conflicts. Background applications are safely throttled, and all state modifications are automatically restored to neutral upon game exit.
+                </p>
+              </div>
             </div>
-            <span style="background: rgba(90, 92, 255, 0.1); border: 1px solid rgba(90, 92, 255, 0.25); color: #5A5CFF; font-family: monospace; font-size: 11px; padding: 4px 10px; border-radius: 6px;">
-              Credentials Isolated
-            </span>
-          </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Protected Logins</span>
-              <p style="font-size: 24px; font-weight: 800; color: #00E699; font-family: monospace; margin-top: 4px;">100% Preserved</p>
+            <!-- 3. Privacy Center View -->
+            <div data-feature-preview="privacy-center" class="hidden">
+              <div class="telemetry-row">
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Browsers Protected</div>
+                  <div class="telemetry-box-val" style="color: #02FEDC;">4 Active</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Tracking Tokens</div>
+                  <div class="telemetry-box-val">4,819 Purged</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Passwords & Logins</div>
+                  <div class="telemetry-box-val" style="color: #00E699;">100% Preserved</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Local SQLite</div>
+                  <div class="telemetry-box-val">Isolated</div>
+                </div>
+              </div>
+              <div class="card" style="padding: 20px; background: rgba(18,22,34,0.4);">
+                <span style="font-weight: 700; font-size: 14px; display: block; margin-bottom: 8px;">Deterministic Browser Privacy Isolation</span>
+                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                  Cleans transient script caches, beacon traces, and offline resource bundles across Chrome, Edge, Brave, and Firefox. Saved credentials, active session tokens, and bookmarks remain untouchable.
+                </p>
+              </div>
             </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Web Cache Purged</span>
-              <p style="font-size: 24px; font-weight: 800; color: #02FEDC; font-family: monospace; margin-top: 4px;">1.42 GB</p>
-            </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Trackers Mitigated</span>
-              <p style="font-size: 24px; font-weight: 800; color: #5A5CFF; font-family: monospace; margin-top: 4px;">12,840</p>
-            </div>
-          </div>
-        </div>
 
-        <!-- Tab Panel 4: System Monitor -->
-        <div data-feature-preview="monitor" class="hidden">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
-            <div>
-              <h3 style="font-size: 17px; font-weight: 700; color: #F5F7FA;">Live Process Telemetry & Kernel Shield</h3>
-              <p style="font-size: 13px; color: #969BAA;">Real-time hardware inspection with a protected process shield that blocks accidental termination of system32 core tasks.</p>
+            <!-- 4. System Monitor View -->
+            <div data-feature-preview="system-monitor" class="hidden">
+              <div class="telemetry-row">
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">CPU Telemetry</div>
+                  <div class="telemetry-box-val" style="color: #02FEDC;">16 Cores (8%)</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Physical RAM</div>
+                  <div class="telemetry-box-val">12.4 GB / 32 GB</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Kernel Shield</div>
+                  <div class="telemetry-box-val" style="color: #00E699;">Enforced</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Background Daemons</div>
+                  <div class="telemetry-box-val" style="color: #5A5CFF;">0 Services</div>
+                </div>
+              </div>
+              <div class="card" style="padding: 20px; background: rgba(18,22,34,0.4);">
+                <span style="font-weight: 700; font-size: 14px; display: block; margin-bottom: 8px;">Protected Process Shield</span>
+                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                  Monitors active processes with hardware counter telemetry. Hardcoded kernel protection shields prevent accidental termination of critical Windows services like <code>csrss.exe</code>, <code>lsass.exe</code>, and <code>explorer.exe</code>.
+                </p>
+              </div>
             </div>
-            <span style="background: rgba(0, 230, 153, 0.1); border: 1px solid rgba(0, 230, 153, 0.25); color: #00E699; font-family: monospace; font-size: 11px; padding: 4px 10px; border-radius: 6px;">
-              Protected System Whitelist
-            </span>
-          </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">System Idle CPU</span>
-              <p style="font-size: 24px; font-weight: 800; color: #02FEDC; font-family: monospace; margin-top: 4px;">0.0% Overhead</p>
-            </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Monitored Tasks</span>
-              <p style="font-size: 24px; font-weight: 800; color: #F502FD; font-family: monospace; margin-top: 4px;">164 Processes</p>
-            </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Protected Windows PIDs</span>
-              <p style="font-size: 24px; font-weight: 800; color: #00E699; font-family: monospace; margin-top: 4px;">21 Core Services</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab Panel 5: Quarantine Vault -->
-        <div data-feature-preview="quarantine" class="hidden">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
-            <div>
-              <h3 style="font-size: 17px; font-weight: 700; color: #F5F7FA;">Atomic Quarantine Vault</h3>
-              <p style="font-size: 13px; color: #969BAA;">Deleted items are staged in an on-device isolated vault. Click any record to restore it byte-for-byte to its original directory.</p>
-            </div>
-            <span style="background: rgba(2, 254, 220, 0.1); border: 1px solid rgba(2, 254, 220, 0.25); color: #02FEDC; font-family: monospace; font-size: 11px; padding: 4px 10px; border-radius: 6px;">
-              SQLite Audit Journal
-            </span>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Vault Storage</span>
-              <p style="font-size: 24px; font-weight: 800; color: #02FEDC; font-family: monospace; margin-top: 4px;">1.39 MB Staged</p>
-            </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Restore Time</span>
-              <p style="font-size: 24px; font-weight: 800; color: #00E699; font-family: monospace; margin-top: 4px;">&lt; 5 ms (Instant)</p>
-            </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 18px; border-radius: 12px;">
-              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Retention Window</span>
-              <p style="font-size: 24px; font-weight: 800; color: #5A5CFF; font-family: monospace; margin-top: 4px;">14 Days Default</p>
+            <!-- 5. Quarantine Vault View -->
+            <div data-feature-preview="quarantine-vault" class="hidden">
+              <div class="telemetry-row">
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Quarantined Files</div>
+                  <div class="telemetry-box-val" style="color: #02FEDC;">8,914</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Vault Compression</div>
+                  <div class="telemetry-box-val">4.12 GB (1:2.4)</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Rollback Reliability</div>
+                  <div class="telemetry-box-val" style="color: #00E699;">100% Lossless</div>
+                </div>
+                <div class="telemetry-box">
+                  <div class="telemetry-box-title">Retention Policy</div>
+                  <div class="telemetry-box-val">30 Days</div>
+                </div>
+              </div>
+              <div class="card" style="padding: 20px; background: rgba(18,22,34,0.4);">
+                <span style="font-weight: 700; font-size: 14px; display: block; margin-bottom: 8px;">Single-Click Lossless File Restoration</span>
+                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                  Every cleaned file is staged into an isolated on-device vault by default. If an application requires a cached file after cleanup, restore it instantly with byte-for-byte fidelity.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -271,192 +266,69 @@
     </div>
   </section>
 
-  <!-- 4 Core Philosophies with 3D Tilt Cards -->
+  <!-- Core Invariants Section -->
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Engineering Philosophy</span>
-        <h2 class="section-title">Built on Honesty & Safety</h2>
-        <p class="section-desc">Legacy PC utilities rely on aggressive scare tactics, registry destruction, and silent background telemetry. NEXORA was engineered to be the exact opposite.</p>
+        <span class="section-tag">Engineering Guarantees</span>
+        <h2 class="section-title">The NEXORA Safety Standard</h2>
+        <p class="section-desc">Safety before cleaning. How NEXORA protects your files and operating system files by design.</p>
       </div>
 
-      <div class="grid-2">
-        <div class="card tilt-card spotlight-card">
-          <div class="card-icon" style="color: #02FEDC;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <h3 class="card-title">1. Safety Before Cleaning</h3>
-          <p class="card-desc">Every candidate path is validated against strict filesystem boundaries. Operating system roots, personal documents, and browser credential stores are mathematically prohibited from deletion.</p>
+      <div class="grid-3">
+        <div class="card tilt-card">
+          <div class="card-icon" style="color: #02FEDC;">🛡️</div>
+          <h3 class="card-title">Zero Document Touch</h3>
+          <p class="card-desc">Personal directories (Documents, Desktop, Pictures, Videos, OneDrive) are strictly blocked by hardcoded boundary barriers.</p>
         </div>
 
-        <div class="card tilt-card spotlight-card">
-          <div class="card-icon" style="color: #5A5CFF;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </div>
-          <h3 class="card-title">2. Transparency Before Automation</h3>
-          <p class="card-desc">No cleaning occurs without your review and dry-run confirmation. Files marked for removal are staged in an on-device Quarantine Vault, enabling instant 1-click byte-for-byte recovery.</p>
+        <div class="card tilt-card">
+          <div class="card-icon" style="color: #5A5CFF;">⚡</div>
+          <h3 class="card-title">Czkawka 3-Stage Scanning</h3>
+          <p class="card-desc">Adopted from the open-source Czkawka Rust engine: 4KB pre-hash header filtering delivers 50x faster duplicate detection with zero false collisions.</p>
         </div>
 
-        <div class="card tilt-card spotlight-card">
-          <div class="card-icon" style="color: #00E699;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </div>
-          <h3 class="card-title">3. Privacy by Default</h3>
-          <p class="card-desc">Zero background surveillance telemetry. Zero personal documents or browsing logs are collected. Optional beta feedback sharing is strictly opt-in and lets you inspect the raw JSON metadata beforehand.</p>
+        <div class="card tilt-card">
+          <div class="card-icon" style="color: #00E699;">🗄️</div>
+          <h3 class="card-title">Quarantine Staging</h3>
+          <p class="card-desc">Cleaned files are staged into an on-device vault with compressed local indexing. Restore any file with a single click.</p>
         </div>
 
-        <div class="card tilt-card spotlight-card">
-          <div class="card-icon" style="color: #F502FD;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          </div>
-          <h3 class="card-title">4. Zero Background Overhead</h3>
-          <p class="card-desc">NEXORA runs only when you launch it. It installs zero background services, zero startup daemons, and consumes exactly 0.0% CPU when closed.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- The 8-Stage Cleaning Lifecycle -->
-  <section class="section" style="background: rgba(11, 13, 19, 0.4);">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Deterministic Workflow</span>
-        <h2 class="section-title">The 8-Stage Cleaning Lifecycle</h2>
-        <p class="section-desc">Complete user control over every stage of the maintenance process.</p>
-      </div>
-
-      <div class="styled-table-wrapper spotlight-card" style="padding: 0;">
-        <table class="styled-table">
-          <thead>
-            <tr>
-              <th>Stage</th>
-              <th>Action</th>
-              <th>Safety Invariant</th>
-              <th>User Guarantee</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong style="color: #02FEDC;">1. SCAN</strong></td>
-              <td>Traverses authorized cache directories</td>
-              <td><code>follow_links(false)</code> blocks symlink traversal</td>
-              <td>Read-only; zero filesystem modifications</td>
-            </tr>
-            <tr>
-              <td><strong style="color: #02FEDC;">2. REVIEW</strong></td>
-              <td>Stratifies findings by risk tier (Low / Med / High)</td>
-              <td>Explicit path and file-count classification</td>
-              <td>Exact itemized visibility</td>
-            </tr>
-            <tr>
-              <td><strong style="color: #02FEDC;">3. SELECT</strong></td>
-              <td>Enables granular category selection</td>
-              <td>Defaults to safe, low-risk temporary caches</td>
-              <td>You choose what is considered for cleanup</td>
-            </tr>
-            <tr>
-              <td><strong style="color: #02FEDC;">4. PREVIEW</strong></td>
-              <td>Generates dry-run confirmation modal</td>
-              <td>Calculates exact reclaimable byte count</td>
-              <td>No surprises prior to destructive action</td>
-            </tr>
-            <tr>
-              <td><strong style="color: #5A5CFF;">5. CONFIRM</strong></td>
-              <td>Explicit user approval requirement</td>
-              <td>Prohibits accidental automated unlinking</td>
-              <td>Complete operational sovereignty</td>
-            </tr>
-            <tr>
-              <td><strong style="color: #5A5CFF;">6. QUARANTINE</strong></td>
-              <td>Atomic move to encrypted on-device vault</td>
-              <td>Pre-removal staging prevents permanent loss</td>
-              <td>Rollback capable at any time</td>
-            </tr>
-            <tr>
-              <td><strong style="color: #00E699;">7. CLEAN</strong></td>
-              <td>Unlinks confirmed staged items safely</td>
-              <td>Path re-validation immediately prior to unlink</td>
-              <td>Protected system files remain untouched</td>
-            </tr>
-            <tr>
-              <td><strong style="color: #00E699;">8. REPORT</strong></td>
-              <td>Logs byte savings and skipped item tallies</td>
-              <td>Persistent on-disk SQLite history record</td>
-              <td>Transparent audit trail</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Interactive FAQ Section -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Transparency & Answers</span>
-        <h2 class="section-title">Frequently Asked Questions</h2>
-        <p class="section-desc">Clear, objective answers without marketing ambiguity.</p>
-      </div>
-
-      <div class="faq-list">
-        <div class="faq-item spotlight-card active">
-          <div class="faq-question">
-            <span>Why doesn't NEXORA clean the Windows Registry?</span>
-            <span class="faq-chevron">▼</span>
-          </div>
-          <div class="faq-answer">
-            Microsoft has explicitly documented that automated registry cleaners offer zero measurable performance benefit and routinely cause unrecoverable system corruption by deleting valid component registration keys. NEXORA strictly protects registry integrity and never runs speculative registry sweepers.
-          </div>
+        <div class="card tilt-card">
+          <div class="card-icon" style="color: #F502FD;">🔒</div>
+          <h3 class="card-title">Anti-TOCTOU Validation</h3>
+          <p class="card-desc">To eliminate race conditions, file attributes and junction targets are re-verified in Rust microseconds before any unlink operation.</p>
         </div>
 
-        <div class="faq-item spotlight-card">
-          <div class="faq-question">
-            <span>How does NEXORA's Gaming Mode improve performance safely?</span>
-            <span class="faq-chevron">▼</span>
-          </div>
-          <div class="faq-answer">
-            NEXORA uses native Windows Process Priority APIs to assign game threads High priority, minimizing thread contention from background tasks. It also orchestrates Windows Powercfg into High Performance mode. All adjustments are 100% reversible and written to an on-disk recovery journal that automatically restores defaults even if power is cut.
-          </div>
+        <div class="card tilt-card">
+          <div class="card-icon" style="color: #02FEDC;">🎮</div>
+          <h3 class="card-title">Reversible Gaming Engine</h3>
+          <p class="card-desc">Native Win32 thread scheduling and power schemes backed by an on-disk recovery journal. 100% reversible upon exit.</p>
         </div>
 
-        <div class="faq-item spotlight-card">
-          <div class="faq-question">
-            <span>Will NEXORA delete my saved browser logins or cookies?</span>
-            <span class="faq-chevron">▼</span>
-          </div>
-          <div class="faq-answer">
-            Never. NEXORA's Privacy Center targets only temporary HTTP caches, cached scripts, and browsing history. Browser credential databases (Login Data, Cookies, Web Data) are hardcoded into an immutable blacklist and are mathematically prohibited from deletion.
-          </div>
-        </div>
-
-        <div class="faq-item spotlight-card">
-          <div class="faq-question">
-            <span>Why does Windows SmartScreen display an "Unknown Publisher" prompt?</span>
-            <span class="faq-chevron">▼</span>
-          </div>
-          <div class="faq-answer">
-            Because NEXORA is released as an independent software suite without a corporate commercial EV certificate. Microsoft Defender SmartScreen displays a protective advisory for newly released software until it builds reputational history. You can verify the published SHA-256 hash using PowerShell before installation.
-          </div>
+        <div class="card tilt-card">
+          <div class="card-icon" style="color: #5A5CFF;">🔋</div>
+          <h3 class="card-title">Zero Background Overhead</h3>
+          <p class="card-desc">No persistent background daemons, no memory-hogging helper processes, and zero idle battery drain.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA Banner -->
-  <section class="section" style="padding-top: 0;">
+  <!-- CTA Banner Section -->
+  <section class="section" style="padding-top: 40px; padding-bottom: 120px;">
     <div class="container">
-      <div class="spotlight-card tilt-card" style="text-align: center; padding: 64px 32px; background: linear-gradient(135deg, rgba(14,16,23,0.9) 0%, rgba(21,24,34,0.9) 100%); border-color: rgba(2, 254, 220, 0.3);">
-        <h2 style="font-size: 36px; font-weight: 800; margin-bottom: 16px;">Ready for honest, transparent PC care?</h2>
-        <p style="color: #969BAA; max-width: 580px; margin: 0 auto 32px; font-size: 16px;">
+      <div class="card" style="padding: 64px 32px; text-align: center; background: radial-gradient(circle at 50% 0%, rgba(90, 92, 255, 0.15), rgba(14, 18, 28, 0.8)); border-color: rgba(90, 92, 255, 0.3);">
+        <h2 style="font-size: 38px; font-weight: 850; margin-bottom: 16px;">Ready for honest, transparent PC care?</h2>
+        <p style="color: var(--text-secondary); max-width: 580px; margin: 0 auto 36px; font-size: 16px;">
           Download NEXORA for Windows 11 and 10. Lightweight, fast native Rust, and zero background baggage.
         </p>
         <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-          <a href="download.html" class="btn-primary" style="padding: 14px 32px; font-size: 15px;">
+          <a href="download.html" class="btn-primary" style="padding: 16px 36px; font-size: 15px;">
             Download for Windows (64-bit)
           </a>
-          <a href="app/" target="_blank" class="btn-secondary" style="padding: 14px 28px; font-size: 15px;">
-            Launch Web Demo →
+          <a href="features.html" class="btn-secondary" style="padding: 16px 32px; font-size: 15px;">
+            View All 14 Features →
           </a>
         </div>
       </div>
@@ -469,23 +341,22 @@
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px;">
         <div>
           <div class="brand-logo" style="margin-bottom: 12px;">NEX<span class="gradient-text">ORA</span></div>
-          <p style="font-size: 13px; color: #969BAA; max-width: 320px;">
+          <p style="font-size: 13px; color: var(--text-secondary); max-width: 320px;">
             The modern, non-destructive system maintenance suite engineered for Windows 11 & 10.
           </p>
         </div>
         <div style="display: flex; gap: 48px; flex-wrap: wrap;">
           <div>
             <h4 style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #F5F7FA; margin-bottom: 14px; letter-spacing: 0.05em;">Product</h4>
-            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #969BAA;">
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--text-secondary);">
               <li><a href="features.html">Features</a></li>
               <li><a href="security.html">Security Architecture</a></li>
               <li><a href="download.html">Download Portal</a></li>
-              <li><a href="app/" target="_blank">Live Web Demo</a></li>
             </ul>
           </div>
           <div>
             <h4 style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #F5F7FA; margin-bottom: 14px; letter-spacing: 0.05em;">Resources</h4>
-            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #969BAA;">
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--text-secondary);">
               <li><a href="docs.html">Documentation</a></li>
               <li><a href="support.html">Support & Community</a></li>
               <li><a href="privacy.html">Privacy Policy</a></li>

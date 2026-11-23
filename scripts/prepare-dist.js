@@ -30,15 +30,14 @@ if (!fs.existsSync(distDir)) {
   fs.mkdirSync(distDir, { recursive: true });
 }
 
-// 2. Copy all files from website/ into dist/ so Vercel serves the high-end landing page at /
+// 2. Clean stale dist/app directory if present
+const staleAppDir = path.join(distDir, 'app');
+if (fs.existsSync(staleAppDir)) {
+  fs.rmSync(staleAppDir, { recursive: true, force: true });
+}
+
+// 3. Copy all files from website/ into dist/ so Vercel serves the high-end landing page at /
 console.log('Copying website landing page and distribution assets into dist/...');
 copyRecursiveSync(websiteDir, distDir);
 
-// 3. Copy dist-app into dist/app for live web preview
-if (fs.existsSync(distAppDir)) {
-  console.log('Copying React desktop UI into dist/app/ for web preview...');
-  const targetAppDir = path.join(distDir, 'app');
-  copyRecursiveSync(distAppDir, targetAppDir);
-}
-
-console.log('Distribution bundle prepared successfully: Landing page at /, Web preview at /app/');
+console.log('Distribution bundle prepared successfully: Official website at /');

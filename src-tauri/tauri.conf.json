@@ -38,6 +38,18 @@
       "icons/icon.png"
     ],
     "publisher": "NEXORA Team",
-    "copyright": "Copyright © 2026 NEXORA"
+    "copyright": "Copyright © 2026 NEXORA",
+    "windows": {
+      "nsis": {
+        "headerImage": "icons/nsis-header.bmp",
+        "sidebarImage": "icons/nsis-sidebar.bmp",
+        "installerIcon": "icons/icon.ico",
+        "installMode": "both",
+        "displayLanguageSelector": false
+      },
+      "wix": {
+        "language": ["en-US"]
+      }
+    }
   }
 }

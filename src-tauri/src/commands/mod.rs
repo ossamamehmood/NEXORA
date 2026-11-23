@@ -2,7 +2,7 @@ use tauri::State;
 use std::path::Path;
 use crate::cleaner::{CleanerEngine, CleanerRule, CleanResult, ScanSummary};
 use crate::monitoring::{ProcessItem, ProcessMonitor, RealtimeMetrics};
-use crate::storage::{AppDatabase, AppSettings, CleanLog, DiskAnalysisResult, DuplicateScanResult, DuplicateFinder, QuarantineRecord, ScanLog, StorageAnalyzer};
+use crate::storage::{AppDatabase, AppSettings, BetaFeedbackRecord, CleanLog, DiskAnalysisResult, DuplicateScanResult, DuplicateFinder, QuarantineRecord, SanitizedDiagnosticBundle, ScanLog, StorageAnalyzer};
 use crate::system::{ApplicationManager, DiagnosticCheckResult, DiagnosticsEngine, InstalledApp, MaintenanceExecutionResult, MaintenanceRoutines, StartupEntry, StartupManager, SystemInfoProvider, SystemOverview};
 
 #[tauri::command]
@@ -150,4 +150,21 @@ pub fn add_exclusion(path: String, db: State<'_, AppDatabase>) -> Result<(), Str
 #[tauri::command]
 pub fn get_exclusions(db: State<'_, AppDatabase>) -> Vec<String> {
     db.get_exclusions()
+}
+
+#[tauri::command]
+pub fn submit_beta_feedback(feedback: BetaFeedbackRecord, db: State<'_, AppDatabase>) -> Result<String, String> {
+    let id = feedback.id.clone();
+    db.add_beta_feedback(feedback);
+    Ok(id)
+}
+
+#[tauri::command]
+pub fn get_beta_feedbacks(db: State<'_, AppDatabase>) -> Vec<BetaFeedbackRecord> {
+    db.get_beta_feedbacks()
+}
+
+#[tauri::command]
+pub fn get_sanitized_diagnostic_bundle(db: State<'_, AppDatabase>) -> SanitizedDiagnosticBundle {
+    db.generate_sanitized_diagnostics()
 }

@@ -12,6 +12,7 @@ import {
   Stethoscope,
   Wrench,
   History,
+  MessageSquareQuote,
   Settings,
 } from 'lucide-react';
 import { NavigationSection } from '../types';
@@ -21,7 +22,7 @@ interface SidebarProps {
   onSelectSection: (section: NavigationSection) => void;
 }
 
-const navItems: { id: NavigationSection; label: string; icon: React.ElementType }[] = [
+const navItems: { id: NavigationSection; label: string; icon: React.ElementType; isBeta?: boolean }[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'cleaner', label: 'Smart Cleaner', icon: Sparkles },
   { id: 'deep-cleaner', label: 'Deep Cleaner', icon: Layers },
@@ -34,6 +35,7 @@ const navItems: { id: NavigationSection; label: string; icon: React.ElementType 
   { id: 'diagnostics', label: 'Diagnostics', icon: Stethoscope },
   { id: 'maintenance', label: 'Maintenance', icon: Wrench },
   { id: 'history', label: 'Activity History', icon: History },
+  { id: 'feedback', label: 'Beta Feedback', icon: MessageSquareQuote, isBeta: true },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
@@ -47,11 +49,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentSection, onSelectSectio
             <span className="font-black text-sm text-gradient">N</span>
           </div>
         </div>
-        <div>
-          <h1 className="font-bold text-base tracking-wider text-[#F5F7FA]">
-            NEX<span className="text-gradient">ORA</span>
-          </h1>
-          <p className="text-[10px] tracking-wider text-[#969BAA] uppercase font-medium">Under Control</p>
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <h1 className="font-bold text-base tracking-wider text-[#F5F7FA]">
+              NEX<span className="text-gradient">ORA</span>
+            </h1>
+            <span className="px-1.5 py-0.2 rounded text-[8px] font-black tracking-widest uppercase bg-[#02FEDC]/15 text-[#02FEDC] border border-[#02FEDC]/30">
+              BETA
+            </span>
+          </div>
+          <p className="text-[10px] tracking-wider text-[#969BAA] uppercase font-medium">v1.0.0-beta.1</p>
         </div>
       </div>
 
@@ -64,17 +71,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentSection, onSelectSectio
             <button
               key={item.id}
               onClick={() => onSelectSection(item.id)}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 ${
                 isActive
                   ? 'bg-[#171A23] text-[#F5F7FA] border border-[#2B3245] shadow-sm relative'
                   : 'text-[#969BAA] hover:bg-[#12151D] hover:text-[#E2E8F0]'
               }`}
             >
-              {isActive && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r bg-gradient-to-b from-[#02FEDC] via-[#5A5CFF] to-[#F502FD]" />
+              <div className="flex items-center gap-3">
+                {isActive && (
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r bg-gradient-to-b from-[#02FEDC] via-[#5A5CFF] to-[#F502FD]" />
+                )}
+                <Icon className={`w-4 h-4 ${isActive ? 'text-[#02FEDC]' : 'text-[#656C80]'}`} />
+                <span>{item.label}</span>
+              </div>
+              {item.isBeta && (
+                <span className="px-1.5 py-0.5 rounded text-[8px] font-bold uppercase bg-[#5A5CFF]/20 text-[#5A5CFF] border border-[#5A5CFF]/30">
+                  New
+                </span>
               )}
-              <Icon className={`w-4 h-4 ${isActive ? 'text-[#02FEDC]' : 'text-[#656C80]'}`} />
-              <span>{item.label}</span>
             </button>
           );
         })}

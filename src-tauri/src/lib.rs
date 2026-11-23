@@ -36,6 +36,9 @@ pub fn run() {
             commands::get_quarantine_records,
             commands::add_exclusion,
             commands::get_exclusions,
+            commands::submit_beta_feedback,
+            commands::get_beta_feedbacks,
+            commands::get_sanitized_diagnostic_bundle,
         ])
         .run(tauri::generate_context!())
         .expect("error while running NEXORA application");

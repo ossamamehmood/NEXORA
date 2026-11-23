@@ -11,6 +11,7 @@ export type NavigationSection =
   | 'diagnostics'
   | 'maintenance'
   | 'history'
+  | 'feedback'
   | 'settings';
 
 export type RiskLevel = 'Low' | 'Medium' | 'High';
@@ -196,5 +197,29 @@ export interface QuarantineRecord {
   original_path: string;
   quarantined_path: string;
   file_size: number;
+  timestamp: string;
+}
+
+export type FeedbackType = 'bug' | 'feature' | 'workflow' | 'performance' | 'general';
+
+export interface SanitizedDiagnosticBundle {
+  os_name: string;
+  os_version: string;
+  architecture: string;
+  app_version: string;
+  quarantine_records_count: number;
+  exclusions_count: number;
+  privacy_declaration: string;
+}
+
+export interface BetaFeedbackRecord {
+  id: string;
+  feedback_type: FeedbackType;
+  rating?: number;
+  summary: string;
+  description: string;
+  steps_to_reproduce?: string;
+  include_diagnostics: boolean;
+  diagnostic_payload?: SanitizedDiagnosticBundle;
   timestamp: string;
 }

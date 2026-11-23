@@ -52,6 +52,30 @@ pub struct QuarantineRecord {
     pub timestamp: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SanitizedDiagnosticBundle {
+    pub os_name: String,
+    pub os_version: String,
+    pub architecture: String,
+    pub app_version: String,
+    pub quarantine_records_count: usize,
+    pub exclusions_count: usize,
+    pub privacy_declaration: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BetaFeedbackRecord {
+    pub id: String,
+    pub feedback_type: String, // "bug", "feature", "workflow", "performance", "general"
+    pub rating: Option<u8>,
+    pub summary: String,
+    pub description: String,
+    pub steps_to_reproduce: Option<String>,
+    pub include_diagnostics: bool,
+    pub diagnostic_payload: Option<SanitizedDiagnosticBundle>,
+    pub timestamp: String,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct AppDatabaseState {
     pub settings: AppSettings,
@@ -59,6 +83,8 @@ pub struct AppDatabaseState {
     pub clean_history: Vec<CleanLog>,
     pub quarantine_records: Vec<QuarantineRecord>,
     pub exclusions: Vec<String>,
+    #[serde(default)]
+    pub beta_feedbacks: Vec<BetaFeedbackRecord>,
 }
 
 pub struct AppDatabase {
@@ -180,5 +206,33 @@ impl AppDatabase {
             }
         }
         self.persist();
+    }
+
+    pub fn add_beta_feedback(&self, record: BetaFeedbackRecord) {
+        if let Ok(mut state) = self.state.lock() {
+            state.beta_feedbacks.insert(0, record);
+            state.beta_feedbacks.truncate(100);
+        }
+        self.persist();
+    }
+
+    pub fn get_beta_feedbacks(&self) -> Vec<BetaFeedbackRecord> {
+        self.state.lock().map(|s| s.beta_feedbacks.clone()).unwrap_or_default()
+    }
+
+    pub fn generate_sanitized_diagnostics(&self) -> SanitizedDiagnosticBundle {
+        let (quarantine_count, exclusions_count) = self.state.lock()
+            .map(|s| (s.quarantine_records.len(), s.exclusions.len()))
+            .unwrap_or((0, 0));
+
+        SanitizedDiagnosticBundle {
+            os_name: "Windows".to_string(),
+            os_version: sysinfo::System::long_os_version().unwrap_or_else(|| "Windows 11 / 10".to_string()),
+            architecture: std::env::consts::ARCH.to_string(),
+            app_version: "1.0.0-beta.1".to_string(),
+            quarantine_records_count: quarantine_count,
+            exclusions_count,
+            privacy_declaration: "Zero personal documents, credentials, or file paths collected.".to_string(),
+        }
     }
 }

@@ -22,6 +22,7 @@ const titles: Record<NavigationSection, { title: string; subtitle: string }> = {
   diagnostics: { title: 'System Diagnostics', subtitle: 'Operating system health checks and error inspection' },
   maintenance: { title: 'Maintenance Center', subtitle: 'Actionable, non-destructive tuning recommendations' },
   history: { title: 'Activity History', subtitle: 'Audit log of past scans, cleanups, and quarantine items' },
+  feedback: { title: 'Closed Beta Feedback & Telemetry Vault', subtitle: 'Report anomalies, suggest enhancements, and view feedback audit trail' },
   settings: { title: 'Application Settings', subtitle: 'Configure safety thresholds, quarantine, and appearance' },
 };
 
@@ -56,6 +57,12 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, metrics, onQuick
             </div>
           </div>
         )}
+
+        {/* Beta Status Badge */}
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#11131A] border border-[#02FEDC]/30 text-[10px] font-mono text-[#02FEDC]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00E699] animate-pulse" />
+          <span>BETA 1.0</span>
+        </div>
 
         {/* Refresh Action */}
         <button

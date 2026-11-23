@@ -17,6 +17,7 @@ import { ApplicationManagerView } from './features/applications/ApplicationManag
 import { SystemDiagnosticsView } from './features/diagnostics/SystemDiagnosticsView';
 import { MaintenanceCenterView } from './features/maintenance/MaintenanceCenterView';
 import { ActivityHistoryView } from './features/history/ActivityHistoryView';
+import { BetaFeedbackView } from './features/feedback/BetaFeedbackView';
 import { SettingsView } from './features/settings/SettingsView';
 
 export const App: React.FC = () => {
@@ -101,6 +102,8 @@ export const App: React.FC = () => {
           {currentSection === 'maintenance' && <MaintenanceCenterView />}
 
           {currentSection === 'history' && <ActivityHistoryView />}
+
+          {currentSection === 'feedback' && <BetaFeedbackView />}
 
           {currentSection === 'settings' && <SettingsView />}
         </main>

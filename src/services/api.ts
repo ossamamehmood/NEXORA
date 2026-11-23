@@ -1,5 +1,6 @@
 import {
   AppSettings,
+  BetaFeedbackRecord,
   CleanLog,
   CleanResult,
   CleanerRule,
@@ -11,6 +12,7 @@ import {
   ProcessItem,
   QuarantineRecord,
   RealtimeMetrics,
+  SanitizedDiagnosticBundle,
   ScanLog,
   ScanSummary,
   StartupEntry,
@@ -58,6 +60,12 @@ export const NexoraApi = {
   getQuarantineRecords: () => tauriInvoke<QuarantineRecord[]>('get_quarantine_records'),
   addExclusion: (path: string) => tauriInvoke<void>('add_exclusion', { path }),
   getExclusions: () => tauriInvoke<string[]>('get_exclusions'),
+  submitBetaFeedback: (feedback: BetaFeedbackRecord) =>
+    tauriInvoke<string>('submit_beta_feedback', { feedback }),
+  getBetaFeedbacks: () =>
+    tauriInvoke<BetaFeedbackRecord[]>('get_beta_feedbacks'),
+  getSanitizedDiagnosticBundle: () =>
+    tauriInvoke<SanitizedDiagnosticBundle>('get_sanitized_diagnostic_bundle'),
 };
 
 // Realistic mock implementation for browser preview / development
@@ -201,6 +209,33 @@ async function mockInvoke<T>(cmd: string, args?: Record<string, unknown>): Promi
 
     case 'get_exclusions':
       return ['C:\\Users\\User\\AppData\\Local\\Temp\\custom_work_dir'] as unknown as T;
+
+    case 'submit_beta_feedback':
+      return 'fb_success' as unknown as T;
+
+    case 'get_beta_feedbacks':
+      return [
+        {
+          id: 'fb-initial-1',
+          feedback_type: 'feature',
+          rating: 5,
+          summary: 'Smooth dark mode experience and safe quarantine',
+          description: 'Tested temporary file cleanup on Windows 11. Restoring quarantined cache files works seamlessly.',
+          include_diagnostics: true,
+          timestamp: new Date().toISOString(),
+        },
+      ] as unknown as T;
+
+    case 'get_sanitized_diagnostic_bundle':
+      return {
+        os_name: 'Windows',
+        os_version: 'Windows 11 Version 23H2 (Build 22631)',
+        architecture: 'x86_64',
+        app_version: '1.0.0-beta.1',
+        quarantine_records_count: 1,
+        exclusions_count: 1,
+        privacy_declaration: 'Zero personal documents, credentials, or file paths collected.',
+      } as unknown as T;
 
     default:
       return {} as unknown as T;

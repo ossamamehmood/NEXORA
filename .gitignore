@@ -1,0 +1,20 @@
+# Node dependencies
+node_modules/
+dist/
+
+# Rust build target
+src-tauri/target/
+Cargo.lock
+
+# Environment & logs
+*.log
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Windows
+Thumbs.db
+Desktop.ini

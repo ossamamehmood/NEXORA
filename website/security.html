@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXORA — Security & System Architecture</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">NEX<span class="gradient-text">ORA</span></a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="features.html">Features</a></li>
+          <li><a href="security.html" style="color: #02FEDC;">Security</a></li>
+          <li><a href="docs.html">Documentation</a></li>
+          <li><a href="download.html">Download</a></li>
+        </ul>
+      </nav>
+      <a href="download.html" class="gradient-btn" style="padding: 10px 20px; font-size: 13px;">Get NEXORA</a>
+    </div>
+  </header>
+
+  <section class="container" style="padding: 80px 24px;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <h1 style="font-size: 42px; font-weight: 900; margin-bottom: 20px;">Built on the principle of <span class="gradient-text">Absolute System Safety</span>.</h1>
+      <p style="color: #969BAA; font-size: 17px; margin-bottom: 40px;">
+        Traditional PC utilities often do more damage than good by blindly deleting files and hacking into critical registry hives. NEXORA was engineered to put an end to that paradigm.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        <div class="card">
+          <h3>1. Immutable Whitelist & Blacklist Enforcement</h3>
+          <p>The native Rust security engine strictly blocks operations targeting <code>C:\Windows\System32</code>, <code>Boot</code>, <code>Program Files</code>, user Documents, Desktop, Pictures, and sensitive credential databases. Any path traversal attack (e.g. <code>..\..</code>) is rejected instantly.</p>
+        </div>
+
+        <div class="card">
+          <h3>2. Zero Registry Deep Cleaning in v1.0</h3>
+          <p>Microsoft officially advises against automated registry cleaners because deleting orphan keys provides zero measurable performance gain while introducing immense stability hazards. NEXORA strictly excludes arbitrary registry wipeouts.</p>
+        </div>
+
+        <div class="card">
+          <h3>3. Quarantine Staging Vault (14-Day Rollback)</h3>
+          <p>Eligible cache removals are staged in an encrypted local quarantine directory with full metadata recorded in SQLite. If any application requires a removed cache file, it can be restored with a single click.</p>
+        </div>
+
+        <div class="card">
+          <h3>4. Sandboxed Least-Privilege IPC</h3>
+          <p>Frontend TypeScript code has zero direct filesystem access. All commands pass through Tauri 2's strictly scoped IPC boundary and are re-validated in memory by the Rust kernel immediately prior to execution.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      &copy; 2026 NEXORA Team. Your system. Under control.
+    </div>
+  </footer>
+</body>
+</html>

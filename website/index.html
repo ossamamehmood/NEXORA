@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXORA — Your system. Under control.</title>
+  <meta name="description" content="Premium PC cleaner, privacy manager, and system maintenance suite for Windows 11 and 10. Built with Tauri 2, Rust, and React.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        <svg width="28" height="28" viewBox="0 0 512 512" fill="none">
+          <rect width="512" height="512" rx="100" fill="#11131A"/>
+          <path d="M 256,68 L 406,144 L 406,306 C 406,380 342,434 256,456 C 170,434 106,380 106,306 L 106,144 Z" fill="#171A23" stroke="#02FEDC" stroke-width="12"/>
+          <path d="M 184,176 L 220,176 L 220,336 L 184,336 Z" fill="#02FEDC"/>
+          <path d="M 292,176 L 328,176 L 328,336 L 292,336 Z" fill="#F502FD"/>
+          <path d="M 184,176 L 230,176 L 328,336 L 282,336 Z" fill="url(#logoBrand)"/>
+          <defs>
+            <linearGradient id="logoBrand" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#02FEDC"/>
+              <stop offset="50%" stop-color="#5A5CFF"/>
+              <stop offset="100%" stop-color="#F502FD"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        NEX<span class="gradient-text">ORA</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="features.html">Features</a></li>
+          <li><a href="security.html">Security</a></li>
+          <li><a href="docs.html">Documentation</a></li>
+          <li><a href="download.html">Download</a></li>
+        </ul>
+      </nav>
+
+      <a href="download.html" class="gradient-btn" style="padding: 10px 20px; font-size: 13px;">
+        Get NEXORA 1.0
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div style="display: inline-block; padding: 6px 16px; border-radius: 9999px; background: rgba(2, 254, 220, 0.1); border: 1px solid rgba(2, 254, 220, 0.25); color: #02FEDC; font-size: 12px; font-weight: 600; margin-bottom: 24px;">
+        NEXORA 1.0 Production Release for Windows 11 & 10
+      </div>
+
+      <h1>Your system. <span class="gradient-text">Under control.</span></h1>
+      <p>
+        The premium desktop maintenance suite built in Rust and Tauri 2. Transparent, fast, and secure. Zero scareware, zero registry destruction, 100% user control.
+      </p>
+
+      <div style="display: flex; gap: 16px; justify-content: center; align-items: center; margin-bottom: 48px;">
+        <a href="download.html" class="gradient-btn">
+          Download for Windows (.exe / .msi)
+        </a>
+        <a href="security.html" style="color: #969BAA; text-decoration: none; font-size: 14px; font-weight: 600; padding: 14px 20px; border: 1px solid #232838; border-radius: 12px;">
+          View Security Architecture →
+        </a>
+      </div>
+
+      <!-- Hero App Preview Box -->
+      <div style="background: #11131A; border: 1px solid #232838; border-radius: 20px; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); max-width: 980px; margin: 0 auto; text-align: left;">
+        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+          <div style="width: 12px; height: 12px; border-radius: 50%; background: #FF5F56;"></div>
+          <div style="width: 12px; height: 12px; border-radius: 50%; background: #FFBD2E;"></div>
+          <div style="width: 12px; height: 12px; border-radius: 50%; background: #27C93F;"></div>
+          <span style="font-family: monospace; font-size: 11px; color: #656C80; margin-left: 12px;">NEXORA v1.0.0 — System Protected</span>
+        </div>
+        <div style="background: #08090D; border: 1px solid #1D2230; border-radius: 12px; padding: 28px;">
+          <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Smart Cache & Storage Engine</h2>
+          <p style="font-size: 13px; color: #969BAA; margin-bottom: 20px;">Safe, pre-validated temporary file candidate identification with instant rollback quarantine.</p>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+            <div style="background: #11131A; border: 1px solid #232838; padding: 16px; border-radius: 10px;">
+              <span style="font-size: 11px; color: #969BAA;">Reclaimable Space</span>
+              <p style="font-size: 22px; font-weight: 800; color: #02FEDC; font-family: monospace;">4.89 GB</p>
+            </div>
+            <div style="background: #11131A; border: 1px solid #232838; padding: 16px; border-radius: 10px;">
+              <span style="font-size: 11px; color: #969BAA;">Candidate Files</span>
+              <p style="font-size: 22px; font-weight: 800; color: #F5F7FA; font-family: monospace;">3,412</p>
+            </div>
+            <div style="background: #11131A; border: 1px solid #232838; padding: 16px; border-radius: 10px;">
+              <span style="font-size: 11px; color: #969BAA;">Scan Latency</span>
+              <p style="font-size: 22px; font-weight: 800; color: #5A5CFF; font-family: monospace;">642 ms</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Features Grid -->
+  <section class="container" style="padding: 80px 24px;">
+    <div style="text-align: center; max-width: 640px; margin: 0 auto 60px;">
+      <h2 style="font-size: 36px; font-weight: 800; margin-bottom: 16px;">Engineered for safety and speed.</h2>
+      <p style="color: var(--text-secondary); font-size: 16px;">Everything you need to maintain your computer without risking operating system stability.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="card">
+        <h3>Smart & Deep Cleaner</h3>
+        <p>Pre-validated cleaners for application logs, browser caches, and update leftovers. Immutable blacklists prevent system file modifications.</p>
+      </div>
+      <div class="card">
+        <h3>Quarantine Vault & Journal</h3>
+        <p>14-day rollback capability. Cleaned user caches are safely staged rather than permanently destroyed, allowing 1-click restoration.</p>
+      </div>
+      <div class="card">
+        <h3>Non-Destructive Startup Manager</h3>
+        <p>Leverages native Windows <code>StartupApproved</code> binary flags to toggle background apps without deleting registry values.</p>
+      </div>
+      <div class="card">
+        <h3>SHA-256 Duplicate Finder</h3>
+        <p>Cryptographic duplicate identification prevents false positives. Compares exact byte hashes instead of matching file names alone.</p>
+      </div>
+      <div class="card">
+        <h3>Interactive Disk Storage Analyzer</h3>
+        <p>Inspect deep folder hierarchies, identify large media files exceeding 100MB, and visualize capacity consumption per partition.</p>
+      </div>
+      <div class="card">
+        <h3>Zero Background Daemon Drain</h3>
+        <p>NEXORA leaves zero persistent background services or battery-draining telemetry agents running when the application is closed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div>
+        <strong>NEXORA</strong> — Your system. Under control. &copy; 2026 NEXORA Team.
+      </div>
+      <div style="display: flex; gap: 24px;">
+        <a href="privacy.html" style="color: var(--text-secondary); text-decoration: none;">Privacy Policy</a>
+        <a href="terms.html" style="color: var(--text-secondary); text-decoration: none;">Terms of Use</a>
+        <a href="security.html" style="color: var(--text-secondary); text-decoration: none;">Security</a>
+        <a href="docs.html" style="color: var(--text-secondary); text-decoration: none;">Documentation</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

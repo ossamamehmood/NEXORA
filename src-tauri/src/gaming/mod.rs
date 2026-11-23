@@ -126,6 +126,13 @@ impl GamingEngine {
             GameProfile { id: "p6".into(), name: "Fortnite".into(), executable: "fortniteclient-win64-shipping.exe".into(), priority: "High".into(), auto_detect: true },
             GameProfile { id: "p7".into(), name: "Elden Ring".into(), executable: "eldenring.exe".into(), priority: "High".into(), auto_detect: true },
             GameProfile { id: "p8".into(), name: "Apex Legends".into(), executable: "r5apex.exe".into(), priority: "High".into(), auto_detect: true },
+            GameProfile { id: "p9".into(), name: "Helldivers 2".into(), executable: "helldivers2.exe".into(), priority: "High".into(), auto_detect: true },
+            GameProfile { id: "p10".into(), name: "Overwatch 2".into(), executable: "overwatch.exe".into(), priority: "High".into(), auto_detect: true },
+            GameProfile { id: "p11".into(), name: "Rocket League".into(), executable: "rocketleague.exe".into(), priority: "High".into(), auto_detect: true },
+            GameProfile { id: "p12".into(), name: "Rainbow Six Siege".into(), executable: "rainbowsix.exe".into(), priority: "High".into(), auto_detect: true },
+            GameProfile { id: "p13".into(), name: "Call of Duty / Warzone".into(), executable: "cod.exe".into(), priority: "High".into(), auto_detect: true },
+            GameProfile { id: "p14".into(), name: "Baldur's Gate 3".into(), executable: "bg3_dx11.exe".into(), priority: "High".into(), auto_detect: true },
+            GameProfile { id: "p15".into(), name: "Starfield".into(), executable: "starfield.exe".into(), priority: "High".into(), auto_detect: true },
         ];
 
         Self {

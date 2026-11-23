@@ -22,6 +22,8 @@ pub struct CleanerRule {
 }
 
 impl CleanerRule {
+    /// Expanded cleaner catalog inspired by BleachBit (CleanerML) and open-source system utilities.
+    /// Strictly respects user privacy boundaries: preserves credentials, session tokens, and passwords.
     pub fn get_default_rules() -> Vec<CleanerRule> {
         let mut rules = Vec::new();
 
@@ -51,13 +53,29 @@ impl CleanerRule {
                 risk_level: RiskLevel::Low,
                 target_paths: vec![win_temp],
                 extensions: vec!["tmp".into(), "log".into(), "txt".into(), "bak".into()],
-                min_age_hours: 24, // Keep files younger than 24h for safety
+                min_age_hours: 24, // Keep files younger than 24h for operating system stability
                 enabled_by_default: true,
             });
         }
 
-        // 3. Thumbnail Cache
+        // 3. Windows Update Staging Download Cache
+        let win_update_dl = PathBuf::from("C:\\Windows\\SoftwareDistribution\\Download");
+        if win_update_dl.exists() {
+            rules.push(CleanerRule {
+                id: "win_update_cache".to_string(),
+                name: "Windows Update Download Cache".to_string(),
+                description: "Temporary staging files left after Windows updates have completed installation".to_string(),
+                category: "System".to_string(),
+                risk_level: RiskLevel::Low,
+                target_paths: vec![win_update_dl],
+                extensions: vec![],
+                min_age_hours: 48,
+                enabled_by_default: true,
+            });
+        }
+
         if let Some(local_app_data) = dirs::data_local_dir() {
+            // 4. Explorer Thumbnail Cache
             let thumb_path = local_app_data.join("Microsoft").join("Windows").join("Explorer");
             if thumb_path.exists() {
                 rules.push(CleanerRule {
@@ -73,7 +91,7 @@ impl CleanerRule {
                 });
             }
 
-            // 4. Crash Dumps
+            // 5. Crash Dumps
             let crash_dumps = local_app_data.join("CrashDumps");
             if crash_dumps.exists() {
                 rules.push(CleanerRule {
@@ -89,13 +107,13 @@ impl CleanerRule {
                 });
             }
 
-            // 5. Windows Error Reporting
+            // 6. Windows Error Reporting (WER)
             let wer_path = local_app_data.join("Microsoft").join("Windows").join("WER");
             if wer_path.exists() {
                 rules.push(CleanerRule {
                     id: "win_wer".to_string(),
                     name: "Windows Error Reporting Logs".to_string(),
-                    description: "Telemetric crash records awaiting transmission".to_string(),
+                    description: "Telemetric crash records and diagnostic traces awaiting transmission".to_string(),
                     category: "Diagnostics".to_string(),
                     risk_level: RiskLevel::Low,
                     target_paths: vec![wer_path],
@@ -105,13 +123,13 @@ impl CleanerRule {
                 });
             }
 
-            // 6. Google Chrome Cache
+            // 7. Google Chrome Web Cache
             let chrome_cache = local_app_data.join("Google").join("Chrome").join("User Data").join("Default").join("Cache");
             if chrome_cache.exists() {
                 rules.push(CleanerRule {
                     id: "chrome_cache".to_string(),
                     name: "Google Chrome Cache".to_string(),
-                    description: "Cached web resources (images, scripts, styles)".to_string(),
+                    description: "Cached web resources (images, script bundles, styles)".to_string(),
                     category: "Browsers".to_string(),
                     risk_level: RiskLevel::Low,
                     target_paths: vec![chrome_cache],
@@ -121,13 +139,13 @@ impl CleanerRule {
                 });
             }
 
-            // 7. Microsoft Edge Cache
+            // 8. Microsoft Edge Web Cache
             let edge_cache = local_app_data.join("Microsoft").join("Edge").join("User Data").join("Default").join("Cache");
             if edge_cache.exists() {
                 rules.push(CleanerRule {
                     id: "edge_cache".to_string(),
                     name: "Microsoft Edge Cache".to_string(),
-                    description: "Cached web resources and temporary media".to_string(),
+                    description: "Cached web resources and temporary media files".to_string(),
                     category: "Browsers".to_string(),
                     risk_level: RiskLevel::Low,
                     target_paths: vec![edge_cache],
@@ -137,38 +155,176 @@ impl CleanerRule {
                 });
             }
 
-            // 8. Discord Cache
-            if let Some(roaming) = dirs::config_dir() {
-                let discord_cache = roaming.join("discord").join("Cache");
-                if discord_cache.exists() {
-                    rules.push(CleanerRule {
-                        id: "discord_cache".to_string(),
-                        name: "Discord Cache".to_string(),
-                        description: "Cached media attachments, emojis, and voice buffers".to_string(),
-                        category: "Applications".to_string(),
-                        risk_level: RiskLevel::Low,
-                        target_paths: vec![discord_cache],
-                        extensions: vec![],
-                        min_age_hours: 0,
-                        enabled_by_default: true,
-                    });
-                }
+            // 9. Brave Browser Web Cache
+            let brave_cache = local_app_data.join("BraveSoftware").join("Brave-Browser").join("User Data").join("Default").join("Cache");
+            if brave_cache.exists() {
+                rules.push(CleanerRule {
+                    id: "brave_cache".to_string(),
+                    name: "Brave Browser Cache".to_string(),
+                    description: "Transient website caches and cached script bundles".to_string(),
+                    category: "Browsers".to_string(),
+                    risk_level: RiskLevel::Low,
+                    target_paths: vec![brave_cache],
+                    extensions: vec![],
+                    min_age_hours: 0,
+                    enabled_by_default: true,
+                });
+            }
 
-                // 9. Spotify Cache
-                let spotify_cache = local_app_data.join("Spotify").join("Storage");
-                if spotify_cache.exists() {
-                    rules.push(CleanerRule {
-                        id: "spotify_cache".to_string(),
-                        name: "Spotify Stream Cache".to_string(),
-                        description: "Temporary offline audio stream buffers".to_string(),
-                        category: "Applications".to_string(),
-                        risk_level: RiskLevel::Low,
-                        target_paths: vec![spotify_cache],
-                        extensions: vec![],
-                        min_age_hours: 0,
-                        enabled_by_default: true,
-                    });
+            // 10. Mozilla Firefox Cache
+            let firefox_profiles = local_app_data.join("Mozilla").join("Firefox").join("Profiles");
+            if firefox_profiles.exists() {
+                if let Ok(entries) = std::fs::read_dir(&firefox_profiles) {
+                    for entry in entries.filter_map(|e| e.ok()) {
+                        let cache2 = entry.path().join("cache2");
+                        if cache2.exists() {
+                            rules.push(CleanerRule {
+                                id: format!("firefox_cache_{}", entry.file_name().to_string_lossy()),
+                                name: "Mozilla Firefox Cache".to_string(),
+                                description: "Temporary HTTP web resource cache".to_string(),
+                                category: "Browsers".to_string(),
+                                risk_level: RiskLevel::Low,
+                                target_paths: vec![cache2],
+                                extensions: vec![],
+                                min_age_hours: 0,
+                                enabled_by_default: true,
+                            });
+                            break;
+                        }
+                    }
                 }
+            }
+
+            // 11. Steam Client Web & Shader Cache
+            let steam_html = local_app_data.join("Steam").join("htmlcache");
+            if steam_html.exists() {
+                rules.push(CleanerRule {
+                    id: "steam_cache".to_string(),
+                    name: "Steam Client HTML Cache".to_string(),
+                    description: "Embedded browser cache from the Steam game client".to_string(),
+                    category: "Gaming".to_string(),
+                    risk_level: RiskLevel::Low,
+                    target_paths: vec![steam_html],
+                    extensions: vec![],
+                    min_age_hours: 0,
+                    enabled_by_default: true,
+                });
+            }
+
+            // 12. Epic Games Launcher Cache
+            let epic_cache = local_app_data.join("EpicGamesLauncher").join("Saved").join("webcache");
+            if epic_cache.exists() {
+                rules.push(CleanerRule {
+                    id: "epic_cache".to_string(),
+                    name: "Epic Games Launcher Cache".to_string(),
+                    description: "Launcher interface cache and thumbnail previews".to_string(),
+                    category: "Gaming".to_string(),
+                    risk_level: RiskLevel::Low,
+                    target_paths: vec![epic_cache],
+                    extensions: vec![],
+                    min_age_hours: 0,
+                    enabled_by_default: true,
+                });
+            }
+
+            // 13. Python Pip Wheel Cache (Developer Caches)
+            let pip_cache = local_app_data.join("pip").join("cache");
+            if pip_cache.exists() {
+                rules.push(CleanerRule {
+                    id: "pip_cache".to_string(),
+                    name: "Python Pip Cache".to_string(),
+                    description: "Cached wheels, pre-built binaries, and HTTP downloads".to_string(),
+                    category: "Developer".to_string(),
+                    risk_level: RiskLevel::Medium,
+                    target_paths: vec![pip_cache],
+                    extensions: vec!["whl".into(), "tar.gz".into(), "zip".into()],
+                    min_age_hours: 0,
+                    enabled_by_default: false,
+                });
+            }
+
+            // 14. Spotify Stream Cache
+            let spotify_cache = local_app_data.join("Spotify").join("Storage");
+            if spotify_cache.exists() {
+                rules.push(CleanerRule {
+                    id: "spotify_cache".to_string(),
+                    name: "Spotify Stream Cache".to_string(),
+                    description: "Temporary offline audio stream buffers".to_string(),
+                    category: "Applications".to_string(),
+                    risk_level: RiskLevel::Low,
+                    target_paths: vec![spotify_cache],
+                    extensions: vec![],
+                    min_age_hours: 0,
+                    enabled_by_default: true,
+                });
+            }
+        }
+
+        if let Some(roaming) = dirs::config_dir() {
+            // 15. Discord Media Cache
+            let discord_cache = roaming.join("discord").join("Cache");
+            if discord_cache.exists() {
+                rules.push(CleanerRule {
+                    id: "discord_cache".to_string(),
+                    name: "Discord Media Cache".to_string(),
+                    description: "Cached media attachments, stickers, and voice buffers".to_string(),
+                    category: "Applications".to_string(),
+                    risk_level: RiskLevel::Low,
+                    target_paths: vec![discord_cache],
+                    extensions: vec![],
+                    min_age_hours: 0,
+                    enabled_by_default: true,
+                });
+            }
+
+            // 16. Node.js NPM Cache (Developer Caches)
+            let npm_cache = roaming.join("npm-cache");
+            if npm_cache.exists() {
+                rules.push(CleanerRule {
+                    id: "npm_cache".to_string(),
+                    name: "Node.js NPM Cache".to_string(),
+                    description: "Cached package archives and tarballs from npm registry".to_string(),
+                    category: "Developer".to_string(),
+                    risk_level: RiskLevel::Medium,
+                    target_paths: vec![npm_cache],
+                    extensions: vec!["tgz".into()],
+                    min_age_hours: 0,
+                    enabled_by_default: false,
+                });
+            }
+
+            // 17. Visual Studio Code Web Cache
+            let vscode_cache = roaming.join("Code").join("Cache");
+            if vscode_cache.exists() {
+                rules.push(CleanerRule {
+                    id: "vscode_cache".to_string(),
+                    name: "VS Code Editor Cache".to_string(),
+                    description: "Editor runtime web cache and extension preview buffers".to_string(),
+                    category: "Developer".to_string(),
+                    risk_level: RiskLevel::Low,
+                    target_paths: vec![vscode_cache],
+                    extensions: vec![],
+                    min_age_hours: 0,
+                    enabled_by_default: true,
+                });
+            }
+        }
+
+        // 18. Rust Cargo Registry Cache (Developer Caches)
+        if let Some(home) = dirs::home_dir() {
+            let cargo_cache = home.join(".cargo").join("registry").join("cache");
+            if cargo_cache.exists() {
+                rules.push(CleanerRule {
+                    id: "cargo_cache".to_string(),
+                    name: "Rust Cargo Registry Cache".to_string(),
+                    description: "Pre-downloaded .crate archives from crates.io".to_string(),
+                    category: "Developer".to_string(),
+                    risk_level: RiskLevel::Medium,
+                    target_paths: vec![cargo_cache],
+                    extensions: vec!["crate".into()],
+                    min_age_hours: 0,
+                    enabled_by_default: false,
+                });
             }
         }
 

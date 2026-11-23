@@ -9,6 +9,7 @@ import {
   ArrowRight,
   ChevronRight,
   Gamepad2,
+  Zap,
 } from 'lucide-react';
 import { RealtimeMetrics, SystemOverview } from '../../types';
 
@@ -86,13 +87,14 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
       {/* Real-time Hardware Telemetry Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* CPU Card */}
-        <div className="p-5 rounded-xl bg-[#11131A] border border-[#232838] space-y-3">
+        <div className="acrylic-card p-5 rounded-xl border border-[#232838] space-y-3">
           <div className="flex items-center justify-between text-xs text-[#969BAA]">
             <span className="flex items-center gap-2">
               <Cpu className="w-4 h-4 text-[#02FEDC]" />
               Processor
             </span>
-            <span className="font-mono text-[#02FEDC] font-semibold">
+            <span className="font-mono text-[#02FEDC] font-semibold flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#02FEDC] animate-pulse" />
               {metrics ? Math.round(metrics.cpu_usage_pct) : Math.round(overview?.cpu_usage_pct || 0)}%
             </span>
           </div>
@@ -111,13 +113,16 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         </div>
 
         {/* Memory Card */}
-        <div className="p-5 rounded-xl bg-[#11131A] border border-[#232838] space-y-3">
+        <div className="acrylic-card p-5 rounded-xl border border-[#232838] space-y-3">
           <div className="flex items-center justify-between text-xs text-[#969BAA]">
             <span className="flex items-center gap-2">
               <HardDrive className="w-4 h-4 text-[#5A5CFF]" />
               Memory (RAM)
             </span>
-            <span className="font-mono text-[#5A5CFF] font-semibold">{ramUsedPct}%</span>
+            <span className="font-mono text-[#5A5CFF] font-semibold flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#5A5CFF] animate-pulse" />
+              {ramUsedPct}%
+            </span>
           </div>
           <div className="space-y-1">
             <p className="text-base font-semibold text-[#F5F7FA]">
@@ -137,7 +142,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         </div>
 
         {/* System Storage Card */}
-        <div className="p-5 rounded-xl bg-[#11131A] border border-[#232838] space-y-3">
+        <div className="acrylic-card p-5 rounded-xl border border-[#232838] space-y-3">
           <div className="flex items-center justify-between text-xs text-[#969BAA]">
             <span className="flex items-center gap-2">
               <Server className="w-4 h-4 text-[#00E699]" />
@@ -163,7 +168,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         </div>
 
         {/* System Health / Uptime Card */}
-        <div className="p-5 rounded-xl bg-[#11131A] border border-[#232838] space-y-3">
+        <div className="acrylic-card p-5 rounded-xl border border-[#232838] space-y-3">
           <div className="flex items-center justify-between text-xs text-[#969BAA]">
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-[#FFB800]" />
@@ -267,7 +272,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             >
               <div className="flex items-center justify-between text-xs font-medium text-[#02FEDC]">
                 <div className="flex items-center gap-2">
-                  <Gamepad2 className="w-3.5 h-3.5" />
+                  <Zap className="w-3.5 h-3.5 text-[#02FEDC]" />
                   <span>Gaming Mode Ready</span>
                 </div>
                 <ChevronRight className="w-3.5 h-3.5 text-[#969BAA]" />

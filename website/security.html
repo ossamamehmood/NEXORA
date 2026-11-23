@@ -3,13 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Security Architecture — NEXORA</title>
-  <meta name="description" content="In-depth security architecture of NEXORA. Learn how our Rust engine protects personal files, isolates symlinks, and prevents path traversal.">
+  <title>Security Architecture & Invariants — NEXORA</title>
+  <meta name="description" content="In-depth security architecture of NEXORA. Learn how our native Rust engine protects personal files, isolates symlinks, and prevents path traversal.">
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Ambient Hyperflow Atmosphere -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <svg class="hyperflow-ribbon" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M-100 250 C 300 100, 600 600, 1000 350 C 1200 200, 1400 450, 1600 300" stroke="url(#paint0_linear)" stroke-width="2.5" stroke-dasharray="8 12" />
+    <path d="M-50 450 C 250 350, 500 750, 950 500 C 1250 350, 1350 700, 1650 550" stroke="url(#paint1_linear)" stroke-width="2" opacity="0.6" />
+    <defs>
+      <linearGradient id="paint0_linear" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#02FEDC" stop-opacity="0.8" />
+        <stop offset="50%" stop-color="#5A5CFF" stop-opacity="0.9" />
+        <stop offset="100%" stop-color="#F502FD" stop-opacity="0.6" />
+      </linearGradient>
+      <linearGradient id="paint1_linear" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#5A5CFF" stop-opacity="0.4" />
+        <stop offset="50%" stop-color="#02FEDC" stop-opacity="0.7" />
+        <stop offset="100%" stop-color="#5A5CFF" stop-opacity="0.3" />
+      </linearGradient>
+    </defs>
+  </svg>
+
   <header>
     <div class="container nav-wrapper">
       <a href="index.html" class="brand-logo">NEX<span class="gradient-text">ORA</span></a>
@@ -19,15 +40,16 @@
           <li><a href="security.html" class="active" style="color: #02FEDC;">Security</a></li>
           <li><a href="docs.html">Documentation</a></li>
           <li><a href="support.html">Support</a></li>
+          <li><a href="/app/" target="_blank" rel="noopener">Web Demo</a></li>
           <li><a href="download.html">Download</a></li>
         </ul>
       </nav>
-      <a href="download.html" class="btn-primary" style="padding: 10px 20px; font-size: 13px;">Get NEXORA</a>
+      <a href="download.html" class="btn-primary" style="padding: 10px 22px; font-size: 13px;">Get NEXORA</a>
     </div>
   </header>
 
   <section class="section">
-    <div class="container" style="max-width: 960px;">
+    <div class="container" style="max-width: 980px;">
       <div class="section-header">
         <span class="section-tag">Zero Compromise Architecture</span>
         <h1 class="section-title">NEXORA Security & Safety Model</h1>
@@ -35,46 +57,47 @@
       </div>
 
       <div class="grid-2" style="margin-bottom: 48px;">
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(2, 254, 220, 0.3);">
           <h3 class="card-title" style="color: #02FEDC;">1. Path Traversal & Boundary Control</h3>
           <p class="card-desc">
-            All candidate targets are normalized and checked for directory traversal sequences (<code>..</code>) and alternate data streams prior to resolution. The root drive (<code>C:\</code>, <code>D:\</code>) and operating system core folders (<code>C:\Windows\System32</code>, <code>SysWOW64</code>, <code>WinSxS</code>) are hardcoded blacklists that can never be modified.
+            All candidate targets are normalized and checked for directory traversal sequences (<code>..</code>) and alternate data streams prior to resolution. The root drives (<code>C:\</code>, <code>D:\</code>) and operating system core folders (<code>C:\Windows\System32</code>, <code>SysWOW64</code>, <code>WinSxS</code>) are hardcoded blacklists that can never be modified.
           </p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(90, 92, 255, 0.3);">
           <h3 class="card-title" style="color: #5A5CFF;">2. User Personal Document Shields</h3>
           <p class="card-desc">
             NEXORA strictly excludes standard personal directories: <code>Documents</code>, <code>Desktop</code>, <code>Pictures</code>, <code>Videos</code>, <code>Music</code>, <code>OneDrive</code>, and <code>Dropbox</code>. Even if a temporary file is placed inside a personal folder, the engine denies unlinking.
           </p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(0, 230, 153, 0.3);">
           <h3 class="card-title" style="color: #00E699;">3. Symlink & Junction Hijack Protection</h3>
           <p class="card-desc">
             Malicious programs often use NTFS junctions or symlinks pointing from temporary folders into sensitive system roots. NEXORA's Rust directory walker strictly enforces <code>follow_links(false)</code> and verifies reparse point metadata before examining any path.
           </p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(245, 2, 253, 0.3);">
           <h3 class="card-title" style="color: #F502FD;">4. Anti-TOCTOU Double Validation</h3>
           <p class="card-desc">
-            To prevent Time-of-Check Time-of-Use race conditions, NEXORA re-validates every individual path immediately before calling the native file move or unlinking API. If target attributes change between scan and clean, the file is aborted.
+            To prevent Time-of-Check Time-of-Use race conditions, NEXORA re-validates every individual path immediately before calling the native file move or unlinking API. If target attributes change between scan and clean, the file operation is automatically aborted.
           </p>
         </div>
       </div>
 
       <!-- Vulnerability Reporting Box -->
-      <div class="card" id="vulnerability">
+      <div class="card tilt-card" id="vulnerability" style="border-color: rgba(90, 92, 255, 0.4);">
         <h3 class="card-title">Vulnerability Disclosure Policy</h3>
         <p class="card-desc" style="margin-bottom: 16px;">
-          We take cybersecurity and user data protection seriously. If you believe you have discovered a security weakness or vulnerability in NEXORA:
+          We take cybersecurity and user data protection seriously. If you believe you have discovered a security weakness or potential bypass in our boundary model:
         </p>
         <ul style="color: #969BAA; font-size: 13px; line-height: 1.8; list-style-position: inside; margin-bottom: 20px;">
           <li>Report it directly to our security team at: <code style="color: #02FEDC;">security@nexora.app</code></li>
           <li>Include reproduction steps, version details, and expected vs observed behavior.</li>
           <li>We acknowledge vulnerability reports within <strong>24 business hours</strong> and prioritize patches within 72 hours.</li>
         </ul>
+        <a href="docs.html#safe-cleaning" style="color: #02FEDC; font-size: 13px; font-weight: 600;">Read Safe Cleaning Architecture Documentation →</a>
       </div>
     </div>
   </section>
@@ -82,8 +105,14 @@
   <footer>
     <div class="container footer-bottom">
       <div>Copyright &copy; 2026 NEXORA Team. All rights reserved.</div>
-      <div><a href="privacy.html" style="margin-right: 16px;">Privacy Policy</a> <a href="terms.html">Terms of Use</a></div>
+      <div>
+        <a href="privacy.html" style="margin-right: 16px;">Privacy Policy</a>
+        <a href="terms.html" style="margin-right: 16px;">Terms of Use</a>
+        <a href="download.html">Download Portal</a>
+      </div>
     </div>
   </footer>
+
+  <script src="interactive.js"></script>
 </body>
 </html>

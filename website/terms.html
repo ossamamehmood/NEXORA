@@ -7,9 +7,29 @@
   <meta name="description" content="NEXORA official terms of use and desktop software license agreement.">
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <svg class="hyperflow-ribbon" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M-100 250 C 300 100, 600 600, 1000 350 C 1200 200, 1400 450, 1600 300" stroke="url(#paint0_linear)" stroke-width="2.5" stroke-dasharray="8 12" />
+    <path d="M-50 450 C 250 350, 500 750, 950 500 C 1250 350, 1350 700, 1650 550" stroke="url(#paint1_linear)" stroke-width="2" opacity="0.6" />
+    <defs>
+      <linearGradient id="paint0_linear" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#02FEDC" stop-opacity="0.8" />
+        <stop offset="50%" stop-color="#5A5CFF" stop-opacity="0.9" />
+        <stop offset="100%" stop-color="#F502FD" stop-opacity="0.6" />
+      </linearGradient>
+      <linearGradient id="paint1_linear" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#5A5CFF" stop-opacity="0.4" />
+        <stop offset="50%" stop-color="#02FEDC" stop-opacity="0.7" />
+        <stop offset="100%" stop-color="#5A5CFF" stop-opacity="0.3" />
+      </linearGradient>
+    </defs>
+  </svg>
+
   <header>
     <div class="container nav-wrapper">
       <a href="index.html" class="brand-logo">NEX<span class="gradient-text">ORA</span></a>
@@ -19,40 +39,36 @@
           <li><a href="security.html">Security</a></li>
           <li><a href="docs.html">Documentation</a></li>
           <li><a href="support.html">Support</a></li>
+          <li><a href="/app/" target="_blank" rel="noopener">Web Demo</a></li>
           <li><a href="download.html">Download</a></li>
         </ul>
       </nav>
-      <a href="download.html" class="btn-primary" style="padding: 10px 20px; font-size: 13px;">Get NEXORA</a>
+      <a href="download.html" class="btn-primary" style="padding: 10px 22px; font-size: 13px;">Get NEXORA</a>
     </div>
   </header>
 
   <section class="section">
-    <div class="container" style="max-width: 860px;">
+    <div class="container" style="max-width: 880px;">
       <div class="section-header">
-        <span class="section-tag">Legal Terms</span>
+        <span class="section-tag">Software License Agreement</span>
         <h1 class="section-title">Terms of Use</h1>
         <p class="section-desc">Effective Date: November 2026 • Product: NEXORA PC Maintenance Suite</p>
       </div>
 
-      <div class="card" style="line-height: 1.8;">
+      <div class="card tilt-card" style="line-height: 1.8;">
         <h2 style="font-size: 18px; color: #F5F7FA; margin-bottom: 8px;">1. License Agreement</h2>
         <p style="font-size: 14px; color: #969BAA; margin-bottom: 20px;">
           NEXORA grants you a personal, non-exclusive, revocable license to install and run the application on supported personal computers running Microsoft Windows 10 or Windows 11.
         </p>
 
-        <h2 style="font-size: 18px; color: #F5F7FA; margin-bottom: 8px;">2. User Responsibilities</h2>
+        <h2 style="font-size: 18px; color: #F5F7FA; margin-bottom: 8px;">2. User Responsibilities & Data Backups</h2>
         <p style="font-size: 14px; color: #969BAA; margin-bottom: 20px;">
-          You agree to use NEXORA in compliance with applicable laws. You may not attempt to reverse engineer, decompile, or modify the software to bypass safety boundaries.
+          You agree to use NEXORA in compliance with applicable laws. You may not attempt to reverse engineer, decompile, or modify the software to bypass safety boundaries. While NEXORA enforces defensive quarantine mechanisms and anti-TOCTOU validation before file modifications, regular system backups remain standard best practice.
         </p>
 
         <h2 style="font-size: 18px; color: #F5F7FA; margin-bottom: 8px;">3. Disclaimer of Warranties</h2>
         <p style="font-size: 14px; color: #969BAA; margin-bottom: 20px;">
-          NEXORA is provided "AS IS" without warranties of any kind. While extensive safety rules and automatic quarantine mechanisms are implemented, users are advised to maintain regular data backups.
-        </p>
-
-        <h2 style="font-size: 18px; color: #F5F7FA; margin-bottom: 8px;">4. Contact</h2>
-        <p style="font-size: 14px; color: #969BAA;">
-          For legal inquiries: <code style="color: #02FEDC;">legal@nexora.app</code>
+          NEXORA is provided "AS IS" without warranties of any kind, whether express or implied. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability.
         </p>
       </div>
     </div>
@@ -61,8 +77,14 @@
   <footer>
     <div class="container footer-bottom">
       <div>Copyright &copy; 2026 NEXORA Team. All rights reserved.</div>
-      <div><a href="privacy.html" style="margin-right: 16px;">Privacy Policy</a> <a href="terms.html">Terms of Use</a></div>
+      <div>
+        <a href="privacy.html" style="margin-right: 16px;">Privacy Policy</a>
+        <a href="security.html" style="margin-right: 16px;">Security Whitepaper</a>
+        <a href="download.html">Download Portal</a>
+      </div>
     </div>
   </footer>
+
+  <script src="interactive.js"></script>
 </body>
 </html>

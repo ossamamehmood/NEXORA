@@ -3,13 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Documentation — NEXORA</title>
+  <title>Documentation & User Guide — NEXORA</title>
   <meta name="description" content="Official user guides, installation tutorials, safe cleaning workflows, and troubleshooting documentation for NEXORA.">
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <svg class="hyperflow-ribbon" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M-100 250 C 300 100, 600 600, 1000 350 C 1200 200, 1400 450, 1600 300" stroke="url(#paint0_linear)" stroke-width="2.5" stroke-dasharray="8 12" />
+    <path d="M-50 450 C 250 350, 500 750, 950 500 C 1250 350, 1350 700, 1650 550" stroke="url(#paint1_linear)" stroke-width="2" opacity="0.6" />
+    <defs>
+      <linearGradient id="paint0_linear" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#02FEDC" stop-opacity="0.8" />
+        <stop offset="50%" stop-color="#5A5CFF" stop-opacity="0.9" />
+        <stop offset="100%" stop-color="#F502FD" stop-opacity="0.6" />
+      </linearGradient>
+      <linearGradient id="paint1_linear" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#5A5CFF" stop-opacity="0.4" />
+        <stop offset="50%" stop-color="#02FEDC" stop-opacity="0.7" />
+        <stop offset="100%" stop-color="#5A5CFF" stop-opacity="0.3" />
+      </linearGradient>
+    </defs>
+  </svg>
+
   <header>
     <div class="container nav-wrapper">
       <a href="index.html" class="brand-logo">NEX<span class="gradient-text">ORA</span></a>
@@ -19,41 +39,42 @@
           <li><a href="security.html">Security</a></li>
           <li><a href="docs.html" class="active" style="color: #02FEDC;">Documentation</a></li>
           <li><a href="support.html">Support</a></li>
+          <li><a href="/app/" target="_blank" rel="noopener">Web Demo</a></li>
           <li><a href="download.html">Download</a></li>
         </ul>
       </nav>
-      <a href="download.html" class="btn-primary" style="padding: 10px 20px; font-size: 13px;">Get NEXORA</a>
+      <a href="download.html" class="btn-primary" style="padding: 10px 22px; font-size: 13px;">Get NEXORA</a>
     </div>
   </header>
 
   <section class="section">
-    <div class="container" style="max-width: 960px;">
+    <div class="container" style="max-width: 980px;">
       <div class="section-header">
         <span class="section-tag">Knowledge Base</span>
         <h1 class="section-title">NEXORA Documentation</h1>
-        <p class="section-desc">Comprehensive instructions, safety guidelines, and reference manuals.</p>
+        <p class="section-desc">Comprehensive instructions, safety guidelines, and reference manuals for power users and administrators.</p>
       </div>
 
       <div class="grid-2" style="margin-bottom: 48px;">
-        <div class="card">
+        <div class="card tilt-card">
           <h3 class="card-title">Getting Started Guide</h3>
           <p class="card-desc" style="margin-bottom: 16px;">Step-by-step walkthrough of installing NEXORA, performing your first safe scan, and understanding the dashboard telemetry.</p>
           <a href="#getting-started" style="color: #02FEDC; font-size: 13px; font-weight: 600;">Read Guide →</a>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card">
           <h3 class="card-title">Safe Cleaning Guide</h3>
           <p class="card-desc" style="margin-bottom: 16px;">Learn how the 8-stage cleaning lifecycle works, how quarantine staging prevents accidental loss, and how to rollback files.</p>
           <a href="#safe-cleaning" style="color: #5A5CFF; font-size: 13px; font-weight: 600;">Read Guide →</a>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card">
           <h3 class="card-title">Exclusions Configuration</h3>
           <p class="card-desc" style="margin-bottom: 16px;">Configure custom folder exclusions to ensure proprietary development directories are completely bypassed.</p>
           <a href="#exclusions" style="color: #00E699; font-size: 13px; font-weight: 600;">Read Guide →</a>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card">
           <h3 class="card-title">Troubleshooting & FAQs</h3>
           <p class="card-desc" style="margin-bottom: 16px;">Solutions for skipped locked files, DISM component store cleanup runtimes, and high-DPI multi-monitor display scaling.</p>
           <a href="#troubleshooting" style="color: #F502FD; font-size: 13px; font-weight: 600;">Read Guide →</a>
@@ -61,7 +82,7 @@
       </div>
 
       <!-- Guide Content Section -->
-      <div class="card" id="getting-started" style="margin-bottom: 32px;">
+      <div class="card tilt-card" id="getting-started" style="margin-bottom: 32px;">
         <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #F5F7FA;">Getting Started with NEXORA</h2>
         <p style="font-size: 14px; color: #969BAA; line-height: 1.7; margin-bottom: 16px;">
           NEXORA installs in seconds into user-space. Once launched:
@@ -74,10 +95,23 @@
         </ol>
       </div>
 
-      <div class="card" id="troubleshooting">
+      <div class="card tilt-card" id="safe-cleaning" style="margin-bottom: 32px;">
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #F5F7FA;">Safe Cleaning Lifecycle</h2>
+        <p style="font-size: 14px; color: #969BAA; line-height: 1.7; margin-bottom: 16px;">
+          NEXORA follows an irreversible-safety policy. Every file targeted for removal undergoes:
+        </p>
+        <ul style="color: #969BAA; font-size: 13px; line-height: 1.9; list-style-position: inside;">
+          <li>Boundary check against Windows system folders (System32, WinSxS) and user document roots.</li>
+          <li>Symlink target verification: no symbolic link or directory junction is traversed.</li>
+          <li>Staging into the local Quarantine Vault (compressed and indexed in SQLite).</li>
+          <li>Anti-TOCTOU validation: metadata re-verified immediately before unlinking.</li>
+        </ul>
+      </div>
+
+      <div class="card tilt-card" id="troubleshooting">
         <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #F5F7FA;">Troubleshooting: Skipped Files</h2>
         <p style="font-size: 14px; color: #969BAA; line-height: 1.7;">
-          If Smart Cleaner reports that files were skipped, an active Windows application currently holds an exclusive lock on those cache files. Close active applications and re-run Smart Cleaner to complete the clean.
+          If Smart Cleaner reports that files were skipped, an active Windows application currently holds an exclusive lock on those cache files. Close active applications and re-run Smart Cleaner to complete the clean safely without forced unlinking.
         </p>
       </div>
     </div>
@@ -86,8 +120,14 @@
   <footer>
     <div class="container footer-bottom">
       <div>Copyright &copy; 2026 NEXORA Team. All rights reserved.</div>
-      <div><a href="privacy.html" style="margin-right: 16px;">Privacy Policy</a> <a href="terms.html">Terms of Use</a></div>
+      <div>
+        <a href="privacy.html" style="margin-right: 16px;">Privacy Policy</a>
+        <a href="terms.html" style="margin-right: 16px;">Terms of Use</a>
+        <a href="download.html">Download Portal</a>
+      </div>
     </div>
   </footer>
+
+  <script src="interactive.js"></script>
 </body>
 </html>

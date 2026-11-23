@@ -4,12 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Features — NEXORA Desktop Suite</title>
-  <meta name="description" content="Explore the 13 built-in modules of NEXORA: Smart Cleaner, Deep Cleaner, Privacy Center, Real-Time Process Monitor, Startup Manager, and Duplicate Finder.">
+  <meta name="description" content="Explore the 14 built-in modules of NEXORA: Smart Cleaner, Deep Cleaner, Privacy Center, Reversible Gaming Mode, Real-Time Process Monitor, Startup Manager, and Duplicate Finder.">
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Ambient Hyperflow Atmosphere -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <svg class="hyperflow-ribbon" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M-100 250 C 300 100, 600 600, 1000 350 C 1200 200, 1400 450, 1600 300" stroke="url(#paint0_linear)" stroke-width="2.5" stroke-dasharray="8 12" />
+    <path d="M-50 450 C 250 350, 500 750, 950 500 C 1250 350, 1350 700, 1650 550" stroke="url(#paint1_linear)" stroke-width="2" opacity="0.6" />
+    <defs>
+      <linearGradient id="paint0_linear" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#02FEDC" stop-opacity="0.8" />
+        <stop offset="50%" stop-color="#5A5CFF" stop-opacity="0.9" />
+        <stop offset="100%" stop-color="#F502FD" stop-opacity="0.6" />
+      </linearGradient>
+      <linearGradient id="paint1_linear" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#5A5CFF" stop-opacity="0.4" />
+        <stop offset="50%" stop-color="#02FEDC" stop-opacity="0.7" />
+        <stop offset="100%" stop-color="#5A5CFF" stop-opacity="0.3" />
+      </linearGradient>
+    </defs>
+  </svg>
+
   <header>
     <div class="container nav-wrapper">
       <a href="index.html" class="brand-logo">NEX<span class="gradient-text">ORA</span></a>
@@ -19,99 +40,110 @@
           <li><a href="security.html">Security</a></li>
           <li><a href="docs.html">Documentation</a></li>
           <li><a href="support.html">Support</a></li>
+          <li><a href="/app/" target="_blank" rel="noopener">Web Demo</a></li>
           <li><a href="download.html">Download</a></li>
         </ul>
       </nav>
-      <a href="download.html" class="btn-primary" style="padding: 10px 20px; font-size: 13px;">Get NEXORA</a>
+      <a href="download.html" class="btn-primary" style="padding: 10px 22px; font-size: 13px;">Get NEXORA</a>
     </div>
   </header>
 
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Modular Power</span>
-        <h1 class="section-title">NEXORA Feature Suite</h1>
-        <p class="section-desc">13 unified utilities engineered in native Rust for maximum transparency and zero background system overhead.</p>
+        <span class="section-tag">Engineered For Windows</span>
+        <h1 class="section-title">The Complete NEXORA Feature Suite</h1>
+        <p class="section-desc">14 native utilities written in Rust and Windows API for maximum transparency, deterministic performance, and zero background battery drain.</p>
       </div>
 
       <div class="grid-3">
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(2, 254, 220, 0.3);">
           <div class="card-icon" style="color: #02FEDC;">⚡</div>
           <h3 class="card-title">Smart Cleaner</h3>
-          <p class="card-desc">Targets approved temporary directories (%TEMP%, C:\Windows\Temp), crash dump dumps, and Windows Error Reporting logs. Features a dry-run confirmation preview before any disk changes.</p>
+          <p class="card-desc">Targets approved temporary directories (%TEMP%, C:\Windows\Temp), crash dumps, and Windows Error Reporting logs. Features dry-run confirmation before any disk changes.</p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(90, 92, 255, 0.3);">
           <div class="card-icon" style="color: #5A5CFF;">🔍</div>
           <h3 class="card-title">Deep Cleaner</h3>
-          <p class="card-desc">Advanced category filters designed for developers and power users: purge stale npm cache, pip wheel cache, cargo build artifacts, and system diagnostics with risk stratification.</p>
+          <p class="card-desc">Advanced category filters for developers and power users: purge stale npm cache, pip wheel cache, cargo build artifacts, and system diagnostics with risk stratification.</p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(0, 230, 153, 0.3);">
           <div class="card-icon" style="color: #00E699;">🛡️</div>
           <h3 class="card-title">Privacy Center</h3>
-          <p class="card-desc">Cleans temporary web caches, URL history, and temporary script bundles across Google Chrome, Microsoft Edge, Mozilla Firefox, and Brave. Saved credentials and active sessions are strictly preserved.</p>
+          <p class="card-desc">Cleans temporary web caches, URL history, and script bundles across Chrome, Edge, Firefox, and Brave. Saved credentials and active sessions are strictly preserved.</p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(2, 254, 220, 0.4);">
+          <div class="card-icon" style="color: #02FEDC;">🎮</div>
+          <h3 class="card-title">Reversible Gaming Mode</h3>
+          <p class="card-desc">Elevates active game thread priority to High or AboveNormal and activates the native Windows High Performance power scheme. Zero risky registry hacks, 100% reversible via an on-disk journal.</p>
+        </div>
+
+        <div class="card tilt-card" style="border-color: rgba(245, 2, 253, 0.3);">
           <div class="card-icon" style="color: #F502FD;">📊</div>
           <h3 class="card-title">System Monitor</h3>
           <p class="card-desc">Real-time hardware telemetry and process inspector. Features a protected process shield that blocks accidental termination of core Windows services like csrss.exe, lsass.exe, and explorer.exe.</p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(2, 254, 220, 0.3);">
           <div class="card-icon" style="color: #02FEDC;">🚀</div>
           <h3 class="card-title">Startup Manager</h3>
           <p class="card-desc">Inspects and toggles background applications launched at Windows boot. Uses native Windows registry APIs (StartupApproved\Run) without modifying critical startup manifests.</p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(90, 92, 255, 0.3);">
           <div class="card-icon" style="color: #5A5CFF;">📂</div>
           <h3 class="card-title">Disk Analyzer</h3>
-          <p class="card-desc">Interactive visual folder traversal with proportional size allocation bars and automatic identification of the top 10 largest space-consuming files.</p>
+          <p class="card-desc">Interactive visual folder traversal with proportional size allocation bars and automatic identification of the top space-consuming files across any drive partition.</p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(0, 230, 153, 0.3);">
           <div class="card-icon" style="color: #00E699;">♊</div>
           <h3 class="card-title">Duplicate Finder</h3>
           <p class="card-desc">Find redundant files across storage volumes using multi-stage size filters followed by full SHA-256 cryptographic verification. Zero false positives guaranteed.</p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(245, 2, 253, 0.3);">
           <div class="card-icon" style="color: #F502FD;">📦</div>
           <h3 class="card-title">Application Manager</h3>
           <p class="card-desc">Reads installed programs directly from Windows Uninstall registry hives (HKLM, HKCU, WOW6432Node), displaying publisher, version, and estimated size.</p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(2, 254, 220, 0.3);">
           <div class="card-icon" style="color: #02FEDC;">🩺</div>
           <h3 class="card-title">System Diagnostics</h3>
           <p class="card-desc">Inspects primary volume storage capacity, physical RAM pressure, OS kernel services, and network socket / DNS protocol stack health.</p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(90, 92, 255, 0.3);">
           <div class="card-icon" style="color: #5A5CFF;">🔧</div>
           <h3 class="card-title">Maintenance Center</h3>
           <p class="card-desc">Actionable Windows maintenance tasks: DNS resolver cache flush (ipconfig /flushdns), DISM Component Store cleanup, and Windows Update cache reset.</p>
         </div>
 
-        <div class="card">
+        <div class="card tilt-card" style="border-color: rgba(0, 230, 153, 0.3);">
           <div class="card-icon" style="color: #00E699;">🗄️</div>
           <h3 class="card-title">Quarantine Vault</h3>
           <p class="card-desc">Files marked for cleanup are staged into an on-device vault by default. Restore any file with a single click — byte-for-byte identical rollback.</p>
         </div>
 
-        <div class="card">
-          <div class="card-icon" style="color: #F502FD;">💬</div>
-          <h3 class="card-title">Beta & Telemetry Vault</h3>
-          <p class="card-desc">In-app communication channel with the engineering team. Allows optional, sanitized diagnostic log sharing with raw JSON preview before submission.</p>
+        <div class="card tilt-card" style="border-color: rgba(245, 2, 253, 0.3);">
+          <div class="card-icon" style="color: #F502FD;">📜</div>
+          <h3 class="card-title">Activity History</h3>
+          <p class="card-desc">Comprehensive local SQLite audit log documenting every scan timestamp, reclaimed byte count, quarantined item, and system action.</p>
         </div>
 
-        <div class="card" style="border-color: #02FEDC;">
-          <div class="card-icon" style="color: #02FEDC;">🎮</div>
-          <h3 class="card-title">Reversible Gaming Mode</h3>
-          <p class="card-desc">Elevates active game thread priority to High or AboveNormal and applies the native Windows High Performance power scheme. Zero risky registry hacks, 100% reversible with an on-disk crash recovery journal.</p>
+        <div class="card tilt-card" style="border-color: rgba(2, 254, 220, 0.3);">
+          <div class="card-icon" style="color: #02FEDC;">💬</div>
+          <h3 class="card-title">Beta Feedback Vault</h3>
+          <p class="card-desc">Direct in-app communication channel with the engineering team. Allows optional, sanitized diagnostic log sharing with raw JSON preview before submission.</p>
         </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 64px;">
+        <a href="download.html" class="btn-primary" style="font-size: 15px; padding: 16px 36px;">Download NEXORA Suite</a>
       </div>
     </div>
   </section>
@@ -119,8 +151,14 @@
   <footer>
     <div class="container footer-bottom">
       <div>Copyright &copy; 2026 NEXORA Team. All rights reserved.</div>
-      <div><a href="privacy.html" style="margin-right: 16px;">Privacy Policy</a> <a href="terms.html">Terms of Use</a></div>
+      <div>
+        <a href="privacy.html" style="margin-right: 16px;">Privacy Policy</a>
+        <a href="terms.html" style="margin-right: 16px;">Terms of Use</a>
+        <a href="security.html">Security Whitepaper</a>
+      </div>
     </div>
   </footer>
+
+  <script src="interactive.js"></script>
 </body>
 </html>

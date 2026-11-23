@@ -1,5 +1,5 @@
-import React from 'react';
-import { Cpu, HardDrive, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Cpu, HardDrive, RefreshCw, Sun, Moon, ShieldCheck } from 'lucide-react';
 import { NavigationSection, RealtimeMetrics } from '../types';
 
 interface HeaderProps {
@@ -28,6 +28,26 @@ const titles: Record<NavigationSection, { title: string; subtitle: string }> = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ currentSection, metrics, onQuickRefresh, isRefreshing }) => {
+  const [isLightMode, setIsLightMode] = useState(false);
+
+  useEffect(() => {
+    setIsLightMode(document.documentElement.classList.contains('light'));
+  }, []);
+
+  const toggleTheme = () => {
+    if (isLightMode) {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+      setIsLightMode(false);
+      localStorage.setItem('nexora-theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+      setIsLightMode(true);
+      localStorage.setItem('nexora-theme', 'light');
+    }
+  };
+
   const sectionMeta = titles[currentSection] || { title: 'NEXORA', subtitle: 'Your system. Under control.' };
 
   const memoryPct = metrics
@@ -41,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, metrics, onQuick
         <p className="text-[11px] text-[#969BAA]">{sectionMeta.subtitle}</p>
       </div>
 
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-4">
         {/* Real-time Telemetry Pill */}
         {metrics && (
           <div className="flex items-center gap-4 bg-[#11131A] border border-[#232838] px-3.5 py-1.5 rounded-full text-xs">
@@ -59,18 +79,29 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, metrics, onQuick
           </div>
         )}
 
-        {/* Release Candidate Status Badge */}
-        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#11131A] border border-[#5A5CFF]/40 text-[10px] font-mono text-[#5A5CFF]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#02FEDC] animate-pulse" />
-          <span>RC 1.0</span>
+        {/* Protection Shield Indicator */}
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#11131A] border border-[#00E699]/30 text-[10px] font-medium text-[#00E699]">
+          <ShieldCheck className="w-3 h-3 text-[#00E699]" />
+          <span>Protected</span>
         </div>
+
+        {/* Theme Switcher */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg bg-[#11131A] hover:bg-[#171A23] text-[#969BAA] hover:text-[#F5F7FA] border border-[#232838] transition-all"
+          title={isLightMode ? 'Switch to Dark Theme' : 'Switch to Light Theme'}
+          aria-label="Toggle theme"
+        >
+          {isLightMode ? <Moon className="w-4 h-4 text-[#5A5CFF]" /> : <Sun className="w-4 h-4 text-[#02FEDC]" />}
+        </button>
 
         {/* Refresh Action */}
         <button
           onClick={onQuickRefresh}
           disabled={isRefreshing}
           className="p-2 rounded-lg bg-[#11131A] hover:bg-[#171A23] text-[#969BAA] hover:text-[#F5F7FA] border border-[#232838] transition-all"
-          title="Refresh Data"
+          title="Refresh Telemetry"
+          aria-label="Refresh telemetry"
         >
           <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#02FEDC]' : ''}`} />
         </button>

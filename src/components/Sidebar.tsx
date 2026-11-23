@@ -71,11 +71,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentSection, onSelectSectio
             <button
               key={item.id}
               onClick={() => onSelectSection(item.id)}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 ${
-                isActive
-                  ? 'bg-[#171A23] text-[#F5F7FA] border border-[#2B3245] shadow-sm relative'
-                  : 'text-[#969BAA] hover:bg-[#12151D] hover:text-[#E2E8F0]'
-              }`}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 ${isActive
+                ? 'bg-[#171A23] text-[#F5F7FA] border border-[#2B3245] shadow-sm relative'
+                : 'text-[#969BAA] hover:bg-[#12151D] hover:text-[#E2E8F0]'
+                }`}
             >
               <div className="flex items-center gap-3">
                 {isActive && (

@@ -15,6 +15,7 @@ const titles: Record<NavigationSection, { title: string; subtitle: string }> = {
   'deep-cleaner': { title: 'Deep Cleaner', subtitle: 'Granular application and developer cache rules' },
   privacy: { title: 'Privacy Center', subtitle: 'Browser history, temporary tokens, and activity traces' },
   monitor: { title: 'System Monitor', subtitle: 'Live processes, CPU usage, and resource consumption' },
+  gaming: { title: 'Gaming Mode & System Performance', subtitle: 'Dynamic process scheduling, power scheme optimization, and latency reduction' },
   startup: { title: 'Startup Manager', subtitle: 'Manage background applications that launch with Windows' },
   'disk-analyzer': { title: 'Disk Analyzer', subtitle: 'Interactive folder hierarchy and storage consumption' },
   duplicates: { title: 'Duplicate Finder', subtitle: 'Cryptographic SHA-256 duplicate file detection' },

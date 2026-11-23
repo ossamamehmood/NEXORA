@@ -1,12 +1,16 @@
 import {
   AppSettings,
+  BackgroundAppCandidate,
   BetaFeedbackRecord,
   CleanLog,
   CleanResult,
   CleanerRule,
+  DetectedGame,
   DiagnosticCheckResult,
   DiskAnalysisResult,
   DuplicateScanResult,
+  GameProfile,
+  GamingModeState,
   InstalledApp,
   MaintenanceExecutionResult,
   ProcessItem,
@@ -66,6 +70,20 @@ export const NexoraApi = {
     tauriInvoke<BetaFeedbackRecord[]>('get_beta_feedbacks'),
   getSanitizedDiagnosticBundle: () =>
     tauriInvoke<SanitizedDiagnosticBundle>('get_sanitized_diagnostic_bundle'),
+  getGamingModeState: () =>
+    tauriInvoke<GamingModeState>('get_gaming_mode_state'),
+  toggleGamingMode: (enable: boolean, preset: string) =>
+    tauriInvoke<GamingModeState>('toggle_gaming_mode', { enable, preset }),
+  detectActiveGame: () =>
+    tauriInvoke<DetectedGame | null>('detect_active_game'),
+  getBackgroundProcessCandidates: () =>
+    tauriInvoke<BackgroundAppCandidate[]>('get_background_process_candidates'),
+  closeBackgroundProcess: (pid: number) =>
+    tauriInvoke<boolean>('close_background_process', { pid }),
+  getCustomGameProfiles: () =>
+    tauriInvoke<GameProfile[]>('get_custom_game_profiles'),
+  addCustomGameProfile: (profile: GameProfile) =>
+    tauriInvoke<void>('add_custom_game_profile', { profile }),
 };
 
 // Realistic mock implementation for browser preview / development
@@ -236,6 +254,71 @@ async function mockInvoke<T>(cmd: string, args?: Record<string, unknown>): Promi
         exclusions_count: 1,
         privacy_declaration: 'Zero personal documents, credentials, or file paths collected.',
       } as unknown as T;
+
+    case 'get_gaming_mode_state':
+      return {
+        is_enabled: false,
+        preset: 'Performance',
+        active_game: null,
+        session_start: null,
+        session_duration_seconds: 0,
+        original_power_scheme_guid: '381b4222-f694-41f0-9685-ff5bb260df2e',
+        current_power_scheme_name: 'Balanced',
+        managed_processes_count: 0,
+        activity_logs: [
+          { timestamp: new Date(Date.now() - 3600000).toISOString(), event_type: 'INIT', message: 'NEXORA Gaming Engine initialized and ready.' },
+        ],
+      } as unknown as T;
+
+    case 'toggle_gaming_mode': {
+      const enable = (args?.enable as boolean) ?? false;
+      const preset = ((args?.preset as string) || 'Performance') as 'Balanced' | 'Performance' | 'Custom';
+      return {
+        is_enabled: enable,
+        preset,
+        active_game: enable
+          ? { name: 'Cyberpunk 2077', executable: 'Cyberpunk2077.exe', pid: 14820, cpu_usage: 18.4, memory_bytes: 4294967296 }
+          : null,
+        session_start: enable ? new Date().toISOString() : null,
+        session_duration_seconds: enable ? 1 : 0,
+        original_power_scheme_guid: '381b4222-f694-41f0-9685-ff5bb260df2e',
+        current_power_scheme_name: enable ? 'High Performance' : 'Balanced',
+        managed_processes_count: enable ? 1 : 0,
+        activity_logs: [
+          {
+            timestamp: new Date().toISOString(),
+            event_type: enable ? 'ENABLE' : 'DISABLE',
+            message: enable
+              ? `Gaming Mode engaged (${preset}) - Process priority elevated to High, Power Scheme set to High Performance`
+              : 'Gaming Mode disengaged - Original Balanced power scheme and normal priorities restored',
+          },
+        ],
+      } as unknown as T;
+    }
+
+    case 'detect_active_game':
+      return null as unknown as T;
+
+    case 'get_background_process_candidates':
+      return [
+        { pid: 8812, name: 'Discord.exe', memory_bytes: 382400000, cpu_usage: 0.8, is_safe_to_close: true, category: 'Chat & Social' },
+        { pid: 9144, name: 'OneDrive.exe', memory_bytes: 145000000, cpu_usage: 0.2, is_safe_to_close: true, category: 'Cloud Sync' },
+        { pid: 10420, name: 'Spotify.exe', memory_bytes: 498000000, cpu_usage: 1.2, is_safe_to_close: true, category: 'Media Player' },
+        { pid: 11200, name: 'EpicGamesLauncher.exe', memory_bytes: 280000000, cpu_usage: 0.4, is_safe_to_close: true, category: 'Game Launcher' },
+      ] as unknown as T;
+
+    case 'close_background_process':
+      return true as unknown as T;
+
+    case 'get_custom_game_profiles':
+      return [
+        { id: 'gp-1', name: 'Cyberpunk 2077', executable: 'Cyberpunk2077.exe', priority: 'High', auto_detect: true },
+        { id: 'gp-2', name: 'Counter-Strike 2', executable: 'cs2.exe', priority: 'High', auto_detect: true },
+        { id: 'gp-3', name: 'Valorant', executable: 'VALORANT-Win64-Shipping.exe', priority: 'High', auto_detect: true },
+      ] as unknown as T;
+
+    case 'add_custom_game_profile':
+      return undefined as unknown as T;
 
     default:
       return {} as unknown as T;

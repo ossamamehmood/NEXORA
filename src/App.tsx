@@ -10,6 +10,7 @@ import { SmartCleanerView } from './features/cleaner/SmartCleanerView';
 import { DeepCleanerView } from './features/deep-cleaner/DeepCleanerView';
 import { PrivacyCenterView } from './features/privacy/PrivacyCenterView';
 import { SystemMonitorView } from './features/monitor/SystemMonitorView';
+import { GamingModeView } from './features/gaming/GamingModeView';
 import { StartupManagerView } from './features/startup/StartupManagerView';
 import { DiskAnalyzerView } from './features/disk-analyzer/DiskAnalyzerView';
 import { DuplicateFinderView } from './features/duplicates/DuplicateFinderView';
@@ -88,6 +89,8 @@ export const App: React.FC = () => {
           {currentSection === 'privacy' && <PrivacyCenterView />}
 
           {currentSection === 'monitor' && <SystemMonitorView />}
+
+          {currentSection === 'gaming' && <GamingModeView />}
 
           {currentSection === 'startup' && <StartupManagerView />}
 

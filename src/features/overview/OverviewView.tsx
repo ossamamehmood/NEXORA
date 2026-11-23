@@ -8,6 +8,7 @@ import {
   Server,
   ArrowRight,
   ChevronRight,
+  Gamepad2,
 } from 'lucide-react';
 import { RealtimeMetrics, SystemOverview } from '../../types';
 
@@ -257,6 +258,22 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               </div>
               <p className="text-xs text-[#969BAA] leading-relaxed">
                 Review applications running silently in the background when Windows boots up to save RAM.
+              </p>
+            </div>
+
+            <div
+              className="p-3.5 rounded-lg bg-[#171A23] border border-[#232838] space-y-1.5 cursor-pointer hover:border-[#02FEDC]/40 transition-colors"
+              onClick={() => onNavigateToSection('gaming')}
+            >
+              <div className="flex items-center justify-between text-xs font-medium text-[#02FEDC]">
+                <div className="flex items-center gap-2">
+                  <Gamepad2 className="w-3.5 h-3.5" />
+                  <span>Gaming Mode Ready</span>
+                </div>
+                <ChevronRight className="w-3.5 h-3.5 text-[#969BAA]" />
+              </div>
+              <p className="text-xs text-[#969BAA] leading-relaxed">
+                Reversibly elevate game thread priority and orchestrate high-performance power plans.
               </p>
             </div>
           </div>

@@ -3,6 +3,7 @@ export type NavigationSection =
   | 'cleaner'
   | 'deep-cleaner'
   | 'privacy'
+  | 'gaming'
   | 'monitor'
   | 'startup'
   | 'disk-analyzer'
@@ -222,4 +223,47 @@ export interface BetaFeedbackRecord {
   include_diagnostics: boolean;
   diagnostic_payload?: SanitizedDiagnosticBundle;
   timestamp: string;
+}
+
+export interface GameProfile {
+  id: string;
+  name: string;
+  executable: string;
+  priority: 'High' | 'AboveNormal' | 'Normal';
+  auto_detect: boolean;
+}
+
+export interface DetectedGame {
+  name: string;
+  executable: string;
+  pid: number;
+  cpu_usage: number;
+  memory_bytes: number;
+}
+
+export interface BackgroundAppCandidate {
+  pid: number;
+  name: string;
+  memory_bytes: number;
+  cpu_usage: number;
+  is_safe_to_close: boolean;
+  category: string;
+}
+
+export interface GamingLogEntry {
+  timestamp: string;
+  event_type: string;
+  message: string;
+}
+
+export interface GamingModeState {
+  is_enabled: boolean;
+  preset: 'Balanced' | 'Performance' | 'Custom';
+  active_game: DetectedGame | null;
+  session_start: string | null;
+  session_duration_seconds: number;
+  original_power_scheme_guid: string | null;
+  current_power_scheme_name: string;
+  managed_processes_count: number;
+  activity_logs: GamingLogEntry[];
 }

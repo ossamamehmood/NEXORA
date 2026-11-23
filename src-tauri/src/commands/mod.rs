@@ -1,6 +1,7 @@
 use tauri::State;
 use std::path::Path;
 use crate::cleaner::{CleanerEngine, CleanerRule, CleanResult, ScanSummary};
+use crate::gaming::{BackgroundAppCandidate, DetectedGame, GameProfile, GamingEngine, GamingModeState};
 use crate::monitoring::{ProcessItem, ProcessMonitor, RealtimeMetrics};
 use crate::storage::{AppDatabase, AppSettings, BetaFeedbackRecord, CleanLog, DiskAnalysisResult, DuplicateScanResult, DuplicateFinder, QuarantineRecord, SanitizedDiagnosticBundle, ScanLog, StorageAnalyzer};
 use crate::system::{ApplicationManager, DiagnosticCheckResult, DiagnosticsEngine, InstalledApp, MaintenanceExecutionResult, MaintenanceRoutines, StartupEntry, StartupManager, SystemInfoProvider, SystemOverview};
@@ -168,3 +169,40 @@ pub fn get_beta_feedbacks(db: State<'_, AppDatabase>) -> Vec<BetaFeedbackRecord>
 pub fn get_sanitized_diagnostic_bundle(db: State<'_, AppDatabase>) -> SanitizedDiagnosticBundle {
     db.generate_sanitized_diagnostics()
 }
+
+#[tauri::command]
+pub fn get_gaming_mode_state(engine: State<'_, GamingEngine>) -> GamingModeState {
+    engine.get_state()
+}
+
+#[tauri::command]
+pub fn toggle_gaming_mode(enable: bool, preset: String, engine: State<'_, GamingEngine>) -> Result<GamingModeState, String> {
+    engine.toggle_gaming_mode(enable, preset)
+}
+
+#[tauri::command]
+pub fn detect_active_game(engine: State<'_, GamingEngine>) -> Option<DetectedGame> {
+    engine.detect_active_game()
+}
+
+#[tauri::command]
+pub fn get_background_process_candidates(engine: State<'_, GamingEngine>) -> Vec<BackgroundAppCandidate> {
+    engine.get_background_process_candidates()
+}
+
+#[tauri::command]
+pub fn close_background_process(pid: u32, engine: State<'_, GamingEngine>) -> Result<bool, String> {
+    engine.close_background_process(pid)
+}
+
+#[tauri::command]
+pub fn get_custom_game_profiles(engine: State<'_, GamingEngine>) -> Vec<GameProfile> {
+    engine.get_custom_profiles()
+}
+
+#[tauri::command]
+pub fn add_custom_game_profile(profile: GameProfile, engine: State<'_, GamingEngine>) -> Result<(), String> {
+    engine.add_custom_profile(profile);
+    Ok(())
+}
+

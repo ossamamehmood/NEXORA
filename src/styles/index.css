@@ -60,7 +60,7 @@
   }
 }
 
-/* Glassmorphism and Acrylic layering */
+/* Glassmorphism and Luxury Acrylic layering */
 .acrylic-surface {
   background: rgba(14, 17, 25, 0.75);
   backdrop-filter: blur(16px);
@@ -72,14 +72,38 @@
   background: rgba(17, 19, 26, 0.65);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .acrylic-card:hover {
-  background: rgba(23, 26, 36, 0.85);
-  border-color: rgba(2, 254, 220, 0.25);
-  transform: translateY(-1px);
+  background: rgba(22, 26, 38, 0.85);
+  border-color: rgba(2, 254, 220, 0.35);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(2, 254, 220, 0.08);
+  transform: translateY(-1.5px);
+}
+
+.luxury-glass {
+  background: linear-gradient(135deg, rgba(18, 22, 34, 0.82) 0%, rgba(11, 14, 22, 0.72) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.luxury-card {
+  background: linear-gradient(180deg, rgba(19, 23, 35, 0.75) 0%, rgba(13, 16, 24, 0.8) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luxury-card:hover {
+  border-color: rgba(2, 254, 220, 0.3);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(2, 254, 220, 0.1);
+  transform: translateY(-2px);
 }
 
 /* Brand Gradients */
@@ -88,7 +112,7 @@
 }
 
 .gradient-brand-subtle {
-  background: linear-gradient(135deg, rgba(2, 254, 220, 0.12) 0%, rgba(90, 92, 255, 0.12) 50%, rgba(245, 2, 253, 0.12) 100%);
+  background: linear-gradient(135deg, rgba(2, 254, 220, 0.15) 0%, rgba(90, 92, 255, 0.15) 50%, rgba(245, 2, 253, 0.15) 100%);
 }
 
 .gradient-brand-border {
@@ -102,5 +126,23 @@
 }
 
 .badge-glow {
-  box-shadow: 0 0 12px rgba(2, 254, 220, 0.3);
+  box-shadow: 0 0 16px rgba(2, 254, 220, 0.35);
+}
+
+@keyframes radarSweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-radar {
+  animation: radarSweep 2.5s linear infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.08); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
 }

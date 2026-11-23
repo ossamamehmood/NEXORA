@@ -79,32 +79,35 @@ const navCategories: NavCategory[] = [
 
 export const Sidebar: React.FC<SidebarProps> = ({ currentSection, onSelectSection }) => {
   return (
-    <aside className="w-64 bg-[#0B0D13] border-r border-[#1D2230] flex flex-col h-full select-none">
+    <aside className="w-64 bg-gradient-to-b from-[#0c0f17] via-[#090b11] to-[#07080d] border-r border-[#1D2230] flex flex-col h-full select-none shadow-2xl relative z-20">
       {/* Brand Header */}
-      <div className="p-5 flex items-center gap-3 border-b border-[#1D2230]/70">
-        <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center p-0.5 shadow-lg shadow-[#02FEDC]/15">
-          <div className="w-full h-full bg-[#08090D] rounded-[10px] flex items-center justify-center">
-            <span className="font-black text-sm text-gradient">N</span>
+      <div className="p-5 flex items-center gap-3 border-b border-[#1D2230]/60 bg-[#0d1018]/40">
+        <div className="relative group">
+          <div className="w-10 h-10 rounded-xl gradient-brand flex items-center justify-center p-0.5 shadow-lg shadow-[#02FEDC]/20 transition-transform group-hover:scale-105">
+            <div className="w-full h-full bg-[#08090D] rounded-[10px] flex items-center justify-center">
+              <span className="font-black text-base text-gradient">N</span>
+            </div>
           </div>
+          <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#00E699] ring-2 ring-[#08090D] shadow-[0_0_8px_#00E699]" />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h1 className="font-bold text-base tracking-wider text-[#F5F7FA]">
+            <h1 className="font-extrabold text-base tracking-wider text-[#F5F7FA]">
               NEX<span className="text-gradient">ORA</span>
             </h1>
-            <span className="px-1.5 py-0.2 rounded text-[8px] font-black tracking-widest uppercase bg-[#02FEDC]/20 text-[#02FEDC] border border-[#02FEDC]/40">
+            <span className="px-1.5 py-0.5 rounded text-[8px] font-black tracking-widest uppercase bg-[#02FEDC]/15 text-[#02FEDC] border border-[#02FEDC]/30 shadow-[0_0_10px_rgba(2,254,220,0.2)]">
               v1.0.0
             </span>
           </div>
-          <p className="text-[10px] tracking-wider text-[#969BAA] uppercase font-medium">Your system. Under control.</p>
+          <p className="text-[10px] tracking-wider text-[#8A90A2] uppercase font-medium truncate">System Under Control</p>
         </div>
       </div>
 
       {/* Categorized Navigation List */}
-      <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
+      <nav className="flex-1 overflow-y-auto px-3 py-3.5 space-y-4">
         {navCategories.map((category) => (
           <div key={category.title} className="space-y-1">
-            <h2 className="px-3 text-[10px] font-bold uppercase tracking-wider text-[#656C80]">
+            <h2 className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#5E6578]">
               {category.title}
             </h2>
             <div className="space-y-0.5">
@@ -115,21 +118,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentSection, onSelectSectio
                   <button
                     key={item.id}
                     onClick={() => onSelectSection(item.id)}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150 relative ${
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 relative group ${
                       isActive
-                        ? 'bg-[#171A24] text-[#F5F7FA] border border-[#2B3245] shadow-sm'
-                        : 'text-[#969BAA] hover:bg-[#12151E] hover:text-[#E2E8F0] border border-transparent'
+                        ? 'bg-gradient-to-r from-[#02FEDC]/15 via-[#5A5CFF]/10 to-transparent text-[#F5F7FA] border border-[#02FEDC]/30 shadow-[0_4px_20px_rgba(2,254,220,0.08)]'
+                        : 'text-[#969BAA] hover:bg-white/[0.03] hover:text-[#F5F7FA] border border-transparent'
                     }`}
                   >
                     {isActive && (
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r bg-gradient-to-b from-[#02FEDC] via-[#5A5CFF] to-[#F502FD]" />
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-gradient-to-b from-[#02FEDC] via-[#5A5CFF] to-[#F502FD] shadow-[0_0_12px_#02FEDC]" />
                     )}
                     <div className="flex items-center gap-3">
-                      <Icon className={`w-4 h-4 transition-colors ${isActive ? 'text-[#02FEDC]' : 'text-[#656C80]'}`} />
-                      <span>{item.label}</span>
+                      <Icon className={`w-4 h-4 transition-transform group-hover:scale-110 ${isActive ? 'text-[#02FEDC]' : 'text-[#656C80]'}`} />
+                      <span className={isActive ? 'font-semibold' : ''}>{item.label}</span>
                     </div>
                     {item.badge && (
-                      <span className="px-1.5 py-0.5 rounded text-[8px] font-bold uppercase bg-[#02FEDC]/15 text-[#02FEDC] border border-[#02FEDC]/30">
+                      <span className="px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase bg-gradient-to-r from-[#02FEDC]/20 to-[#5A5CFF]/20 text-[#02FEDC] border border-[#02FEDC]/30">
                         {item.badge}
                       </span>
                     )}
@@ -146,15 +149,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentSection, onSelectSectio
         ))}
       </nav>
 
-      {/* Footer Status */}
-      <div className="p-4 border-t border-[#1D2230] bg-[#08090D]/50">
-        <div className="flex items-center justify-between text-[11px] text-[#969BAA]">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#00E699] animate-pulse"></span>
-            System Protected
+      {/* Footer System Status Banner */}
+      <div className="p-3.5 m-3 rounded-xl bg-gradient-to-b from-[#111520] to-[#0d1018] border border-[#1D2230]/80 space-y-1.5">
+        <div className="flex items-center justify-between text-[11px]">
+          <span className="flex items-center gap-1.5 font-semibold text-[#00E699]">
+            <span className="w-2 h-2 rounded-full bg-[#00E699] animate-pulse shadow-[0_0_8px_#00E699]" />
+            Native Rust Core
           </span>
-          <span className="font-mono text-[10px] text-[#656C80]">Windows 64-bit</span>
+          <span className="font-mono text-[9px] text-[#02FEDC] px-1.5 py-0.2 rounded bg-[#02FEDC]/10 border border-[#02FEDC]/20">Active</span>
         </div>
+        <p className="text-[10px] text-[#71788E] leading-tight">
+          Zero background daemons. Zero telemetry battery drain.
+        </p>
       </div>
     </aside>
   );

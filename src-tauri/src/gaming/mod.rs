@@ -6,6 +6,88 @@ use std::sync::Mutex;
 use chrono::Local;
 use serde::{Deserialize, Serialize};
 
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
+
+const CREATE_NO_WINDOW: u32 = 0x08000000;
+
+fn create_hidden_command(program: &str) -> Command {
+    let mut cmd = Command::new(program);
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(CREATE_NO_WINDOW);
+    cmd
+}
+
+#[cfg(target_os = "windows")]
+mod win_priority {
+    use std::ffi::c_void;
+
+    const PROCESS_QUERY_LIMITED_INFORMATION: u32 = 0x1000;
+    const PROCESS_SET_INFORMATION: u32 = 0x0200;
+
+    pub const IDLE_PRIORITY_CLASS: u32 = 0x00000040;
+    pub const BELOW_NORMAL_PRIORITY_CLASS: u32 = 0x00004000;
+    pub const NORMAL_PRIORITY_CLASS: u32 = 0x00000020;
+    pub const ABOVE_NORMAL_PRIORITY_CLASS: u32 = 0x00008000;
+    pub const HIGH_PRIORITY_CLASS: u32 = 0x00000080;
+    pub const REALTIME_PRIORITY_CLASS: u32 = 0x00000100;
+
+    #[link(name = "kernel32")]
+    extern "system" {
+        fn OpenProcess(dwDesiredAccess: u32, bInheritHandle: i32, dwProcessId: u32) -> *mut c_void;
+        fn GetPriorityClass(hProcess: *mut c_void) -> u32;
+        fn SetPriorityClass(hProcess: *mut c_void, dwPriorityClass: u32) -> i32;
+        fn CloseHandle(hObject: *mut c_void) -> i32;
+    }
+
+    pub fn priority_str_to_u32(p: &str) -> u32 {
+        match p.to_lowercase().as_str() {
+            "high" => HIGH_PRIORITY_CLASS,
+            "abovenormal" | "above_normal" => ABOVE_NORMAL_PRIORITY_CLASS,
+            "belownormal" | "below_normal" => BELOW_NORMAL_PRIORITY_CLASS,
+            "idle" => IDLE_PRIORITY_CLASS,
+            "realtime" => REALTIME_PRIORITY_CLASS,
+            _ => NORMAL_PRIORITY_CLASS,
+        }
+    }
+
+    pub fn priority_u32_to_str(p: u32) -> &'static str {
+        match p {
+            HIGH_PRIORITY_CLASS => "High",
+            ABOVE_NORMAL_PRIORITY_CLASS => "AboveNormal",
+            BELOW_NORMAL_PRIORITY_CLASS => "BelowNormal",
+            IDLE_PRIORITY_CLASS => "Idle",
+            REALTIME_PRIORITY_CLASS => "Realtime",
+            _ => "Normal",
+        }
+    }
+
+    pub fn get_process_priority(pid: u32) -> Option<String> {
+        let handle = unsafe { OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, 0, pid) };
+        if handle.is_null() {
+            return None;
+        }
+        let prio = unsafe { GetPriorityClass(handle) };
+        unsafe { CloseHandle(handle) };
+        if prio == 0 {
+            None
+        } else {
+            Some(priority_u32_to_str(prio).to_string())
+        }
+    }
+
+    pub fn set_process_priority(pid: u32, target: &str) -> bool {
+        let prio_val = priority_str_to_u32(target);
+        let handle = unsafe { OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_SET_INFORMATION, 0, pid) };
+        if handle.is_null() {
+            return false;
+        }
+        let res = unsafe { SetPriorityClass(handle, prio_val) };
+        unsafe { CloseHandle(handle) };
+        res != 0
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GameProfile {
     pub id: String,
@@ -80,18 +162,13 @@ impl GamingEngine {
             if let Ok(content) = fs::read_to_string(&recovery_file) {
                 if let Ok(journal) = serde_json::from_str::<RecoveryJournal>(&content) {
                     if let Some(ref guid) = journal.original_power_scheme_guid {
-                        let _ = Command::new("powercfg")
+                        let _ = create_hidden_command("powercfg")
                             .args(["/setactive", guid])
                             .output();
                     }
                     for (pid, orig_prio) in journal.modified_priorities {
-                        let script = format!(
-                            "try {{ (Get-Process -Id {} -ErrorAction SilentlyContinue).PriorityClass = '{}' }} catch {{}}",
-                            pid, orig_prio
-                        );
-                        let _ = Command::new("powershell")
-                            .args(["-NoProfile", "-NonInteractive", "-Command", &script])
-                            .output();
+                        #[cfg(target_os = "windows")]
+                        win_priority::set_process_priority(pid, &orig_prio);
                     }
                 }
             }
@@ -143,7 +220,7 @@ impl GamingEngine {
     }
 
     fn query_active_power_scheme() -> Option<(String, String)> {
-        let output = Command::new("powercfg")
+        let output = create_hidden_command("powercfg")
             .arg("/getactivescheme")
             .output()
             .ok()?;
@@ -228,7 +305,7 @@ impl GamingEngine {
             // 2. Set power plan to High Performance if preset requires it
             if preset == "Performance" || preset == "Custom" {
                 // High Performance GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
-                let res = Command::new("powercfg")
+                let res = create_hidden_command("powercfg")
                     .args(["/setactive", "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"])
                     .output();
                 if res.is_ok() {
@@ -281,7 +358,7 @@ impl GamingEngine {
         } else {
             // Restore everything
             if let Some(orig_guid) = state.original_power_scheme_guid.take() {
-                let _ = Command::new("powercfg")
+                let _ = create_hidden_command("powercfg")
                     .args(["/setactive", &orig_guid])
                     .output();
                 state.activity_logs.insert(0, GamingLogEntry {
@@ -291,16 +368,11 @@ impl GamingEngine {
                 });
             }
 
-            // Restore process priorities
+            // Restore process priorities natively via Win32 API in 0ms (no cmd/powershell popups)
             let mut orig_prios = self.original_priorities.lock().unwrap();
             for (pid, orig_prio) in orig_prios.drain() {
-                let script = format!(
-                    "try {{ (Get-Process -Id {} -ErrorAction SilentlyContinue).PriorityClass = '{}' }} catch {{}}",
-                    pid, orig_prio
-                );
-                let _ = Command::new("powershell")
-                    .args(["-NoProfile", "-NonInteractive", "-Command", &script])
-                    .output();
+                #[cfg(target_os = "windows")]
+                win_priority::set_process_priority(pid, &orig_prio);
             }
 
             state.is_enabled = false;
@@ -322,36 +394,21 @@ impl GamingEngine {
     }
 
     fn apply_game_priority_internal(&self, pid: u32, target_priority: &str) -> Result<(), String> {
-        // Query original priority first
-        let query_script = format!(
-            "(Get-Process -Id {} -ErrorAction SilentlyContinue).PriorityClass",
-            pid
-        );
-        let output = Command::new("powershell")
-            .args(["-NoProfile", "-NonInteractive", "-Command", &query_script])
-            .output()
-            .map_err(|e| e.to_string())?;
+        #[cfg(target_os = "windows")]
+        {
+            if let Some(orig) = win_priority::get_process_priority(pid) {
+                let mut orig_map = self.original_priorities.lock().unwrap();
+                orig_map.entry(pid).or_insert(orig);
+            }
 
-        let orig = String::from_utf8_lossy(&output.stdout).trim().to_string();
-        if !orig.is_empty() {
-            let mut orig_map = self.original_priorities.lock().unwrap();
-            orig_map.entry(pid).or_insert(orig);
+            if win_priority::set_process_priority(pid, target_priority) {
+                Ok(())
+            } else {
+                Err(format!("Could not adjust priority for PID {}", pid))
+            }
         }
-
-        let set_script = format!(
-            "try {{ (Get-Process -Id {} -ErrorAction Stop).PriorityClass = '{}' }} catch {{ exit 1 }}",
-            pid, target_priority
-        );
-        let res = Command::new("powershell")
-            .args(["-NoProfile", "-NonInteractive", "-Command", &set_script])
-            .status()
-            .map_err(|e| e.to_string())?;
-
-        if res.success() {
-            Ok(())
-        } else {
-            Err(format!("Could not adjust priority for PID {}", pid))
-        }
+        #[cfg(not(target_os = "windows"))]
+        Ok(())
     }
 
     pub fn get_background_process_candidates(&self) -> Vec<BackgroundAppCandidate> {

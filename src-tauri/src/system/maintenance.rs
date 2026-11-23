@@ -1,6 +1,18 @@
 use serde::{Deserialize, Serialize};
 use std::process::Command;
 
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
+
+const CREATE_NO_WINDOW: u32 = 0x08000000;
+
+fn create_hidden_command(program: &str) -> Command {
+    let mut cmd = Command::new(program);
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(CREATE_NO_WINDOW);
+    cmd
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceExecutionResult {
     pub task_id: String,
@@ -18,7 +30,7 @@ impl MaintenanceRoutines {
             "flush_dns" => {
                 #[cfg(target_os = "windows")]
                 {
-                    match Command::new("ipconfig").arg("/flushdns").output() {
+                    match create_hidden_command("ipconfig").arg("/flushdns").output() {
                         Ok(output) => {
                             let msg = String::from_utf8_lossy(&output.stdout).trim().to_string();
                             MaintenanceExecutionResult {
@@ -45,7 +57,7 @@ impl MaintenanceRoutines {
             "flush_arp" => {
                 #[cfg(target_os = "windows")]
                 {
-                    match Command::new("netsh").args(["interface", "ip", "delete", "arpcache"]).output() {
+                    match create_hidden_command("netsh").args(["interface", "ip", "delete", "arpcache"]).output() {
                         Ok(output) => MaintenanceExecutionResult {
                             task_id: task_id.to_string(),
                             success: output.status.success(),
@@ -75,7 +87,7 @@ impl MaintenanceRoutines {
                             let _ = std::fs::remove_file(&icon_db);
                         }
                     }
-                    let _ = Command::new("ie4uinit.exe").arg("-show").output();
+                    let _ = create_hidden_command("ie4uinit.exe").arg("-show").output();
                     MaintenanceExecutionResult {
                         task_id: task_id.to_string(),
                         success: true,
@@ -94,7 +106,7 @@ impl MaintenanceRoutines {
                 #[cfg(target_os = "windows")]
                 {
                     // Run DISM component store cleanup
-                    match Command::new("dism")
+                    match create_hidden_command("dism")
                         .args(&["/online", "/cleanup-image", "/startcomponentcleanup"])
                         .output()
                     {

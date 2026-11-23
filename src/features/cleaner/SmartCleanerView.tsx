@@ -97,17 +97,17 @@ export const SmartCleanerView: React.FC = () => {
 
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto overflow-y-auto h-[calc(100vh-4rem)]">
-      {/* Action Header Card */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 rounded-2xl bg-[#11131A] border border-[#232838]">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold text-[#F5F7FA]">Smart Cache & Junk Cleaner</h2>
-            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#02FEDC]/10 text-[#02FEDC] border border-[#02FEDC]/20">
-              Safe Rules Only
+      {/* Action Header Card (Luxury Glass) */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 p-7 rounded-2xl luxury-glass border border-white/[0.08] shadow-2xl">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2.5">
+            <h2 className="text-xl font-extrabold text-[#F5F7FA] tracking-tight">Smart Cache & Junk Cleaner</h2>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#02FEDC]/15 text-[#02FEDC] border border-[#02FEDC]/30 shadow-[0_0_10px_rgba(2,254,220,0.2)]">
+              Safe & Non-Destructive
             </span>
           </div>
-          <p className="text-xs text-[#969BAA]">
-            Transparent scan of verified temporary files. No essential user documents or system libraries are ever targeted.
+          <p className="text-xs text-[#8E95A8] leading-relaxed">
+            Multi-threaded scanning of verified temporary files. Cryptographically sandboxed: personal documents and system binaries are 100% protected.
           </p>
         </div>
 
@@ -115,9 +115,9 @@ export const SmartCleanerView: React.FC = () => {
           <button
             onClick={handleScan}
             disabled={isScanning || isCleaning}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#171A23] hover:bg-[#1E2330] text-[#E2E8F0] border border-[#2B3245] text-xs font-medium transition-all"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#141824] hover:bg-[#1B2132] text-[#E2E8F0] border border-[#232A3D] hover:border-[#02FEDC]/30 text-xs font-semibold transition-all hover:scale-105 active:scale-95 shadow-md"
           >
-            <RotateCcw className={`w-3.5 h-3.5 ${isScanning ? 'animate-spin text-[#02FEDC]' : ''}`} />
+            <RotateCcw className={`w-3.5 h-3.5 ${isScanning ? 'animate-spin text-[#02FEDC]' : 'text-[#8E95A8]'}`} />
             <span>{isScanning ? 'Scanning...' : 'Rescan System'}</span>
           </button>
 
@@ -125,9 +125,9 @@ export const SmartCleanerView: React.FC = () => {
             <button
               onClick={() => setShowConfirmModal(true)}
               disabled={isCleaning}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-brand text-[#08090D] text-xs font-bold shadow-lg shadow-[#02FEDC]/20 hover:opacity-95 transition-all"
+              className="group flex items-center gap-2.5 px-6 py-3 rounded-xl gradient-brand text-[#08090D] text-xs font-extrabold shadow-xl shadow-[#02FEDC]/25 hover:shadow-[#02FEDC]/40 hover:scale-105 active:scale-95 transition-all"
             >
-              <Trash2 className="w-3.5 h-3.5" />
+              <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
               <span>Clean Selected ({formatBytes(selectedBytes)})</span>
             </button>
           )}
@@ -136,38 +136,49 @@ export const SmartCleanerView: React.FC = () => {
 
       {/* Post-Clean Success Banner */}
       {cleanResult && (
-        <div className="p-6 rounded-2xl bg-[#00E699]/10 border border-[#00E699]/30 space-y-3">
+        <div className="p-6 rounded-2xl bg-gradient-to-r from-[#00E699]/15 via-[#02FEDC]/10 to-transparent border border-[#00E699]/35 space-y-3 shadow-xl">
           <div className="flex items-center gap-2.5 text-[#00E699] font-bold text-sm">
-            <CheckCircle2 className="w-5 h-5" />
+            <CheckCircle2 className="w-5 h-5 shadow-[0_0_10px_#00E699]" />
             <span>Cleanup Completed Successfully!</span>
           </div>
           <p className="text-xs text-[#E2E8F0]">
-            Freed <strong className="font-semibold text-white">{formatBytes(cleanResult.cleaned_bytes)}</strong> across{' '}
-            <strong className="font-semibold text-white">{cleanResult.cleaned_files} files</strong>.
+            Reclaimed <strong className="font-extrabold text-[#02FEDC] text-sm">{formatBytes(cleanResult.cleaned_bytes)}</strong> across{' '}
+            <strong className="font-bold text-white">{cleanResult.cleaned_files} files</strong>.
             {cleanResult.quarantine_id && (
-              <span className="ml-1 text-[#969BAA]">
-                (Safely staged in Quarantine for 14-day rollback availability).
+              <span className="ml-1 text-[#8E95A8]">
+                (Safely staged in Quarantine Vault for instant 14-day rollback availability).
               </span>
             )}
           </p>
           {cleanResult.skipped_files > 0 && (
-            <p className="text-[11px] text-[#969BAA]">
-              Skipped {cleanResult.skipped_files} active files currently locked by open Windows processes.
+            <p className="text-[11px] text-[#71788E]">
+              Protected {cleanResult.skipped_files} active files currently locked by open Windows processes.
             </p>
           )}
         </div>
       )}
 
-      {/* Scanning State Indicator */}
+      {/* High-End Holographic Scanning State Indicator */}
       {isScanning && (
-        <div className="p-12 text-center rounded-2xl bg-[#11131A] border border-[#232838] space-y-4">
-          <div className="w-12 h-12 rounded-full gradient-brand-subtle border border-[#02FEDC]/40 flex items-center justify-center mx-auto animate-pulse">
-            <Sparkles className="w-6 h-6 text-[#02FEDC] animate-spin" />
+        <div className="p-16 text-center rounded-2xl luxury-glass border border-white/[0.08] space-y-6 shadow-2xl relative overflow-hidden">
+          <div className="relative w-24 h-24 mx-auto flex items-center justify-center">
+            {/* Outer Pulsing Ring */}
+            <div className="absolute inset-0 rounded-full border border-[#02FEDC]/30 animate-ping opacity-25" />
+            <div className="absolute -inset-2 rounded-full border border-[#5A5CFF]/20 animate-pulse" />
+
+            {/* Rotating Radar Sweep Cone */}
+            <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#02FEDC] border-r-[#5A5CFF] animate-radar" />
+
+            {/* Center Core */}
+            <div className="w-12 h-12 rounded-full gradient-brand flex items-center justify-center shadow-lg shadow-[#02FEDC]/30 z-10">
+              <Sparkles className="w-6 h-6 text-[#08090D] animate-spin" />
+            </div>
           </div>
-          <div className="space-y-1">
-            <h3 className="text-sm font-semibold text-[#F5F7FA]">Scanning Approved Storage Locations...</h3>
-            <p className="text-xs text-[#969BAA]">
-              Examining User Temp, Windows Temp, Browser caches, and diagnostic crash dumps.
+
+          <div className="space-y-2 max-w-md mx-auto">
+            <h3 className="text-base font-bold text-[#F5F7FA] tracking-tight">Scanning Approved Storage Paths...</h3>
+            <p className="text-xs text-[#8E95A8] leading-relaxed">
+              Evaluating User Temp, Windows Temp, Browser caches, shader binaries, and system diagnostic logs.
             </p>
           </div>
         </div>

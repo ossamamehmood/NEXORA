@@ -104,8 +104,13 @@ export const GamingModeView: React.FC = () => {
     fetchProfiles();
 
     const interval = setInterval(() => {
-      fetchState();
-    }, 3000);
+      // Gentle polling for gaming session duration and active game detection
+      NexoraApi.getGamingModeState().then((state) => {
+        if (state) {
+          setGamingState(state);
+        }
+      }).catch(() => {});
+    }, 8000);
     return () => clearInterval(interval);
   }, []);
 

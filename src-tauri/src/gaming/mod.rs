@@ -5,7 +5,6 @@ use std::process::Command;
 use std::sync::Mutex;
 use chrono::Local;
 use serde::{Deserialize, Serialize};
-use sysinfo::{Pid, System};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GameProfile {
@@ -190,22 +189,20 @@ impl GamingEngine {
     }
 
     pub fn detect_active_game(&self) -> Option<DetectedGame> {
-        let mut sys = System::new_all();
-        sys.refresh_processes();
-
+        let processes = crate::monitoring::TelemetryEngine::get_processes_list();
         let profiles = self.custom_profiles.lock().unwrap();
 
-        for (pid, process) in sys.processes() {
-            let proc_name = process.name().to_lowercase();
+        for process in processes {
+            let proc_name = process.name.to_lowercase();
             for profile in profiles.iter() {
                 let exec_lower = profile.executable.to_lowercase();
                 if proc_name == exec_lower || proc_name.starts_with(&exec_lower.replace(".exe", "")) {
                     return Some(DetectedGame {
                         name: profile.name.clone(),
                         executable: profile.executable.clone(),
-                        pid: pid.as_u32(),
-                        cpu_usage: process.cpu_usage(),
-                        memory_bytes: process.memory(),
+                        pid: process.pid,
+                        cpu_usage: process.cpu_usage,
+                        memory_bytes: process.memory_bytes,
                     });
                 }
             }
@@ -358,8 +355,7 @@ impl GamingEngine {
     }
 
     pub fn get_background_process_candidates(&self) -> Vec<BackgroundAppCandidate> {
-        let mut sys = System::new_all();
-        sys.refresh_processes();
+        let processes = crate::monitoring::TelemetryEngine::get_processes_list();
 
         let protected = [
             "explorer.exe", "dwm.exe", "csrss.exe", "lsass.exe", "smss.exe", "services.exe",
@@ -370,14 +366,14 @@ impl GamingEngine {
 
         let mut candidates = Vec::new();
 
-        for (pid, proc_) in sys.processes() {
-            let name = proc_.name().to_lowercase();
-            if protected.iter().any(|&p| p == name) {
+        for proc_ in processes {
+            let name = proc_.name.to_lowercase();
+            if protected.iter().any(|&p| p == name || name.starts_with(p)) {
                 continue;
             }
 
-            let mem = proc_.memory();
-            let cpu = proc_.cpu_usage();
+            let mem = proc_.memory_bytes;
+            let cpu = proc_.cpu_usage;
 
             // Candidate if using significant memory (> 100 MB) or CPU (> 0.8%)
             if mem > 100 * 1024 * 1024 || cpu > 0.8 {
@@ -394,8 +390,8 @@ impl GamingEngine {
                 };
 
                 candidates.push(BackgroundAppCandidate {
-                    pid: pid.as_u32(),
-                    name: proc_.name().to_string(),
+                    pid: proc_.pid,
+                    name: proc_.name,
                     memory_bytes: mem,
                     cpu_usage: cpu,
                     is_safe_to_close: true,
@@ -410,24 +406,21 @@ impl GamingEngine {
     }
 
     pub fn close_background_process(&self, pid: u32) -> Result<bool, String> {
-        let mut sys = System::new_all();
-        sys.refresh_processes();
-
-        if let Some(proc_) = sys.process(Pid::from_u32(pid)) {
-            let name = proc_.name().to_string();
-            let killed = proc_.kill();
-            if killed {
-                let mut state = self.state.lock().unwrap();
-                state.managed_processes_count += 1;
-                state.activity_logs.insert(0, GamingLogEntry {
-                    timestamp: Local::now().to_rfc3339(),
-                    event_type: "Process".to_string(),
-                    message: format!("Safely closed background application '{}' (PID {})", name, pid),
-                });
-                return Ok(true);
+        match crate::monitoring::ProcessMonitor::terminate_process(pid) {
+            Ok(killed) => {
+                if killed {
+                    let mut state = self.state.lock().unwrap();
+                    state.managed_processes_count += 1;
+                    state.activity_logs.insert(0, GamingLogEntry {
+                        timestamp: Local::now().to_rfc3339(),
+                        event_type: "Process".to_string(),
+                        message: format!("Safely closed background application (PID {})", pid),
+                    });
+                }
+                Ok(killed)
             }
+            Err(e) => Err(e),
         }
-        Err(format!("Process {} could not be closed", pid))
     }
 
     pub fn get_custom_profiles(&self) -> Vec<GameProfile> {

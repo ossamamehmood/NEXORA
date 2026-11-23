@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Shield, Moon, Sun, Monitor, Lock, Trash2, Plus } from 'lucide-react';
+import { Settings, Shield, Moon, Sun, Monitor, Lock, Trash2, Plus, Info, ExternalLink, ShieldCheck, Mail } from 'lucide-react';
 import { AppSettings } from '../../types';
 import { NexoraApi } from '../../services/api';
 
@@ -150,6 +150,48 @@ export const SettingsView: React.FC = () => {
               <span className="font-mono text-[#969BAA] truncate">{path}</span>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* About & Production Legal Information */}
+      <div className="p-6 rounded-2xl bg-[#11131A] border border-[#232838] space-y-4">
+        <div className="flex items-center gap-2">
+          <Info className="w-5 h-5 text-[#5A5CFF]" />
+          <h3 className="text-xs font-bold text-[#F5F7FA] uppercase tracking-wider">About NEXORA</h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
+          <div className="p-4 rounded-xl bg-[#0E1017] border border-[#1D2230] space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-[#F5F7FA]">NEXORA Desktop Suite</span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#5A5CFF]/20 text-[#5A5CFF] border border-[#5A5CFF]/30 font-semibold">
+                v1.0.0-rc.1 (RC)
+              </span>
+            </div>
+            <p className="text-[11px] text-[#969BAA] leading-relaxed">
+              Your system. Under control. Built with a high-performance native Rust engine and modern Windows WebView2 shell.
+            </p>
+            <div className="pt-2 text-[10px] text-[#656C80] font-mono">
+              Build Revision: be7ad6d / RC1 • Architecture: x86_64
+            </div>
+          </div>
+
+          <div className="p-4 rounded-xl bg-[#0E1017] border border-[#1D2230] space-y-2">
+            <span className="text-xs font-bold text-[#F5F7FA]">Security & Support</span>
+            <div className="space-y-1.5 text-xs text-[#969BAA]">
+              <div className="flex items-center gap-2">
+                <Mail className="w-3.5 h-3.5 text-[#02FEDC]" />
+                <span>Security Contact: <code className="text-[#F5F7FA]">security@nexora.app</code></span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#00E699]" />
+                <span>Zero Telemetry Guarantee (Strict Opt-In Only)</span>
+              </div>
+            </div>
+            <div className="pt-2 text-[10px] text-[#656C80]">
+              Copyright © 2026 NEXORA Team. All rights reserved.
+            </div>
+          </div>
         </div>
       </div>
     </div>

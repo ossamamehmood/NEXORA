@@ -58,10 +58,10 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, metrics, onQuick
           </div>
         )}
 
-        {/* Beta Status Badge */}
-        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#11131A] border border-[#02FEDC]/30 text-[10px] font-mono text-[#02FEDC]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00E699] animate-pulse" />
-          <span>BETA 1.0</span>
+        {/* Release Candidate Status Badge */}
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#11131A] border border-[#5A5CFF]/40 text-[10px] font-mono text-[#5A5CFF]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#02FEDC] animate-pulse" />
+          <span>RC 1.0</span>
         </div>
 
         {/* Refresh Action */}

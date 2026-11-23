@@ -54,11 +54,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentSection, onSelectSectio
             <h1 className="font-bold text-base tracking-wider text-[#F5F7FA]">
               NEX<span className="text-gradient">ORA</span>
             </h1>
-            <span className="px-1.5 py-0.2 rounded text-[8px] font-black tracking-widest uppercase bg-[#02FEDC]/15 text-[#02FEDC] border border-[#02FEDC]/30">
-              BETA
+            <span className="px-1.5 py-0.2 rounded text-[8px] font-black tracking-widest uppercase bg-[#5A5CFF]/20 text-[#5A5CFF] border border-[#5A5CFF]/40">
+              RC1
             </span>
           </div>
-          <p className="text-[10px] tracking-wider text-[#969BAA] uppercase font-medium">v1.0.0-beta.1</p>
+          <p className="text-[10px] tracking-wider text-[#969BAA] uppercase font-medium">v1.0.0-rc.1</p>
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 # Node dependencies
 node_modules/
 dist/
+dist-app/
 
 # Rust build target
 src-tauri/target/
@@ -18,3 +19,5 @@ Cargo.lock
 # Windows
 Thumbs.db
 Desktop.ini
+
+.vercel

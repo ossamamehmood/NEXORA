@@ -145,4 +145,37 @@ mod tests {
         let p = Path::new("C:\\Users\\User\\AppData\\Local\\Temp\\sample_cache.tmp");
         assert_eq!(SecurityValidator::validate_target_path(p), ValidationResult::Safe);
     }
+
+    #[test]
+    fn test_duplicate_finder_cryptographic_verification() {
+        use tempfile::tempdir;
+        use std::fs;
+        use crate::storage::DuplicateFinder;
+
+        let dir = tempdir().expect("Failed to create disposable test dir");
+        let dir_path = dir.path();
+
+        let content_a = b"NEXORA duplicate detection verification payload 1234567890";
+        let file1 = dir_path.join("file1.dat");
+        let file2 = dir_path.join("file2.dat");
+        let file3 = dir_path.join("file3.dat");
+
+        fs::write(&file1, content_a).unwrap();
+        fs::write(&file2, content_a).unwrap();
+        fs::write(&file3, content_a).unwrap();
+
+        let content_b = b"Completely different content for uniqueness check";
+        let file4 = dir_path.join("file4.dat");
+        fs::write(&file4, content_b).unwrap();
+
+        let result = DuplicateFinder::find_duplicates(dir_path).expect("Scan failed");
+
+        assert_eq!(result.total_examined_files, 4);
+        assert_eq!(result.duplicate_groups.len(), 1);
+
+        let group = &result.duplicate_groups[0];
+        assert_eq!(group.file_paths.len(), 3);
+        assert_eq!(group.file_size, content_a.len() as u64);
+        assert_eq!(result.potential_reclaimable_bytes, (content_a.len() * 2) as u64);
+    }
 }

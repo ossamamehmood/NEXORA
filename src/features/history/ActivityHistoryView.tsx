@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { History, ShieldCheck, Download, Trash2 } from 'lucide-react';
+import { History, ShieldCheck, Download, Trash2, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 import { CleanLog, QuarantineRecord, ScanLog } from '../../types';
 import { NexoraApi } from '../../services/api';
 
@@ -16,12 +16,32 @@ export const ActivityHistoryView: React.FC = () => {
   const [cleanLogs, setCleanLogs] = useState<CleanLog[]>([]);
   const [scanLogs, setScanLogs] = useState<ScanLog[]>([]);
   const [quarantineRecords, setQuarantineRecords] = useState<QuarantineRecord[]>([]);
+  const [restoringId, setRestoringId] = useState<string | null>(null);
+  const [notification, setNotification] = useState<{ msg: string; isError?: boolean } | null>(null);
 
-  useEffect(() => {
+  const loadData = () => {
     NexoraApi.getCleanHistory().then(setCleanLogs);
     NexoraApi.getScanHistory().then(setScanLogs);
     NexoraApi.getQuarantineRecords().then(setQuarantineRecords);
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
+
+  const handleRestore = async (id: string) => {
+    setRestoringId(id);
+    setNotification(null);
+    try {
+      const res = await NexoraApi.restoreQuarantineRecord(id);
+      setNotification({ msg: res || 'File successfully restored from quarantine vault.' });
+      loadData();
+    } catch (err: any) {
+      setNotification({ msg: err?.toString() || 'Failed to restore file.', isError: true });
+    } finally {
+      setRestoringId(null);
+    }
+  };
 
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto overflow-y-auto h-[calc(100vh-4rem)]">
@@ -60,6 +80,17 @@ export const ActivityHistoryView: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {notification && (
+        <div className={`p-4 rounded-xl flex items-center gap-2 text-xs border ${
+          notification.isError
+            ? 'bg-[#FF453A]/10 border-[#FF453A]/30 text-[#FF453A]'
+            : 'bg-[#00E699]/10 border-[#00E699]/30 text-[#00E699]'
+        }`}>
+          {notification.isError ? <AlertCircle className="w-4 h-4 shrink-0" /> : <CheckCircle2 className="w-4 h-4 shrink-0" />}
+          <span>{notification.msg}</span>
+        </div>
+      )}
 
       {/* Content based on Active Tab */}
       <div className="border border-[#1D2230] rounded-xl overflow-hidden bg-[#11131A]">
@@ -130,8 +161,12 @@ export const ActivityHistoryView: React.FC = () => {
                   <td className="p-3.5 font-mono text-[#969BAA]">{formatBytes(rec.file_size)}</td>
                   <td className="p-3.5 font-mono text-[#656C80]">{new Date(rec.timestamp).toLocaleString()}</td>
                   <td className="p-3.5 text-right">
-                    <button className="px-2.5 py-1 rounded bg-[#02FEDC]/10 text-[#02FEDC] hover:bg-[#02FEDC]/20 font-medium">
-                      Restore File
+                    <button
+                      onClick={() => handleRestore(rec.id)}
+                      disabled={restoringId === rec.id}
+                      className="px-2.5 py-1 rounded bg-[#02FEDC]/10 text-[#02FEDC] hover:bg-[#02FEDC]/20 font-medium transition-all"
+                    >
+                      {restoringId === rec.id ? 'Restoring...' : 'Restore File'}
                     </button>
                   </td>
                 </tr>

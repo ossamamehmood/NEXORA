@@ -22,6 +22,11 @@ export const SettingsView: React.FC = () => {
 
   const handleSave = async (updated: AppSettings) => {
     setSettings(updated);
+    if (updated.theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
     await NexoraApi.saveAppSettings(updated);
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 2000);

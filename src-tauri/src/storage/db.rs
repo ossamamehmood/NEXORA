@@ -135,6 +135,40 @@ impl AppDatabase {
         self.state.lock().map(|s| s.quarantine_records.clone()).unwrap_or_default()
     }
 
+    pub fn add_quarantine_record(&self, record: QuarantineRecord) {
+        if let Ok(mut state) = self.state.lock() {
+            state.quarantine_records.push(record);
+        }
+        self.persist();
+    }
+
+    pub fn restore_quarantine_record(&self, record_id: &str) -> Result<String, String> {
+        let mut state = self.state.lock().map_err(|e| e.to_string())?;
+        if let Some(pos) = state.quarantine_records.iter().position(|r| r.id == record_id) {
+            let record = state.quarantine_records.remove(pos);
+            let src = std::path::Path::new(&record.quarantined_path);
+            let dst = std::path::Path::new(&record.original_path);
+
+            if !src.exists() {
+                return Err(format!("Quarantine source file not found at {:?}", src));
+            }
+
+            if let Some(parent) = dst.parent() {
+                let _ = fs::create_dir_all(parent);
+            }
+
+            fs::rename(src, dst)
+                .or_else(|_| fs::copy(src, dst).and_then(|_| fs::remove_file(src)))
+                .map_err(|e| format!("Failed to restore file to {:?}: {}", dst, e))?;
+
+            drop(state);
+            self.persist();
+            Ok(record.original_path)
+        } else {
+            Err(format!("Quarantine record '{}' not found", record_id))
+        }
+    }
+
     pub fn get_exclusions(&self) -> Vec<String> {
         self.state.lock().map(|s| s.exclusions.clone()).unwrap_or_default()
     }

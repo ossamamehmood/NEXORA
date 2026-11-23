@@ -89,12 +89,20 @@ export interface ScanSummary {
   scan_duration_ms: number;
 }
 
+export interface QuarantinedItemInfo {
+  id: string;
+  original_path: string;
+  quarantined_path: string;
+  file_size: number;
+}
+
 export interface CleanResult {
   cleaned_files: number;
   cleaned_bytes: number;
   skipped_files: number;
   errors: string[];
   quarantine_id: string | null;
+  quarantined_items: QuarantinedItemInfo[];
 }
 
 export interface StartupEntry {
@@ -104,6 +112,31 @@ export interface StartupEntry {
   location: string;
   enabled: boolean;
   is_protected: boolean;
+}
+
+export interface InstalledApp {
+  id: string;
+  name: string;
+  publisher: string;
+  version: string;
+  install_date: string;
+  estimated_size_bytes: number;
+  uninstall_string?: string | null;
+}
+
+export interface DiagnosticCheckResult {
+  id: string;
+  title: string;
+  category: string;
+  status: 'Optimal' | 'Good' | 'Warning';
+  details: string;
+  is_actionable: boolean;
+}
+
+export interface MaintenanceExecutionResult {
+  task_id: string;
+  success: boolean;
+  message: string;
 }
 
 export interface LargeFileItem {

@@ -37,12 +37,21 @@ pub struct ScanSummary {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QuarantinedItemInfo {
+    pub id: String,
+    pub original_path: String,
+    pub quarantined_path: String,
+    pub file_size: u64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CleanResult {
     pub cleaned_files: usize,
     pub cleaned_bytes: u64,
     pub skipped_files: usize,
     pub errors: Vec<String>,
     pub quarantine_id: Option<String>,
+    pub quarantined_items: Vec<QuarantinedItemInfo>,
 }
 
 pub struct CleanerEngine;
@@ -148,6 +157,7 @@ impl CleanerEngine {
         let mut cleaned_bytes = 0u64;
         let mut skipped_files = 0;
         let mut errors = Vec::new();
+        let mut quarantined_items = Vec::new();
         let quarantine_id = if use_quarantine {
             Some(uuid::Uuid::new_v4().to_string())
         } else {
@@ -182,24 +192,27 @@ impl CleanerEngine {
             if let Some(ref qdir) = quarantine_dir {
                 // Move to quarantine
                 let file_name = p.file_name().unwrap_or_default();
-                let dest = qdir.join(format!("{}_{}", uuid::Uuid::new_v4().simple(), file_name.to_string_lossy()));
-                match fs::rename(p, &dest) {
-                    Ok(_) => {
-                        cleaned_files += 1;
-                        cleaned_bytes += size;
-                    }
-                    Err(_) => {
-                        // If cross-device move or locked
-                        match fs::copy(p, &dest).and_then(|_| fs::remove_file(p)) {
-                            Ok(_) => {
-                                cleaned_files += 1;
-                                cleaned_bytes += size;
-                            }
-                            Err(_) => {
-                                skipped_files += 1;
-                            }
-                        }
-                    }
+                let item_id = uuid::Uuid::new_v4().to_string();
+                let dest = qdir.join(format!("{}_{}", item_id, file_name.to_string_lossy()));
+                let mut moved = false;
+
+                if fs::rename(p, &dest).is_ok() {
+                    moved = true;
+                } else if fs::copy(p, &dest).and_then(|_| fs::remove_file(p)).is_ok() {
+                    moved = true;
+                }
+
+                if moved {
+                    cleaned_files += 1;
+                    cleaned_bytes += size;
+                    quarantined_items.push(QuarantinedItemInfo {
+                        id: item_id,
+                        original_path: path_str.clone(),
+                        quarantined_path: dest.to_string_lossy().to_string(),
+                        file_size: size,
+                    });
+                } else {
+                    skipped_files += 1;
                 }
             } else {
                 // Direct deletion
@@ -222,6 +235,7 @@ impl CleanerEngine {
             skipped_files,
             errors,
             quarantine_id,
+            quarantined_items,
         }
     }
 }

@@ -3,7 +3,7 @@ use std::path::Path;
 use crate::cleaner::{CleanerEngine, CleanerRule, CleanResult, ScanSummary};
 use crate::monitoring::{ProcessItem, ProcessMonitor, RealtimeMetrics};
 use crate::storage::{AppDatabase, AppSettings, CleanLog, DiskAnalysisResult, DuplicateScanResult, DuplicateFinder, QuarantineRecord, ScanLog, StorageAnalyzer};
-use crate::system::{StartupEntry, StartupManager, SystemInfoProvider, SystemOverview};
+use crate::system::{ApplicationManager, DiagnosticCheckResult, DiagnosticsEngine, InstalledApp, MaintenanceExecutionResult, MaintenanceRoutines, StartupEntry, StartupManager, SystemInfoProvider, SystemOverview};
 
 #[tauri::command]
 pub fn get_system_overview() -> SystemOverview {
@@ -61,6 +61,17 @@ pub fn execute_cleaner(file_paths: Vec<String>, use_quarantine: bool, db: State<
         quarantine_id: result.quarantine_id.clone(),
     });
 
+    // Record quarantine items in database state
+    for item in &result.quarantined_items {
+        db.add_quarantine_record(QuarantineRecord {
+            id: item.id.clone(),
+            original_path: item.original_path.clone(),
+            quarantined_path: item.quarantined_path.clone(),
+            file_size: item.file_size,
+            timestamp: chrono::Local::now().to_rfc3339(),
+        });
+    }
+
     result
 }
 
@@ -72,6 +83,26 @@ pub fn get_startup_entries() -> Vec<StartupEntry> {
 #[tauri::command]
 pub fn toggle_startup_entry(entry_id: String, enable: bool) -> Result<(), String> {
     StartupManager::toggle_entry(&entry_id, enable)
+}
+
+#[tauri::command]
+pub fn get_installed_applications() -> Vec<InstalledApp> {
+    ApplicationManager::get_installed_applications()
+}
+
+#[tauri::command]
+pub fn run_system_diagnostics() -> Vec<DiagnosticCheckResult> {
+    DiagnosticsEngine::run_diagnostics()
+}
+
+#[tauri::command]
+pub fn execute_maintenance_task(task_id: String) -> MaintenanceExecutionResult {
+    MaintenanceRoutines::execute_task(&task_id)
+}
+
+#[tauri::command]
+pub fn restore_quarantine_record(record_id: String, db: State<'_, AppDatabase>) -> Result<String, String> {
+    db.restore_quarantine_record(&record_id)
 }
 
 #[tauri::command]

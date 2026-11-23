@@ -43,6 +43,13 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     fetchSystemData();
+    NexoraApi.getAppSettings().then((cfg) => {
+      if (cfg && cfg.theme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    }).catch(() => {});
     const interval = setInterval(() => {
       NexoraApi.getRealtimeMetrics().then(setMetrics).catch(() => {});
     }, 4000);

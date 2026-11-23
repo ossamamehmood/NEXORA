@@ -141,6 +141,62 @@ mod tests {
     }
 
     #[test]
+    fn test_blocks_root_drive() {
+        let p1 = Path::new("C:\\");
+        assert_eq!(
+            SecurityValidator::validate_target_path(p1),
+            ValidationResult::Blocked("Root drive modification is strictly prohibited".to_string())
+        );
+        let p2 = Path::new("D:\\");
+        assert_eq!(
+            SecurityValidator::validate_target_path(p2),
+            ValidationResult::Blocked("Root drive modification is strictly prohibited".to_string())
+        );
+    }
+
+    #[test]
+    fn test_blocks_browser_credentials() {
+        let p = Path::new("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Login Data");
+        assert_eq!(
+            SecurityValidator::validate_target_path(p),
+            ValidationResult::Blocked("Sensitive browser credentials/profile stores are protected".to_string())
+        );
+        let p2 = Path::new("C:\\Users\\User\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cookies");
+        assert_eq!(
+            SecurityValidator::validate_target_path(p2),
+            ValidationResult::Blocked("Sensitive browser credentials/profile stores are protected".to_string())
+        );
+    }
+
+    #[test]
+    fn test_blocks_pagefile_and_hiberfil() {
+        let p1 = Path::new("C:\\pagefile.sys");
+        assert_eq!(
+            SecurityValidator::validate_target_path(p1),
+            ValidationResult::Blocked("Windows virtual memory pagefiles cannot be modified".to_string())
+        );
+        let p2 = Path::new("C:\\hiberfil.sys");
+        assert_eq!(
+            SecurityValidator::validate_target_path(p2),
+            ValidationResult::Blocked("Windows virtual memory pagefiles cannot be modified".to_string())
+        );
+    }
+
+    #[test]
+    fn test_blocks_desktop_and_media() {
+        let p1 = Path::new("C:\\Users\\User\\Desktop\\Important.pdf");
+        assert_eq!(
+            SecurityValidator::validate_target_path(p1),
+            ValidationResult::Blocked("User personal folder '\\DESKTOP' is protected".to_string())
+        );
+        let p2 = Path::new("C:\\Users\\User\\Pictures\\Family.png");
+        assert_eq!(
+            SecurityValidator::validate_target_path(p2),
+            ValidationResult::Blocked("User personal folder '\\PICTURES' is protected".to_string())
+        );
+    }
+
+    #[test]
     fn test_allows_valid_temp_directory() {
         let p = Path::new("C:\\Users\\User\\AppData\\Local\\Temp\\sample_cache.tmp");
         assert_eq!(SecurityValidator::validate_target_path(p), ValidationResult::Safe);

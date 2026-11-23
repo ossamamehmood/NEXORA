@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXORA — Security & System Architecture</title>
+  <title>Security Architecture — NEXORA</title>
+  <meta name="description" content="In-depth security architecture of NEXORA. Learn how our Rust engine protects personal files, isolates symlinks, and prevents path traversal.">
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -15,49 +16,73 @@
       <nav>
         <ul class="nav-links">
           <li><a href="features.html">Features</a></li>
-          <li><a href="security.html" style="color: #02FEDC;">Security</a></li>
+          <li><a href="security.html" class="active" style="color: #02FEDC;">Security</a></li>
           <li><a href="docs.html">Documentation</a></li>
+          <li><a href="support.html">Support</a></li>
           <li><a href="download.html">Download</a></li>
         </ul>
       </nav>
-      <a href="download.html" class="gradient-btn" style="padding: 10px 20px; font-size: 13px;">Get NEXORA</a>
+      <a href="download.html" class="btn-primary" style="padding: 10px 20px; font-size: 13px;">Get NEXORA</a>
     </div>
   </header>
 
-  <section class="container" style="padding: 80px 24px;">
-    <div style="max-width: 800px; margin: 0 auto;">
-      <h1 style="font-size: 42px; font-weight: 900; margin-bottom: 20px;">Built on the principle of <span class="gradient-text">Absolute System Safety</span>.</h1>
-      <p style="color: #969BAA; font-size: 17px; margin-bottom: 40px;">
-        Traditional PC utilities often do more damage than good by blindly deleting files and hacking into critical registry hives. NEXORA was engineered to put an end to that paradigm.
-      </p>
+  <section class="section">
+    <div class="container" style="max-width: 960px;">
+      <div class="section-header">
+        <span class="section-tag">Zero Compromise Architecture</span>
+        <h1 class="section-title">NEXORA Security & Safety Model</h1>
+        <p class="section-desc">Safety before cleaning. How NEXORA mathematically guarantees your personal files and operating system files remain untouched.</p>
+      </div>
 
-      <div style="display: flex; flex-direction: column; gap: 24px;">
+      <div class="grid-2" style="margin-bottom: 48px;">
         <div class="card">
-          <h3>1. Immutable Whitelist & Blacklist Enforcement</h3>
-          <p>The native Rust security engine strictly blocks operations targeting <code>C:\Windows\System32</code>, <code>Boot</code>, <code>Program Files</code>, user Documents, Desktop, Pictures, and sensitive credential databases. Any path traversal attack (e.g. <code>..\..</code>) is rejected instantly.</p>
+          <h3 class="card-title" style="color: #02FEDC;">1. Path Traversal & Boundary Control</h3>
+          <p class="card-desc">
+            All candidate targets are normalized and checked for directory traversal sequences (<code>..</code>) and alternate data streams prior to resolution. The root drive (<code>C:\</code>, <code>D:\</code>) and operating system core folders (<code>C:\Windows\System32</code>, <code>SysWOW64</code>, <code>WinSxS</code>) are hardcoded blacklists that can never be modified.
+          </p>
         </div>
 
         <div class="card">
-          <h3>2. Zero Registry Deep Cleaning in v1.0</h3>
-          <p>Microsoft officially advises against automated registry cleaners because deleting orphan keys provides zero measurable performance gain while introducing immense stability hazards. NEXORA strictly excludes arbitrary registry wipeouts.</p>
+          <h3 class="card-title" style="color: #5A5CFF;">2. User Personal Document Shields</h3>
+          <p class="card-desc">
+            NEXORA strictly excludes standard personal directories: <code>Documents</code>, <code>Desktop</code>, <code>Pictures</code>, <code>Videos</code>, <code>Music</code>, <code>OneDrive</code>, and <code>Dropbox</code>. Even if a temporary file is placed inside a personal folder, the engine denies unlinking.
+          </p>
         </div>
 
         <div class="card">
-          <h3>3. Quarantine Staging Vault (14-Day Rollback)</h3>
-          <p>Eligible cache removals are staged in an encrypted local quarantine directory with full metadata recorded in SQLite. If any application requires a removed cache file, it can be restored with a single click.</p>
+          <h3 class="card-title" style="color: #00E699;">3. Symlink & Junction Hijack Protection</h3>
+          <p class="card-desc">
+            Malicious programs often use NTFS junctions or symlinks pointing from temporary folders into sensitive system roots. NEXORA's Rust directory walker strictly enforces <code>follow_links(false)</code> and verifies reparse point metadata before examining any path.
+          </p>
         </div>
 
         <div class="card">
-          <h3>4. Sandboxed Least-Privilege IPC</h3>
-          <p>Frontend TypeScript code has zero direct filesystem access. All commands pass through Tauri 2's strictly scoped IPC boundary and are re-validated in memory by the Rust kernel immediately prior to execution.</p>
+          <h3 class="card-title" style="color: #F502FD;">4. Anti-TOCTOU Double Validation</h3>
+          <p class="card-desc">
+            To prevent Time-of-Check Time-of-Use race conditions, NEXORA re-validates every individual path immediately before calling the native file move or unlinking API. If target attributes change between scan and clean, the file is aborted.
+          </p>
         </div>
+      </div>
+
+      <!-- Vulnerability Reporting Box -->
+      <div class="card" id="vulnerability">
+        <h3 class="card-title">Vulnerability Disclosure Policy</h3>
+        <p class="card-desc" style="margin-bottom: 16px;">
+          We take cybersecurity and user data protection seriously. If you believe you have discovered a security weakness or vulnerability in NEXORA:
+        </p>
+        <ul style="color: #969BAA; font-size: 13px; line-height: 1.8; list-style-position: inside; margin-bottom: 20px;">
+          <li>Report it directly to our security team at: <code style="color: #02FEDC;">security@nexora.app</code></li>
+          <li>Include reproduction steps, version details, and expected vs observed behavior.</li>
+          <li>We acknowledge vulnerability reports within <strong>24 business hours</strong> and prioritize patches within 72 hours.</li>
+        </ul>
       </div>
     </div>
   </section>
 
   <footer>
-    <div class="container">
-      &copy; 2026 NEXORA Team. Your system. Under control.
+    <div class="container footer-bottom">
+      <div>Copyright &copy; 2026 NEXORA Team. All rights reserved.</div>
+      <div><a href="privacy.html" style="margin-right: 16px;">Privacy Policy</a> <a href="terms.html">Terms of Use</a></div>
     </div>
   </footer>
 </body>

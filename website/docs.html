@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation — NEXORA</title>
+  <meta name="description" content="Official user guides, installation tutorials, safe cleaning workflows, and troubleshooting documentation for NEXORA.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">NEX<span class="gradient-text">ORA</span></a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="features.html">Features</a></li>
+          <li><a href="security.html">Security</a></li>
+          <li><a href="docs.html" class="active" style="color: #02FEDC;">Documentation</a></li>
+          <li><a href="support.html">Support</a></li>
+          <li><a href="download.html">Download</a></li>
+        </ul>
+      </nav>
+      <a href="download.html" class="btn-primary" style="padding: 10px 20px; font-size: 13px;">Get NEXORA</a>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container" style="max-width: 960px;">
+      <div class="section-header">
+        <span class="section-tag">Knowledge Base</span>
+        <h1 class="section-title">NEXORA Documentation</h1>
+        <p class="section-desc">Comprehensive instructions, safety guidelines, and reference manuals.</p>
+      </div>
+
+      <div class="grid-2" style="margin-bottom: 48px;">
+        <div class="card">
+          <h3 class="card-title">Getting Started Guide</h3>
+          <p class="card-desc" style="margin-bottom: 16px;">Step-by-step walkthrough of installing NEXORA, performing your first safe scan, and understanding the dashboard telemetry.</p>
+          <a href="#getting-started" style="color: #02FEDC; font-size: 13px; font-weight: 600;">Read Guide →</a>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Safe Cleaning Guide</h3>
+          <p class="card-desc" style="margin-bottom: 16px;">Learn how the 8-stage cleaning lifecycle works, how quarantine staging prevents accidental loss, and how to rollback files.</p>
+          <a href="#safe-cleaning" style="color: #5A5CFF; font-size: 13px; font-weight: 600;">Read Guide →</a>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Exclusions Configuration</h3>
+          <p class="card-desc" style="margin-bottom: 16px;">Configure custom folder exclusions to ensure proprietary development directories are completely bypassed.</p>
+          <a href="#exclusions" style="color: #00E699; font-size: 13px; font-weight: 600;">Read Guide →</a>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Troubleshooting & FAQs</h3>
+          <p class="card-desc" style="margin-bottom: 16px;">Solutions for skipped locked files, DISM component store cleanup runtimes, and high-DPI multi-monitor display scaling.</p>
+          <a href="#troubleshooting" style="color: #F502FD; font-size: 13px; font-weight: 600;">Read Guide →</a>
+        </div>
+      </div>
+
+      <!-- Guide Content Section -->
+      <div class="card" id="getting-started" style="margin-bottom: 32px;">
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #F5F7FA;">Getting Started with NEXORA</h2>
+        <p style="font-size: 14px; color: #969BAA; line-height: 1.7; margin-bottom: 16px;">
+          NEXORA installs in seconds into user-space. Once launched:
+        </p>
+        <ol style="color: #969BAA; font-size: 13px; line-height: 2; list-style-position: inside; margin-bottom: 16px;">
+          <li>Review the <strong>Overview Dashboard</strong> to inspect your live CPU, RAM, and volume capacity.</li>
+          <li>Navigate to <strong>Smart Cleaner</strong> and click <strong>Scan Candidates</strong>.</li>
+          <li>Inspect the categorized candidate files. Click <strong>Preview Cleanup</strong> to verify paths.</li>
+          <li>Click <strong>Execute Safe Clean</strong>. Reclaimable space is freed, and files are safely quarantined.</li>
+        </ol>
+      </div>
+
+      <div class="card" id="troubleshooting">
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #F5F7FA;">Troubleshooting: Skipped Files</h2>
+        <p style="font-size: 14px; color: #969BAA; line-height: 1.7;">
+          If Smart Cleaner reports that files were skipped, an active Windows application currently holds an exclusive lock on those cache files. Close active applications and re-run Smart Cleaner to complete the clean.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-bottom">
+      <div>Copyright &copy; 2026 NEXORA Team. All rights reserved.</div>
+      <div><a href="privacy.html" style="margin-right: 16px;">Privacy Policy</a> <a href="terms.html">Terms of Use</a></div>
+    </div>
+  </footer>
+</body>
+</html>

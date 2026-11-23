@@ -4,7 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NEXORA — Your system. Under control.</title>
-  <meta name="description" content="Premium PC cleaner, privacy manager, and system maintenance suite for Windows 11 and 10. Built with Tauri 2, Rust, and React.">
+  <meta name="description" content="NEXORA is a high-performance Windows PC cleaner, privacy manager, and system maintenance suite built with native Rust and Tauri 2. 100% transparent with zero background services.">
+  <meta name="keywords" content="PC cleaner, Windows 11 cleaner, privacy manager, system maintenance, duplicate finder, disk analyzer, open source alternative">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="NEXORA — Your system. Under control.">
+  <meta property="og:description" content="High-performance PC cleaner and system maintenance suite for Windows 11 & 10. Built with Rust and Tauri 2.">
+  <meta property="og:url" content="https://nexora.app/">
+  
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,9 +28,9 @@
           <path d="M 256,68 L 406,144 L 406,306 C 406,380 342,434 256,456 C 170,434 106,380 106,306 L 106,144 Z" fill="#171A23" stroke="#02FEDC" stroke-width="12"/>
           <path d="M 184,176 L 220,176 L 220,336 L 184,336 Z" fill="#02FEDC"/>
           <path d="M 292,176 L 328,176 L 328,336 L 292,336 Z" fill="#F502FD"/>
-          <path d="M 184,176 L 230,176 L 328,336 L 282,336 Z" fill="url(#logoBrand)"/>
+          <path d="M 184,176 L 230,176 L 328,336 L 282,336 Z" fill="url(#brandGrad)"/>
           <defs>
-            <linearGradient id="logoBrand" x1="0" y1="0" x2="1" y2="1">
+            <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#02FEDC"/>
               <stop offset="50%" stop-color="#5A5CFF"/>
               <stop offset="100%" stop-color="#F502FD"/>
@@ -37,12 +45,13 @@
           <li><a href="features.html">Features</a></li>
           <li><a href="security.html">Security</a></li>
           <li><a href="docs.html">Documentation</a></li>
+          <li><a href="support.html">Support</a></li>
           <li><a href="download.html">Download</a></li>
         </ul>
       </nav>
 
-      <a href="download.html" class="gradient-btn" style="padding: 10px 20px; font-size: 13px;">
-        Get NEXORA 1.0
+      <a href="download.html" class="btn-primary">
+        Get NEXORA v1.0
       </a>
     </div>
   </header>
@@ -50,47 +59,62 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="container">
-      <div style="display: inline-block; padding: 6px 16px; border-radius: 9999px; background: rgba(2, 254, 220, 0.1); border: 1px solid rgba(2, 254, 220, 0.25); color: #02FEDC; font-size: 12px; font-weight: 600; margin-bottom: 24px;">
-        NEXORA 1.0 Production Release for Windows 11 & 10
+      <div class="hero-badge">
+        <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#00E699;"></span>
+        Production Release Candidate v1.0.0-rc.1 — Windows 11 & 10 Certified
       </div>
 
       <h1>Your system. <span class="gradient-text">Under control.</span></h1>
       <p>
-        The premium desktop maintenance suite built in Rust and Tauri 2. Transparent, fast, and secure. Zero scareware, zero registry destruction, 100% user control.
+        The modern, transparent PC maintenance suite built with native Rust and Tauri 2. Reclaim disk storage, protect browser privacy, and inspect active processes without scare tactics, background surveillance, or registry corruption.
       </p>
 
-      <div style="display: flex; gap: 16px; justify-content: center; align-items: center; margin-bottom: 48px;">
-        <a href="download.html" class="gradient-btn">
-          Download for Windows (.exe / .msi)
+      <div class="hero-actions">
+        <a href="download.html" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download for Windows (64-bit)
         </a>
-        <a href="security.html" style="color: #969BAA; text-decoration: none; font-size: 14px; font-weight: 600; padding: 14px 20px; border: 1px solid #232838; border-radius: 12px;">
-          View Security Architecture →
+        <a href="security.html" class="btn-secondary">
+          Security Architecture & Proof →
         </a>
       </div>
 
-      <!-- Hero App Preview Box -->
-      <div style="background: #11131A; border: 1px solid #232838; border-radius: 20px; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); max-width: 980px; margin: 0 auto; text-align: left;">
-        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-          <div style="width: 12px; height: 12px; border-radius: 50%; background: #FF5F56;"></div>
-          <div style="width: 12px; height: 12px; border-radius: 50%; background: #FFBD2E;"></div>
-          <div style="width: 12px; height: 12px; border-radius: 50%; background: #27C93F;"></div>
-          <span style="font-family: monospace; font-size: 11px; color: #656C80; margin-left: 12px;">NEXORA v1.0.0 — System Protected</span>
+      <!-- App Window Preview -->
+      <div class="app-window-preview">
+        <div class="window-titlebar">
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
+          <span class="window-title">NEXORA — Smart Cleaner & Quarantine Vault (Live Telemetry)</span>
         </div>
+
         <div style="background: #08090D; border: 1px solid #1D2230; border-radius: 12px; padding: 28px;">
-          <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Smart Cache & Storage Engine</h2>
-          <p style="font-size: 13px; color: #969BAA; margin-bottom: 20px;">Safe, pre-validated temporary file candidate identification with instant rollback quarantine.</p>
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-            <div style="background: #11131A; border: 1px solid #232838; padding: 16px; border-radius: 10px;">
-              <span style="font-size: 11px; color: #969BAA;">Reclaimable Space</span>
-              <p style="font-size: 22px; font-weight: 800; color: #02FEDC; font-family: monospace;">4.89 GB</p>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+            <div>
+              <h2 style="font-size: 18px; font-weight: 700; color: #F5F7FA;">Smart Cache & Storage Engine</h2>
+              <p style="font-size: 13px; color: #969BAA;">Pre-validated temporary file candidate identification with instant rollback quarantine.</p>
             </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 16px; border-radius: 10px;">
-              <span style="font-size: 11px; color: #969BAA;">Candidate Files</span>
-              <p style="font-size: 22px; font-weight: 800; color: #F5F7FA; font-family: monospace;">3,412</p>
+            <span style="background: rgba(2, 254, 220, 0.1); border: 1px solid rgba(2, 254, 220, 0.25); color: #02FEDC; font-family: monospace; font-size: 11px; padding: 4px 10px; border-radius: 6px;">
+              Anti-TOCTOU Active
+            </span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+            <div style="background: #11131A; border: 1px solid #232838; padding: 20px; border-radius: 12px;">
+              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Reclaimable Space</span>
+              <p style="font-size: 26px; font-weight: 800; color: #02FEDC; font-family: monospace; margin-top: 4px;">4.89 GB</p>
             </div>
-            <div style="background: #11131A; border: 1px solid #232838; padding: 16px; border-radius: 10px;">
-              <span style="font-size: 11px; color: #969BAA;">Scan Latency</span>
-              <p style="font-size: 22px; font-weight: 800; color: #5A5CFF; font-family: monospace;">642 ms</p>
+            <div style="background: #11131A; border: 1px solid #232838; padding: 20px; border-radius: 12px;">
+              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Candidate Files</span>
+              <p style="font-size: 26px; font-weight: 800; color: #F5F7FA; font-family: monospace; margin-top: 4px;">3,412</p>
+            </div>
+            <div style="background: #11131A; border: 1px solid #232838; padding: 20px; border-radius: 12px;">
+              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Scan Latency</span>
+              <p style="font-size: 26px; font-weight: 800; color: #5A5CFF; font-family: monospace; margin-top: 4px;">470 ms</p>
+            </div>
+            <div style="background: #11131A; border: 1px solid #232838; padding: 20px; border-radius: 12px;">
+              <span style="font-size: 11px; color: #969BAA; text-transform: uppercase;">Quarantine Vault</span>
+              <p style="font-size: 26px; font-weight: 800; color: #00E699; font-family: monospace; margin-top: 4px;">100% Rollback</p>
             </div>
           </div>
         </div>
@@ -98,52 +122,280 @@
     </div>
   </section>
 
-  <!-- Core Features Grid -->
-  <section class="container" style="padding: 80px 24px;">
-    <div style="text-align: center; max-width: 640px; margin: 0 auto 60px;">
-      <h2 style="font-size: 36px; font-weight: 800; margin-bottom: 16px;">Engineered for safety and speed.</h2>
-      <p style="color: var(--text-secondary); font-size: 16px;">Everything you need to maintain your computer without risking operating system stability.</p>
-    </div>
+  <!-- 4 Core Philosophies -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Engineering Philosophy</span>
+        <h2 class="section-title">Built on Honesty & Safety</h2>
+        <p class="section-desc">Legacy PC utilities rely on aggressive scare tactics, registry destruction, and silent background telemetry. NEXORA was engineered to be the exact opposite.</p>
+      </div>
 
-    <div class="features-grid">
-      <div class="card">
-        <h3>Smart & Deep Cleaner</h3>
-        <p>Pre-validated cleaners for application logs, browser caches, and update leftovers. Immutable blacklists prevent system file modifications.</p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-icon" style="color: #02FEDC;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="card-title">1. Safety Before Cleaning</h3>
+          <p class="card-desc">Every candidate path is validated against strict filesystem boundaries. Operating system roots, personal documents, and browser credential stores are mathematically prohibited from deletion.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon" style="color: #5A5CFF;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3 class="card-title">2. Transparency Before Automation</h3>
+          <p class="card-desc">No cleaning occurs without your review and dry-run confirmation. Files marked for removal are staged in an on-device Quarantine Vault, enabling instant 1-click byte-for-byte recovery.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon" style="color: #00E699;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3 class="card-title">3. Privacy by Default</h3>
+          <p class="card-desc">Zero background surveillance telemetry. Zero personal documents or browsing logs are collected. Optional beta feedback sharing is strictly opt-in and lets you inspect the raw JSON metadata beforehand.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon" style="color: #F502FD;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <h3 class="card-title">4. Zero Background Overhead</h3>
+          <p class="card-desc">NEXORA runs only when you launch it. It installs zero background services, zero startup daemons, and consumes exactly 0.0% CPU when closed.</p>
+        </div>
       </div>
-      <div class="card">
-        <h3>Quarantine Vault & Journal</h3>
-        <p>14-day rollback capability. Cleaned user caches are safely staged rather than permanently destroyed, allowing 1-click restoration.</p>
+    </div>
+  </section>
+
+  <!-- How It Works: 8-Stage Lifecycle -->
+  <section class="section" style="background: #0B0D13;">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Deterministic Workflow</span>
+        <h2 class="section-title">The 8-Stage Cleaning Lifecycle</h2>
+        <p class="section-desc">Complete user control over every stage of the maintenance process.</p>
       </div>
-      <div class="card">
-        <h3>Non-Destructive Startup Manager</h3>
-        <p>Leverages native Windows <code>StartupApproved</code> binary flags to toggle background apps without deleting registry values.</p>
+
+      <div class="styled-table-wrapper" style="background: #11131A; border: 1px solid #232838; border-radius: 16px; overflow: hidden;">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Action</th>
+              <th>Safety Invariant</th>
+              <th>User Guarantee</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color: #02FEDC;">1. SCAN</strong></td>
+              <td>Traverses authorized cache directories</td>
+              <td><code>follow_links(false)</code> blocks symlink traversal</td>
+              <td>Read-only; zero filesystem modifications</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #02FEDC;">2. REVIEW</strong></td>
+              <td>Stratifies findings by risk tier (Low / Med / High)</td>
+              <td>Explicit path and file-count classification</td>
+              <td>Exact itemized visibility</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #02FEDC;">3. SELECT</strong></td>
+              <td>Enables granular category selection</td>
+              <td>Defaults to safe, low-risk temporary caches</td>
+              <td>You choose what is considered for cleanup</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #02FEDC;">4. PREVIEW</strong></td>
+              <td>Generates dry-run confirmation modal</td>
+              <td>Calculates exact reclaimable byte count</td>
+              <td>No surprises prior to destructive action</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #5A5CFF;">5. CONFIRM</strong></td>
+              <td>Explicit user approval requirement</td>
+              <td>Prohibits accidental automated unlinking</td>
+              <td>Complete operational sovereignty</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #5A5CFF;">6. CLEAN</strong></td>
+              <td>Executes safe unlinking or quarantine move</td>
+              <td>Anti-TOCTOU pre-validation before action</td>
+              <td>Locked files skipped gracefully without crash</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #00E699;">7. VERIFY</strong></td>
+              <td>Emits structured execution log</td>
+              <td>Records cleaned bytes, skips, and timestamp</td>
+              <td>Immutable audit trail in local database</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #00E699;">8. RECOVER</strong></td>
+              <td>One-click rollback from Quarantine Vault</td>
+              <td>Atomic restoration to exact original path</td>
+              <td>100% byte-for-byte SHA-256 match</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="card">
-        <h3>SHA-256 Duplicate Finder</h3>
-        <p>Cryptographic duplicate identification prevents false positives. Compares exact byte hashes instead of matching file names alone.</p>
+    </div>
+  </section>
+
+  <!-- Key Features Grid -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Complete Suite</span>
+        <h2 class="section-title">Built-In Power Modules</h2>
+        <p class="section-desc">13 unified tools to monitor, optimize, and maintain Windows without third-party bloat.</p>
       </div>
-      <div class="card">
-        <h3>Interactive Disk Storage Analyzer</h3>
-        <p>Inspect deep folder hierarchies, identify large media files exceeding 100MB, and visualize capacity consumption per partition.</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3 class="card-title">Smart Cleaner</h3>
+          <p class="card-desc">Safely targets user and Windows temporary caches, crash dumps, and Windows Error Reporting logs with dry-run verification.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Deep Cleaner</h3>
+          <p class="card-desc">Advanced category filters for software developers and power users: npm, pip, and compiler artifact cache rules.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Privacy Center</h3>
+          <p class="card-desc">Purges web caches and temporary tokens for Chrome, Edge, Firefox, and Brave while preserving saved logins and active sessions.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">System Monitor</h3>
+          <p class="card-desc">Live process inspection with memory sorting and critical-process shields preventing accidental OS termination.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Startup Manager</h3>
+          <p class="card-desc">Inspects and toggles background applications launched with Windows using native registry APIs.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Duplicate Finder</h3>
+          <p class="card-desc">Identifies redundant files across storage volumes using multi-stage size matching and full SHA-256 cryptographic verification.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Disk Analyzer</h3>
+          <p class="card-desc">Interactive directory traversal with proportional storage allocation bars and largest file detection.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Application Manager</h3>
+          <p class="card-desc">Enumerates installed software directly from Windows registry hives with real publisher, version, and installation dates.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Maintenance Center</h3>
+          <p class="card-desc">Executes verified Windows maintenance routines: DNS resolver cache flush, DISM component store cleanup, and update staging resets.</p>
+        </div>
       </div>
-      <div class="card">
-        <h3>Zero Background Daemon Drain</h3>
-        <p>NEXORA leaves zero persistent background services or battery-draining telemetry agents running when the application is closed.</p>
+    </div>
+  </section>
+
+  <!-- System Requirements & Download CTA -->
+  <section class="section" style="background: #0B0D13;">
+    <div class="container" style="text-align: center;">
+      <span class="section-tag">Ready for Production</span>
+      <h2 class="section-title">Get NEXORA Today</h2>
+      <p class="section-desc">Fast, lightweight, and completely transparent desktop maintenance for Windows.</p>
+
+      <div style="background: #11131A; border: 1px solid #232838; border-radius: 16px; padding: 32px; max-width: 720px; margin: 40px auto; text-align: left;">
+        <h4 style="font-size: 15px; font-weight: 700; color: #F5F7FA; margin-bottom: 16px;">Minimum System Requirements:</h4>
+        <ul style="color: #969BAA; font-size: 13px; line-height: 2; list-style-position: inside; margin-bottom: 24px;">
+          <li><strong>Operating System:</strong> Windows 11 (all versions) or Windows 10 (Version 1903 or later, 64-bit)</li>
+          <li><strong>Processor:</strong> 1 GHz or faster 64-bit (x86_64) processor</li>
+          <li><strong>Memory:</strong> 4 GB RAM minimum (8 GB recommended)</li>
+          <li><strong>Disk Space:</strong> 80 MB available storage</li>
+          <li><strong>Runtime:</strong> Microsoft Edge WebView2 Evergreen Runtime (built into Windows 11 and modern Windows 10)</li>
+        </ul>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <a href="downloads/NEXORA_1.0.0_x64-setup.exe" class="btn-primary" style="flex: 1; justify-content: center;">
+            Download Setup (.exe) — 4.68 MiB
+          </a>
+          <a href="downloads/NEXORA_1.0.0_x64_en-US.msi" class="btn-secondary" style="flex: 1; justify-content: center;">
+            Download Enterprise (.msi) — 7.09 MiB
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section">
+    <div class="container" style="max-width: 860px;">
+      <div class="section-header">
+        <span class="section-tag">Frequently Asked Questions</span>
+        <h2 class="section-title">Common Inquiries</h2>
+      </div>
+
+      <div class="faq-item">
+        <h4 class="faq-q">Does NEXORA include a "Registry Cleaner"?</h4>
+        <p class="faq-a"><strong>No.</strong> Modern Windows operating systems do not benefit from arbitrary registry unlinking, and commercial registry cleaners frequently corrupt COM registrations and driver manifests. NEXORA adheres strictly to Microsoft best practices and avoids speculative registry purging.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4 class="faq-q">Will Privacy Center delete my saved browser passwords or active logins?</h4>
+        <p class="faq-a"><strong>No.</strong> NEXORA's privacy rules are hardcoded to skip <code>Login Data</code>, <code>Cookies</code>, and <code>Web Data</code> files. It targets only temporary rendering caches, script caches, and download history.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4 class="faq-q">Does NEXORA install background services or startup daemons?</h4>
+        <p class="faq-a"><strong>No.</strong> NEXORA runs only when you open it. When closed, zero processes or background threads remain active in memory.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4 class="faq-q">How does the Quarantine Vault protect my files?</h4>
+        <p class="faq-a">When Smart Cleaner is executed, candidate files are staged in an isolated vault inside your local user profile with a 14-day retention timer. If you ever need to retrieve a file, navigate to Activity History -> Quarantine Vault and click "Restore File".</p>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-      <div>
-        <strong>NEXORA</strong> — Your system. Under control. &copy; 2026 NEXORA Team.
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand-logo" style="margin-bottom: 16px;">
+            NEX<span class="gradient-text">ORA</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-secondary); max-width: 320px; line-height: 1.6;">
+            Your system. Under control. Premium, transparent PC cleaner and system maintenance suite for Windows.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Product</h5>
+          <ul class="footer-links">
+            <li><a href="features.html">Features</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="docs.html">Documentation</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Support</h5>
+          <ul class="footer-links">
+            <li><a href="support.html">Support Portal</a></li>
+            <li><a href="docs.html#troubleshooting">Troubleshooting</a></li>
+            <li><a href="security.html#vulnerability">Security Reporting</a></li>
+            <li><a href="https://github.com/ossamamehmood/NEXORA">GitHub Repository</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Legal</h5>
+          <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Use</a></li>
+            <li><a href="security.html">Security Disclosures</a></li>
+          </ul>
+        </div>
       </div>
-      <div style="display: flex; gap: 24px;">
-        <a href="privacy.html" style="color: var(--text-secondary); text-decoration: none;">Privacy Policy</a>
-        <a href="terms.html" style="color: var(--text-secondary); text-decoration: none;">Terms of Use</a>
-        <a href="security.html" style="color: var(--text-secondary); text-decoration: none;">Security</a>
-        <a href="docs.html" style="color: var(--text-secondary); text-decoration: none;">Documentation</a>
+
+      <div class="footer-bottom">
+        <div>Copyright &copy; 2026 NEXORA Team. All rights reserved.</div>
+        <div style="font-family: monospace;">v1.0.0-rc.1 • Windows x64</div>
       </div>
     </div>
   </footer>

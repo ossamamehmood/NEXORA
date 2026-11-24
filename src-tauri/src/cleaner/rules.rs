@@ -328,6 +328,56 @@ impl CleanerRule {
             }
         }
 
+        // 19. DirectX Shader Cache (BleachBit & Game Optimization)
+        if let Some(local_app_data) = dirs::data_local_dir() {
+            let d3d_cache = local_app_data.join("D3DSCache");
+            if d3d_cache.exists() {
+                rules.push(CleanerRule {
+                    id: "d3d_shader_cache".to_string(),
+                    name: "DirectX Shader Cache".to_string(),
+                    description: "Pre-compiled GPU shader binaries that can be safely rebuilt on demand".to_string(),
+                    category: "Gaming".to_string(),
+                    risk_level: RiskLevel::Low,
+                    target_paths: vec![d3d_cache],
+                    extensions: vec![],
+                    min_age_hours: 24,
+                    enabled_by_default: true,
+                });
+            }
+
+            // 20. NVIDIA GPU Shader Cache
+            let nvidia_cache = local_app_data.join("NVIDIA").join("DXCache");
+            if nvidia_cache.exists() {
+                rules.push(CleanerRule {
+                    id: "nvidia_shader_cache".to_string(),
+                    name: "NVIDIA DX Shader Cache".to_string(),
+                    description: "Compiled graphics shader cache for NVIDIA GeForce GPUs".to_string(),
+                    category: "Gaming".to_string(),
+                    risk_level: RiskLevel::Low,
+                    target_paths: vec![nvidia_cache],
+                    extensions: vec!["bin".into(), "toc".into()],
+                    min_age_hours: 48,
+                    enabled_by_default: true,
+                });
+            }
+        }
+
+        // 21. Windows Component-Based Servicing (CBS) Logs
+        let cbs_logs = PathBuf::from("C:\\Windows\\Logs\\CBS");
+        if cbs_logs.exists() {
+            rules.push(CleanerRule {
+                id: "win_cbs_logs".to_string(),
+                name: "Windows CBS Servicing Logs".to_string(),
+                description: "Archived component installation and servicing logs".to_string(),
+                category: "Diagnostics".to_string(),
+                risk_level: RiskLevel::Low,
+                target_paths: vec![cbs_logs],
+                extensions: vec!["log".into(), "cab".into()],
+                min_age_hours: 72,
+                enabled_by_default: true,
+            });
+        }
+
         rules
     }
 }

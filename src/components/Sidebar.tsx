@@ -1,173 +1,201 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  LayoutDashboard,
   Sparkles,
   Layers,
   ShieldCheck,
   Activity,
-  Gamepad2,
-  Rocket,
-  PieChart,
-  Copy,
   Boxes,
   Stethoscope,
   Wrench,
-  History,
-  MessageSquareQuote,
   Settings,
+  Orbit,
+  Zap,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { NavigationSection } from '../types';
 
 interface SidebarProps {
   currentSection: NavigationSection;
   onSelectSection: (section: NavigationSection) => void;
+  isAssistantActive?: boolean;
+  onToggleAssistant?: () => void;
 }
 
-interface NavCategory {
-  title: string;
-  items: {
-    id: NavigationSection;
-    label: string;
-    icon: React.ElementType;
-    isBeta?: boolean;
-    badge?: string;
-  }[];
+interface NavItem {
+  id: NavigationSection;
+  label: string;
+  icon: React.ElementType;
+  hasPip?: boolean;
+  badge?: string;
 }
 
-const navCategories: NavCategory[] = [
-  {
-    title: 'Core Engine',
-    items: [
-      { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-      { id: 'monitor', label: 'System Monitor', icon: Activity },
-      { id: 'gaming', label: 'Gaming Mode', icon: Gamepad2, badge: 'Pro' },
-    ],
-  },
-  {
-    title: 'Cleaning & Privacy',
-    items: [
-      { id: 'cleaner', label: 'Smart Cleaner', icon: Sparkles },
-      { id: 'deep-cleaner', label: 'Deep Cleaner', icon: Layers },
-      { id: 'privacy', label: 'Privacy Center', icon: ShieldCheck },
-    ],
-  },
-  {
-    title: 'System Tools',
-    items: [
-      { id: 'startup', label: 'Startup Manager', icon: Rocket },
-      { id: 'disk-analyzer', label: 'Disk Analyzer', icon: PieChart },
-      { id: 'duplicates', label: 'Duplicate Finder', icon: Copy },
-      { id: 'applications', label: 'Applications', icon: Boxes },
-    ],
-  },
-  {
-    title: 'Maintenance',
-    items: [
-      { id: 'diagnostics', label: 'Diagnostics', icon: Stethoscope },
-      { id: 'maintenance', label: 'Maintenance Center', icon: Wrench },
-      { id: 'history', label: 'Activity History', icon: History },
-    ],
-  },
-  {
-    title: 'Application',
-    items: [
-      { id: 'feedback', label: 'Beta Feedback', icon: MessageSquareQuote, isBeta: true },
-      { id: 'settings', label: 'Settings', icon: Settings },
-    ],
-  },
+const railItems: NavItem[] = [
+  { id: 'overview', label: 'Smart Care', icon: Sparkles },
+  { id: 'cleaner', label: 'Cleanup', icon: Layers, hasPip: true },
+  { id: 'privacy', label: 'Protection', icon: ShieldCheck },
+  { id: 'gaming', label: 'Speed', icon: Zap, hasPip: true, badge: 'Pro' },
+  { id: 'applications', label: 'Applications', icon: Boxes },
+  { id: 'disk-analyzer', label: 'Space Lens', icon: Orbit, hasPip: true },
+  { id: 'monitor', label: 'System Monitor', icon: Activity },
+  { id: 'maintenance', label: 'Maintenance', icon: Wrench },
+  { id: 'diagnostics', label: 'Diagnostics', icon: Stethoscope },
+  { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
-export const Sidebar: React.FC<SidebarProps> = ({ currentSection, onSelectSection }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  currentSection,
+  onSelectSection,
+  isAssistantActive = false,
+  onToggleAssistant,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
-    <aside className="w-64 bg-gradient-to-b from-[#180A2E] via-[#120624] to-[#0B0418] border-r border-white/[0.08] flex flex-col h-full select-none shadow-2xl relative z-20">
-      {/* Window Controls (CleanMyMac X Traffic Lights) */}
-      <div className="flex items-center gap-2 px-5 pt-4 pb-2">
-        <span className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] shadow-sm hover:opacity-80 cursor-pointer" title="Close" />
-        <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123] shadow-sm hover:opacity-80 cursor-pointer" title="Minimize" />
-        <span className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29] shadow-sm hover:opacity-80 cursor-pointer" title="Expand" />
+    <aside
+      className={`bg-gradient-to-b from-[#18082D] via-[#120524] to-[#0A0216] border-r border-white/[0.08] flex flex-col h-full select-none shadow-2xl relative z-30 transition-all duration-300 ${
+        isExpanded ? 'w-60' : 'w-[72px]'
+      }`}
+    >
+      {/* 1. Window Controls (CleanMyMac X Traffic Lights) */}
+      <div className="flex items-center justify-between px-5 pt-4 pb-3">
+        <div className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] shadow-sm hover:opacity-80 cursor-pointer" title="Close" />
+          <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123] shadow-sm hover:opacity-80 cursor-pointer" title="Minimize" />
+          <span className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29] shadow-sm hover:opacity-80 cursor-pointer" title="Expand" />
+        </div>
+        {isExpanded && (
+          <span className="text-[10px] font-mono text-[#02FEDC] px-1.5 py-0.5 rounded bg-[#02FEDC]/10 border border-[#02FEDC]/20">
+            v1.0.1
+          </span>
+        )}
       </div>
 
-      {/* Brand Header */}
-      <div className="px-5 py-3 flex items-center gap-3 border-b border-white/[0.08] bg-white/[0.02]">
-        <div className="relative group">
-          <div className="w-10 h-10 rounded-xl gradient-brand flex items-center justify-center p-0.5 shadow-lg shadow-[#F502FD]/20 transition-transform group-hover:scale-105">
-            <div className="w-full h-full bg-[#1A0B33] rounded-[10px] flex items-center justify-center">
-              <span className="font-black text-base text-gradient">N</span>
-            </div>
-          </div>
-          <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#00E699] ring-2 ring-[#120624] shadow-[0_0_8px_#00E699]" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h1 className="font-extrabold text-base tracking-wider text-white">
-              NEX<span className="text-gradient">ORA</span>
-            </h1>
-            <span className="px-1.5 py-0.5 rounded text-[8px] font-black tracking-widest uppercase bg-[#02FEDC]/15 text-[#02FEDC] border border-[#02FEDC]/30 shadow-[0_0_10px_rgba(2,254,220,0.2)]">
-              v1.0.1
+      {/* 2. Brand Crest (Compact / Full) */}
+      <div className="px-3.5 py-2.5 mb-2 border-b border-white/[0.06] flex items-center gap-3">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#F502FD] to-[#02FEDC] p-[2px] shadow-lg shadow-[#F502FD]/20 flex-shrink-0">
+          <div className="w-full h-full bg-[#16062A] rounded-[14px] flex items-center justify-center">
+            <span className="font-black text-base text-transparent bg-clip-text bg-gradient-to-r from-[#02FEDC] to-[#F502FD]">
+              N
             </span>
           </div>
-          <p className="text-[10px] tracking-wider text-[#C8BEDC] uppercase font-medium truncate">System Under Control</p>
         </div>
+        {isExpanded && (
+          <div className="min-w-0 flex-1">
+            <h1 className="font-extrabold text-sm text-white tracking-wider truncate">
+              NEX<span className="text-[#02FEDC]">ORA</span>
+            </h1>
+            <p className="text-[9px] text-[#C8BEDC] uppercase tracking-wider font-mono">Ultra Care</p>
+          </div>
+        )}
       </div>
 
-      {/* Categorized Navigation List */}
-      <nav className="flex-1 overflow-y-auto px-3 py-3.5 space-y-4">
-        {navCategories.map((category) => (
-          <div key={category.title} className="space-y-1">
-            <h2 className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#8E80A8]">
-              {category.title}
-            </h2>
-            <div className="space-y-0.5">
-              {category.items.map((item) => {
-                const Icon = item.icon;
-                const isActive = currentSection === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => onSelectSection(item.id)}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 relative group ${
-                      isActive
-                        ? 'bg-gradient-to-r from-[#F502FD]/20 via-[#6E56FF]/15 to-transparent text-white border border-[#F502FD]/35 shadow-[0_4px_20px_rgba(245,2,253,0.12)]'
-                        : 'text-[#C8BEDC] hover:bg-white/[0.04] hover:text-white border border-transparent'
-                    }`}
-                  >
-                    {isActive && (
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-gradient-to-b from-[#02FEDC] via-[#6E56FF] to-[#F502FD] shadow-[0_0_12px_#F502FD]" />
-                    )}
-                    <div className="flex items-center gap-3">
-                      <Icon className={`w-4 h-4 transition-transform group-hover:scale-110 ${isActive ? 'text-[#02FEDC]' : 'text-[#8E80A8]'}`} />
-                      <span className={isActive ? 'font-semibold text-white' : ''}>{item.label}</span>
-                    </div>
-                    {item.badge && (
-                      <span className="px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase bg-gradient-to-r from-[#02FEDC]/20 to-[#6E56FF]/20 text-[#02FEDC] border border-[#02FEDC]/30">
-                        {item.badge}
-                      </span>
-                    )}
-                    {item.isBeta && (
-                      <span className="px-1.5 py-0.5 rounded text-[8px] font-bold uppercase bg-[#6E56FF]/20 text-[#6E56FF] border border-[#6E56FF]/30">
-                        Beta
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+      {/* 3. Iconic Navigation Rail List (CleanMyMac X Signature) */}
+      <nav className="flex-1 overflow-y-auto px-2.5 py-2 space-y-1.5 flex flex-col items-center">
+        {railItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = !isAssistantActive && currentSection === item.id;
+
+          return (
+            <button
+              key={item.id}
+              onClick={() => {
+                if (isAssistantActive && onToggleAssistant) {
+                  onToggleAssistant();
+                }
+                onSelectSection(item.id);
+              }}
+              title={!isExpanded ? item.label : undefined}
+              className={`w-full flex items-center ${
+                isExpanded ? 'justify-start px-3 py-2.5 gap-3' : 'justify-center p-2.5'
+              } rounded-2xl transition-all duration-200 relative group ${
+                isActive
+                  ? 'bg-gradient-to-r from-[#F502FD]/30 via-[#6E56FF]/25 to-white/[0.08] text-white border border-[#F502FD]/45 shadow-[0_4px_20px_rgba(245,2,253,0.25)]'
+                  : 'text-[#C8BEDC] hover:bg-white/[0.06] hover:text-white border border-transparent'
+              }`}
+            >
+              {/* Active Left Indicator Bar */}
+              {isActive && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-[#02FEDC] shadow-[0_0_8px_#02FEDC]" />
+              )}
+
+              {/* Icon Container with Floating Indicator Pip */}
+              <div className="relative flex items-center justify-center flex-shrink-0">
+                <Icon
+                  className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110 ${
+                    isActive ? 'text-[#02FEDC]' : 'text-[#A093BC]'
+                  }`}
+                />
+
+                {/* White / Cyan Notification Pip (CleanMyMac X Rail Pip) */}
+                {item.hasPip && !isActive && (
+                  <span className="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+                )}
+              </div>
+
+              {/* Label for Expanded Mode */}
+              {isExpanded && (
+                <div className="flex-1 flex items-center justify-between text-left min-w-0">
+                  <span className={`text-xs truncate ${isActive ? 'font-bold text-white' : 'font-medium'}`}>
+                    {item.label}
+                  </span>
+                  {item.badge && (
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#F502FD]/20 text-[#F502FD] border border-[#F502FD]/40 ml-1">
+                      {item.badge}
+                    </span>
+                  )}
+                </div>
+              )}
+            </button>
+          );
+        })}
       </nav>
 
-      {/* Footer System Status Banner */}
-      <div className="p-3.5 m-3 rounded-xl bg-gradient-to-b from-[#240F44] to-[#140626] border border-white/[0.08] space-y-1.5">
-        <div className="flex items-center justify-between text-[11px]">
-          <span className="flex items-center gap-1.5 font-semibold text-[#00E699]">
-            <span className="w-2 h-2 rounded-full bg-[#00E699] animate-pulse shadow-[0_0_8px_#00E699]" />
-            Native Rust Core
-          </span>
-          <span className="font-mono text-[9px] text-[#02FEDC] px-1.5 py-0.2 rounded bg-[#02FEDC]/10 border border-[#02FEDC]/20">Active</span>
-        </div>
-        <p className="text-[10px] text-[#C8BEDC] leading-tight">
-          Zero background daemons. Zero telemetry battery drain.
-        </p>
+      {/* 4. Bottom Assistant & Rail Toggle Area (CleanMyMac Assistant) */}
+      <div className="p-2.5 border-t border-white/[0.08] flex flex-col items-center gap-2">
+        {/* Assistant Portal Button with Dual Pips */}
+        <button
+          onClick={onToggleAssistant}
+          title={!isExpanded ? 'System Assistant' : undefined}
+          className={`w-full flex items-center ${
+            isExpanded ? 'justify-start px-3 py-2.5 gap-3' : 'justify-center p-2.5'
+          } rounded-2xl transition-all duration-200 relative group ${
+            isAssistantActive
+              ? 'bg-gradient-to-r from-[#02FEDC]/30 via-[#6E56FF]/25 to-white/[0.08] text-white border border-[#02FEDC]/50 shadow-[0_4px_20px_rgba(2,254,220,0.3)]'
+              : 'text-[#C8BEDC] hover:bg-white/[0.06] hover:text-white border border-transparent'
+          }`}
+        >
+          <div className="relative flex items-center justify-center flex-shrink-0">
+            <div className="w-5 h-5 rounded-full border-2 border-[#02FEDC] flex items-center justify-center p-0.5 shadow-[0_0_8px_#02FEDC]">
+              <div className="w-2 h-2 rounded-full bg-[#02FEDC] animate-pulse" />
+            </div>
+            {/* Dual pips */}
+            <span className="absolute -bottom-1 -right-1 w-1.5 h-1.5 rounded-full bg-[#F502FD]" />
+          </div>
+
+          {isExpanded && (
+            <div className="text-left min-w-0">
+              <span className="text-xs font-bold text-white block truncate">Assistant</span>
+              <span className="text-[9px] text-[#02FEDC] block font-mono">Live Guidance</span>
+            </div>
+          )}
+        </button>
+
+        {/* Expand / Collapse Rail Toggle */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="p-1.5 rounded-xl hover:bg-white/10 text-[#8E80A8] hover:text-white transition-all text-xs flex items-center gap-1.5"
+          title={isExpanded ? 'Collapse to Icon Rail' : 'Expand Navigation'}
+        >
+          {isExpanded ? (
+            <>
+              <ChevronLeft className="w-3.5 h-3.5" />
+              <span className="text-[10px]">Collapse</span>
+            </>
+          ) : (
+            <ChevronRight className="w-3.5 h-3.5" />
+          )}
+        </button>
       </div>
     </aside>
   );

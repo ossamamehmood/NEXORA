@@ -23,9 +23,20 @@ import { SettingsView } from './features/settings/SettingsView';
 
 export const App: React.FC = () => {
   const [currentSection, setCurrentSection] = useState<NavigationSection>('overview');
+  const [isAssistantActive, setIsAssistantActive] = useState(false);
   const [overview, setOverview] = useState<SystemOverview | null>(null);
   const [metrics, setMetrics] = useState<RealtimeMetrics | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleSelectSection = (section: NavigationSection) => {
+    setIsAssistantActive(false);
+    setCurrentSection(section);
+  };
+
+  const handleToggleAssistant = () => {
+    setIsAssistantActive((prev) => !prev);
+    setCurrentSection('overview');
+  };
 
   const fetchSystemData = async () => {
     setIsRefreshing(true);
@@ -65,7 +76,12 @@ export const App: React.FC = () => {
       <div className="absolute bottom-0 left-1/3 w-[500px] h-[500px] rounded-full bg-gradient-to-t from-[#02FEDC]/10 via-[#6E56FF]/10 to-transparent blur-[100px] pointer-events-none" />
 
       {/* Sidebar Navigation */}
-      <Sidebar currentSection={currentSection} onSelectSection={setCurrentSection} />
+      <Sidebar
+        currentSection={currentSection}
+        onSelectSection={handleSelectSection}
+        isAssistantActive={isAssistantActive}
+        onToggleAssistant={handleToggleAssistant}
+      />
 
       {/* Main View Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden bg-transparent z-10">
@@ -81,8 +97,9 @@ export const App: React.FC = () => {
             <OverviewView
               overview={overview}
               metrics={metrics}
-              onNavigateToCleaner={() => setCurrentSection('cleaner')}
-              onNavigateToSection={setCurrentSection}
+              onNavigateToCleaner={() => handleSelectSection('cleaner')}
+              onNavigateToSection={handleSelectSection}
+              isAssistantActive={isAssistantActive}
             />
           )}
 

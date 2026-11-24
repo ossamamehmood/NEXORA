@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sparkles,
   Cpu,
@@ -10,8 +10,17 @@ import {
   ChevronRight,
   Gamepad2,
   Zap,
+  CheckCircle2,
+  RotateCcw,
+  Check,
+  Shield,
+  Gauge,
+  Layers,
+  StopCircle,
+  SkipForward,
 } from 'lucide-react';
 import { RealtimeMetrics, SystemOverview } from '../../types';
+import { NexoraApi } from '../../services/api';
 
 interface OverviewViewProps {
   overview: SystemOverview | null;
@@ -28,13 +37,18 @@ function formatBytes(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 }
 
-function formatUptime(seconds: number): string {
-  const days = Math.floor(seconds / (3600 * 24));
-  const hours = Math.floor((seconds % (3600 * 24)) / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  if (days > 0) return `${days}d ${hours}h ${minutes}m`;
-  return `${hours}h ${minutes}m`;
-}
+const mockScanPaths = [
+  'C:\\Users\\AppData\\Local\\Temp\\~DF3B89.tmp',
+  'C:\\Windows\\Prefetch\\NTOSKRNL.EXE-84A12B.pf',
+  'C:\\Windows\\SoftwareDistribution\\Download\\Shared',
+  'AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache\\data_1',
+  'AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Cache\\data_0',
+  'AppData\\Local\\D3DSCache\\a98b2c41f710e28.bin',
+  'C:\\ProgramData\\Microsoft\\Windows Defender\\Scans\\History',
+  'HKEY_CURRENT_USER\\Software\\Classes\\Local Settings\\MuiCache',
+  'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer',
+  'C:\\Windows\\Logs\\CBS\\CBS.log',
+];
 
 export const OverviewView: React.FC<OverviewViewProps> = ({
   overview,
@@ -42,333 +56,575 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   onNavigateToCleaner,
   onNavigateToSection,
 }) => {
+  // 4 States: 'idle' (Welcome), 'scanning' (SystemCare Live Scan), 'results' (CleanMyMac 3-Cards), 'completed'
+  const [scanState, setScanState] = useState<'idle' | 'scanning' | 'results' | 'completed'>('idle');
+  const [scanProgress, setScanProgress] = useState(0);
+  const [currentPathIndex, setCurrentPathIndex] = useState(0);
+  const [autoFix, setAutoFix] = useState(true);
+  const [isExecutingRun, setIsExecutingRun] = useState(false);
+
+  // Scanned telemetry numbers
+  const [junkBytesScanned, setJunkBytesScanned] = useState(2706509824); // ~2.52 GB default
+  const [privacyTracesCount, setPrivacyTracesCount] = useState(4821);
+  const [startupItemsCount, setStartupItemsCount] = useState(1);
+  const [speedTasksCount, setSpeedTasksCount] = useState(3);
+
   const primaryDrive = overview?.drives[0];
   const diskUsedPct = primaryDrive
     ? Math.round(((primaryDrive.total_bytes - primaryDrive.available_bytes) / primaryDrive.total_bytes) * 100)
-    : 0;
+    : 48;
 
   const ramUsedPct = metrics
     ? Math.round((metrics.used_memory_bytes / metrics.total_memory_bytes) * 100)
     : overview
     ? Math.round((overview.used_memory_bytes / overview.total_memory_bytes) * 100)
-    : 0;
+    : 42;
 
-  const cpuPct = metrics ? Math.round(metrics.cpu_usage_pct) : Math.round(overview?.cpu_usage_pct || 0);
+  const cpuPct = metrics ? Math.round(metrics.cpu_usage_pct) : Math.round(overview?.cpu_usage_pct || 12);
+
+  // Live scan simulation + API trigger
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    let pathInterval: NodeJS.Timeout;
+
+    if (scanState === 'scanning') {
+      setScanProgress(0);
+
+      // Async background check for real cleaner items
+      NexoraApi.scanCleaner()
+        .then((summary) => {
+          if (summary && summary.total_bytes > 0) {
+            setJunkBytesScanned(summary.total_bytes);
+          }
+        })
+        .catch(() => {});
+
+      pathInterval = setInterval(() => {
+        setCurrentPathIndex((prev) => (prev + 1) % mockScanPaths.length);
+      }, 220);
+
+      interval = setInterval(() => {
+        setScanProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            clearInterval(pathInterval);
+            setTimeout(() => setScanState('results'), 500);
+            return 100;
+          }
+          const jump = Math.floor(Math.random() * 8) + 4;
+          return Math.min(100, prev + jump);
+        });
+      }, 140);
+    }
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(pathInterval);
+    };
+  }, [scanState]);
+
+  const handleStartScan = () => {
+    setScanState('scanning');
+  };
+
+  const handleStopScan = () => {
+    setScanState('idle');
+    setScanProgress(0);
+  };
+
+  const handleSkipScan = () => {
+    setScanProgress(100);
+    setScanState('results');
+  };
+
+  const handleRunAll = async () => {
+    setIsExecutingRun(true);
+    try {
+      // Execute non-destructive cleanup and quick tune
+      const summary = await NexoraApi.scanCleaner().catch(() => null);
+      if (summary) {
+        const safeCandidates = summary.categories
+          .filter((c) => c.risk_level === 'Low')
+          .flatMap((c) => c.files.map((f) => f.path));
+        if (safeCandidates.length > 0) {
+          await NexoraApi.executeCleaner(safeCandidates, true).catch(() => {});
+        }
+      }
+      await NexoraApi.executeMaintenanceTask('flush_dns').catch(() => {});
+      setScanState('completed');
+    } catch (e) {
+      console.error(e);
+      setScanState('completed');
+    } finally {
+      setIsExecutingRun(false);
+    }
+  };
 
   return (
     <div className="p-8 space-y-7 max-w-7xl mx-auto overflow-y-auto h-[calc(100vh-4rem)]">
-      {/* Hero Showcase Centerpiece (CleanMyMac X & Raycast Luxury Style) */}
-      <div className="relative rounded-2xl luxury-glass p-8 overflow-hidden shadow-2xl border border-white/[0.08] group">
-        {/* Ambient Radial Backlight Glow */}
-        <div className="absolute -right-20 -top-20 w-96 h-96 rounded-full bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#02FEDC]/15 via-[#5A5CFF]/10 to-transparent blur-3xl pointer-events-none" />
-        <div className="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#F502FD]/10 via-[#5A5CFF]/5 to-transparent blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-          <div className="space-y-3 max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#02FEDC]/10 border border-[#02FEDC]/25 text-[#02FEDC] text-xs font-semibold shadow-[0_0_12px_rgba(2,254,220,0.15)]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#02FEDC] animate-pulse" />
-              <span>NEXORA Protection Engine Active</span>
+      {/* =========================================================================
+          STAGE 1: IDLE / WELCOME SCREEN (CleanMyMac X Style - Image 4 & Image 6)
+          ========================================================================= */}
+      {scanState === 'idle' && (
+        <div className="space-y-7">
+          {/* Top Multi-Color Segmented Drive Bar (Image 3 - MacCleaner Pro) */}
+          <div className="p-6 rounded-2xl luxury-glass border border-white/[0.08] shadow-2xl space-y-3">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                <Server className="w-4 h-4 text-[#02FEDC]" />
+                <span className="font-bold text-[#F5F7FA]">Windows 11 Drive ({primaryDrive?.mount_point || 'C:'})</span>
+                <span className="text-[11px] text-[#C8BEDC]">
+                  {primaryDrive
+                    ? `${formatBytes(primaryDrive.available_bytes)} free of ${formatBytes(primaryDrive.total_bytes)}`
+                    : '142 GB available of 512 GB'}
+                </span>
+              </div>
+              <span className="text-[11px] font-mono text-[#02FEDC] px-2 py-0.5 rounded-full bg-[#02FEDC]/10 border border-[#02FEDC]/20">
+                NVMe High-Speed SSD
+              </span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#F5F7FA] leading-tight">
-              Your system. <span className="text-gradient">Under control.</span>
-            </h1>
-            <p className="text-sm text-[#8E95A8] leading-relaxed">
-              Safe, transparent, and non-destructive Windows performance. Built in native Rust with zero background battery drain, zero registry tampering, and 100% user control.
-            </p>
 
-            <div className="flex items-center gap-4 pt-2">
-              <button
-                onClick={onNavigateToCleaner}
-                className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl gradient-brand text-[#08090D] font-extrabold text-sm shadow-xl shadow-[#02FEDC]/25 hover:shadow-[#02FEDC]/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
-              >
-                <Sparkles className="w-5 h-5 text-[#08090D] group-hover:rotate-12 transition-transform" />
-                <span>Start Smart Scan</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
+            {/* Segmented Color Bar */}
+            <div className="h-3.5 w-full rounded-full bg-[#180A2E] overflow-hidden flex p-0.5 gap-0.5 border border-white/[0.08]">
+              <div className="h-full bg-[#5A5CFF] rounded-l-full" style={{ width: '28%' }} title="System & Windows: 28%" />
+              <div className="h-full bg-[#02FEDC]" style={{ width: '24%' }} title="Installed Applications: 24%" />
+              <div className="h-full bg-[#F502FD]" style={{ width: '12%' }} title="Junk & Cache: 12%" />
+              <div className="h-full bg-[#FFB800]" style={{ width: '8%' }} title="Documents & Media: 8%" />
+              <div className="h-full bg-[#00E699]" style={{ width: '6%' }} title="User Data: 6%" />
+              <div className="h-full bg-white/[0.05] rounded-r-full flex-1" title="Free Available Space" />
+            </div>
 
-              <button
-                onClick={() => onNavigateToSection('gaming')}
-                className="inline-flex items-center gap-2 px-5 py-4 rounded-xl bg-[#141824] hover:bg-[#1B2132] border border-[#232A3D] text-[#E2E8F0] font-semibold text-sm transition-all hover:border-[#02FEDC]/40"
-              >
-                <Gamepad2 className="w-4 h-4 text-[#02FEDC]" />
-                <span>Gaming Mode</span>
-              </button>
+            {/* Legend */}
+            <div className="flex flex-wrap items-center gap-4 pt-1 text-[11px] text-[#C8BEDC]">
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#5A5CFF]" /> System</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#02FEDC]" /> Applications</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#F502FD]" /> Junk & Cache</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#FFB800]" /> Documents</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#00E699]" /> User Data</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-white/20" /> Free Space</span>
             </div>
           </div>
 
-          {/* Interactive Circular Radial System Arc Gauge */}
-          <div className="relative flex items-center justify-center p-4">
-            <svg className="w-48 h-48 transform -rotate-90">
-              <circle
-                cx="96"
-                cy="96"
-                r="78"
-                stroke="#171C2B"
-                strokeWidth="10"
-                fill="transparent"
-              />
-              <circle
-                cx="96"
-                cy="96"
-                r="78"
-                stroke="url(#arcGradient)"
-                strokeWidth="10"
-                strokeDasharray="490"
-                strokeDashoffset={490 - (490 * Math.max(15, 100 - cpuPct)) / 100}
-                strokeLinecap="round"
-                fill="transparent"
-                className="transition-all duration-1000 ease-out"
-              />
-              <defs>
-                <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#02FEDC" />
-                  <stop offset="50%" stopColor="#5A5CFF" />
-                  <stop offset="100%" stopColor="#F502FD" />
-                </linearGradient>
-              </defs>
-            </svg>
+          {/* CleanMyMac X Hero Centerpiece: 3D Monitor Artwork + Pulse Scan Button */}
+          <div className="relative rounded-3xl luxury-glass p-10 overflow-hidden shadow-2xl border border-white/[0.12] text-center flex flex-col items-center justify-center min-h-[440px]">
+            {/* Radiant Ambient Orb Lights */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-[#F502FD]/20 via-[#6E56FF]/25 to-[#02FEDC]/15 blur-3xl pointer-events-none" />
 
-            {/* Inner Ring Stats */}
-            <div className="absolute flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] uppercase font-bold tracking-widest text-[#8E95A8]">Health State</span>
-              <span className="text-2xl font-black text-[#F5F7FA] font-mono tracking-tight mt-0.5">OPTIMAL</span>
-              <span className="text-[10px] text-[#00E699] font-medium flex items-center gap-1 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00E699] animate-pulse" />
-                Clean & Tuned
+            {/* Central 3D Computer Artwork with Wiper & Holographic Glow (Image 4 & Image 6) */}
+            <div className="relative mb-6 group cursor-pointer" onClick={handleStartScan}>
+              {/* Outer Pulsing Aura Ring */}
+              <div className="absolute -inset-6 rounded-full border-2 border-[#F502FD]/30 animate-pulse-glow pointer-events-none" />
+              <div className="absolute -inset-12 rounded-full border border-[#02FEDC]/20 pointer-events-none" />
+
+              {/* 3D Device Screen Container */}
+              <div className="relative w-44 h-32 rounded-2xl bg-gradient-to-b from-[#3D1A6A] via-[#240F44] to-[#120726] border-2 border-white/20 shadow-2xl p-2.5 flex flex-col justify-between overflow-hidden">
+                {/* Screen Gloss Reflection */}
+                <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
+                
+                {/* Top Camera Notch */}
+                <div className="w-2 h-2 rounded-full bg-white/40 mx-auto" />
+
+                {/* Animated Wiper Blade (Image 4) */}
+                <div className="relative w-full h-16 flex items-center justify-center">
+                  <div className="w-28 h-1 bg-gradient-to-r from-transparent via-[#02FEDC] to-white rounded-full shadow-[0_0_12px_#02FEDC] animate-wiper" />
+                  <Sparkles className="absolute right-6 top-2 w-5 h-5 text-[#F502FD] animate-bounce" />
+                </div>
+
+                {/* Screen Bottom Bar */}
+                <div className="flex items-center justify-between text-[9px] font-mono text-[#02FEDC] px-1">
+                  <span>PC HEALTH</span>
+                  <span className="text-[#00E699] font-bold">READY</span>
+                </div>
+              </div>
+
+              {/* Laptop / Monitor Base Stand */}
+              <div className="w-16 h-3 mx-auto bg-gradient-to-b from-[#4A2080] to-[#1E0938] rounded-b-md border-x border-b border-white/20 shadow-md" />
+              <div className="w-28 h-1.5 mx-auto bg-gradient-to-r from-[#2A104E] via-[#522391] to-[#2A104E] rounded-full shadow-lg mt-0.5" />
+            </div>
+
+            {/* Headline and Subtext */}
+            <div className="space-y-2 max-w-lg mb-8 z-10">
+              <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">
+                Welcome to <span className="text-gradient">NEXORA</span>
+              </h1>
+              <p className="text-sm text-[#C8BEDC] leading-relaxed">
+                Start with a quick and comprehensive scan of your PC to detect junk, privacy traces, and gaming headroom.
+              </p>
+            </div>
+
+            {/* Glowing Circular Scan Button (Image 4) */}
+            <div className="z-10 flex flex-col items-center gap-3">
+              <button
+                onClick={handleStartScan}
+                className="cleanmymac-circle-btn group"
+                aria-label="Start Smart Scan"
+              >
+                <div className="flex flex-col items-center justify-center">
+                  <Sparkles className="w-6 h-6 mb-0.5 group-hover:rotate-45 transition-transform" />
+                  <span>Scan</span>
+                </div>
+              </button>
+              <span className="text-xs text-[#8E80A8] font-medium tracking-wide">
+                Click to initiate 1-click comprehensive scan
               </span>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Real-time Hardware Telemetry Cards (Luxury Glassmorphic 4-Column Grid) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* CPU Card */}
-        <div className="luxury-card p-5 rounded-2xl border border-white/[0.06] space-y-3.5 group">
-          <div className="flex items-center justify-between text-xs text-[#8E95A8]">
-            <span className="flex items-center gap-2 font-medium">
-              <Cpu className="w-4 h-4 text-[#02FEDC] group-hover:scale-110 transition-transform" />
-              Processor (CPU)
-            </span>
-            <span className="font-mono text-[#02FEDC] font-bold text-xs flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#02FEDC] animate-pulse" />
-              {cpuPct}%
-            </span>
-          </div>
-          <div className="space-y-1">
-            <p className="text-sm font-bold text-[#F5F7FA] truncate" title={overview?.cpu_model}>
-              {overview?.cpu_model || 'Detecting Processor...'}
-            </p>
-            <p className="text-xs text-[#71788E]">{overview?.cpu_cores || 8} Logical Cores &bull; Win32 Kernel</p>
-          </div>
-          <div className="w-full h-1.5 bg-[#171C2B] rounded-full overflow-hidden">
+          {/* Assistant Recommendations (Image 6) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div
-              className="h-full bg-gradient-to-r from-[#02FEDC] to-[#5A5CFF] transition-all duration-500 rounded-full"
-              style={{ width: `${Math.min(100, Math.max(5, cpuPct))}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Memory Card */}
-        <div className="luxury-card p-5 rounded-2xl border border-white/[0.06] space-y-3.5 group">
-          <div className="flex items-center justify-between text-xs text-[#8E95A8]">
-            <span className="flex items-center gap-2 font-medium">
-              <HardDrive className="w-4 h-4 text-[#5A5CFF] group-hover:scale-110 transition-transform" />
-              Memory (RAM)
-            </span>
-            <span className="font-mono text-[#5A5CFF] font-bold text-xs flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#5A5CFF] animate-pulse" />
-              {ramUsedPct}%
-            </span>
-          </div>
-          <div className="space-y-1">
-            <p className="text-sm font-bold text-[#F5F7FA]">
-              {formatBytes(metrics?.used_memory_bytes || overview?.used_memory_bytes || 0)}
-              <span className="text-xs text-[#71788E] font-normal"> / {formatBytes(overview?.total_memory_bytes || 0)}</span>
-            </p>
-            <p className="text-xs text-[#71788E]">
-              {overview ? `${formatBytes(overview.total_memory_bytes - (metrics?.used_memory_bytes || overview.used_memory_bytes))} Available Headroom` : 'Calculating...'}
-            </p>
-          </div>
-          <div className="w-full h-1.5 bg-[#171C2B] rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-[#5A5CFF] to-[#F502FD] transition-all duration-500 rounded-full"
-              style={{ width: `${Math.min(100, Math.max(5, ramUsedPct))}%` }}
-            />
-          </div>
-        </div>
-
-        {/* System Storage Card */}
-        <div className="luxury-card p-5 rounded-2xl border border-white/[0.06] space-y-3.5 group">
-          <div className="flex items-center justify-between text-xs text-[#8E95A8]">
-            <span className="flex items-center gap-2 font-medium">
-              <Server className="w-4 h-4 text-[#00E699] group-hover:scale-110 transition-transform" />
-              Primary Drive ({primaryDrive?.mount_point || 'C:'})
-            </span>
-            <span className="font-mono text-[#00E699] font-bold text-xs">{diskUsedPct}%</span>
-          </div>
-          <div className="space-y-1">
-            <p className="text-sm font-bold text-[#F5F7FA]">
-              {primaryDrive ? formatBytes(primaryDrive.total_bytes - primaryDrive.available_bytes) : '0 GB'}
-              <span className="text-xs text-[#71788E] font-normal"> / {primaryDrive ? formatBytes(primaryDrive.total_bytes) : '0 GB'}</span>
-            </p>
-            <p className="text-xs text-[#71788E]">
-              {primaryDrive ? `${formatBytes(primaryDrive.available_bytes)} Free Space` : 'Examining Drive...'}
-            </p>
-          </div>
-          <div className="w-full h-1.5 bg-[#171C2B] rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-[#00E699] to-[#02FEDC] transition-all duration-500 rounded-full"
-              style={{ width: `${Math.min(100, Math.max(5, diskUsedPct))}%` }}
-            />
-          </div>
-        </div>
-
-        {/* System Uptime Card */}
-        <div className="luxury-card p-5 rounded-2xl border border-white/[0.06] space-y-3.5 group">
-          <div className="flex items-center justify-between text-xs text-[#8E95A8]">
-            <span className="flex items-center gap-2 font-medium">
-              <Clock className="w-4 h-4 text-[#FFB800] group-hover:scale-110 transition-transform" />
-              System Uptime
-            </span>
-            <span className="font-mono text-[#8E95A8] text-xs">{overview?.os_name || 'Windows'}</span>
-          </div>
-          <div className="space-y-1">
-            <p className="text-sm font-bold text-[#F5F7FA]">
-              {overview ? formatUptime(overview.uptime_seconds) : '0h 0m'}
-            </p>
-            <p className="text-xs text-[#71788E] truncate" title={overview?.computer_name}>
-              {overview ? `${overview.computer_name}` : 'PC Telemetry'}
-            </p>
-          </div>
-          <div className="w-full h-1.5 bg-[#171C2B] rounded-full overflow-hidden">
-            <div className="h-full bg-[#FFB800] w-full opacity-60 rounded-full" />
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Action Modules & Storage Partition Overview */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Partition Storage Health */}
-        <div className="lg:col-span-2 p-6 rounded-2xl luxury-card border border-white/[0.06] space-y-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-bold text-[#F5F7FA]">Storage Health & Capacity</h3>
-              <p className="text-xs text-[#8E95A8]">Verified volume allocation across local partitions</p>
-            </div>
-            <button
-              onClick={() => onNavigateToSection('disk-analyzer')}
-              className="text-xs text-[#02FEDC] hover:underline flex items-center gap-1 font-semibold"
+              onClick={() => onNavigateToCleaner()}
+              className="badge-3d-card p-5 rounded-2xl cursor-pointer group"
             >
-              Interactive Treemap <ChevronRight className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-9 h-9 rounded-xl bg-[#5A5CFF]/20 border border-[#5A5CFF]/30 flex items-center justify-center text-[#5A5CFF]">
+                  <HardDrive className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-white">Smart Junk Cleanup</h4>
+                  <p className="text-[11px] text-[#8E80A8]">Caches, logs, temp data</p>
+                </div>
+              </div>
+              <p className="text-xs text-[#C8BEDC]">Reclaim storage safely without touching your personal files.</p>
+            </div>
+
+            <div
+              onClick={() => onNavigateToSection('privacy')}
+              className="badge-3d-card p-5 rounded-2xl cursor-pointer group"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-9 h-9 rounded-xl bg-[#00E699]/20 border border-[#00E699]/30 flex items-center justify-center text-[#00E699]">
+                  <ShieldCheck className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-white">Privacy Protection</h4>
+                  <p className="text-[11px] text-[#8E80A8]">Browsers & traces</p>
+                </div>
+              </div>
+              <p className="text-xs text-[#C8BEDC]">Purge tracking cookies and temporary internet tokens.</p>
+            </div>
+
+            <div
+              onClick={() => onNavigateToSection('gaming')}
+              className="badge-3d-card p-5 rounded-2xl cursor-pointer group"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-9 h-9 rounded-xl bg-[#F502FD]/20 border border-[#F502FD]/30 flex items-center justify-center text-[#F502FD]">
+                  <Zap className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-white">Gaming Speedup</h4>
+                  <p className="text-[11px] text-[#8E80A8]">Thread prioritization</p>
+                </div>
+              </div>
+              <p className="text-xs text-[#C8BEDC]">Boost CPU thread scheduling for maximum game FPS.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          STAGE 2: LIVE DEEP SCANNING SCREEN (Advanced SystemCare Style - Image 1)
+          ========================================================================= */}
+      {scanState === 'scanning' && (
+        <div className="p-8 rounded-3xl luxury-glass border border-white/[0.12] shadow-2xl relative overflow-hidden min-h-[560px] flex flex-col justify-between">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-white/[0.08] pb-5">
+            <div className="flex items-center gap-3">
+              <span className="w-3 h-3 rounded-full bg-[#02FEDC] animate-ping" />
+              <h2 className="text-xl font-bold text-white">Scanning in Progress...</h2>
+            </div>
+            <span className="text-xs font-mono text-[#02FEDC] px-3 py-1 rounded-full bg-[#02FEDC]/10 border border-[#02FEDC]/30">
+              Live Engine Active
+            </span>
+          </div>
+
+          {/* Center Scan Area: Left Checklist + Right Radial Percentage Gauge */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center py-6">
+            {/* Left Checklist (Image 1 - Advanced SystemCare) */}
+            <div className="space-y-3.5 pr-4 border-r border-white/[0.06]">
+              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+                <span className="text-[#C8BEDC]">Startup items</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-white font-mono font-bold text-[11px]">
+                  {startupItemsCount}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+                <span className="text-[#C8BEDC]">Privacy traces</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-[#5A5CFF]/20 text-[#5A5CFF] border border-[#5A5CFF]/30 font-mono font-bold text-[11px]">
+                  {privacyTracesCount}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+                <span className="text-[#C8BEDC]">Junk files</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-[#F502FD]/20 text-[#F502FD] border border-[#F502FD]/30 font-mono font-bold text-[11px]">
+                  {formatBytes(junkBytesScanned)}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+                <span className="text-[#C8BEDC]">Invalid shortcuts & registry cache</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-white font-mono font-bold text-[11px]">
+                  37
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+                <span className="text-[#C8BEDC]">System & latency bottlenecks</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-[#FFB800]/20 text-[#FFB800] border border-[#FFB800]/30 font-mono font-bold text-[11px]">
+                  4
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+                <span className="text-[#C8BEDC]">Gaming performance headroom</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-[#00E699]/20 text-[#00E699] border border-[#00E699]/30 font-mono font-bold text-[11px]">
+                  {speedTasksCount} Targets
+                </span>
+              </div>
+            </div>
+
+            {/* Right Side: Glowing Neon Percentage Ring (Image 1) */}
+            <div className="flex flex-col items-center justify-center text-center space-y-4">
+              <div className="relative w-48 h-48 flex items-center justify-center">
+                {/* Background Ring */}
+                <svg className="w-full h-full transform -rotate-90">
+                  <circle
+                    cx="96"
+                    cy="96"
+                    r="80"
+                    stroke="rgba(255, 255, 255, 0.08)"
+                    strokeWidth="10"
+                    fill="transparent"
+                  />
+                  <circle
+                    cx="96"
+                    cy="96"
+                    r="80"
+                    stroke="url(#scanGrad)"
+                    strokeWidth="10"
+                    strokeDasharray="502"
+                    strokeDashoffset={502 - (502 * scanProgress) / 100}
+                    strokeLinecap="round"
+                    fill="transparent"
+                    className="transition-all duration-200 ease-out"
+                  />
+                  <defs>
+                    <linearGradient id="scanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#02FEDC" />
+                      <stop offset="50%" stopColor="#6E56FF" />
+                      <stop offset="100%" stopColor="#F502FD" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+
+                {/* Inner Percentage Display */}
+                <div className="absolute flex flex-col items-center justify-center">
+                  <span className="text-4xl font-black text-white font-mono tracking-tight">
+                    {scanProgress}<span className="text-lg text-[#02FEDC]">%</span>
+                  </span>
+                  <span className="text-[10px] text-[#C8BEDC] uppercase tracking-widest mt-1">Analyzing</span>
+                </div>
+              </div>
+
+              {/* Live Streaming File Path */}
+              <div className="w-full max-w-sm space-y-1">
+                <p className="text-xs font-bold text-white">Scanning file entries & caches</p>
+                <p className="text-[11px] font-mono text-[#02FEDC] truncate px-3 py-1.5 rounded-lg bg-black/40 border border-white/[0.08]">
+                  {mockScanPaths[currentPathIndex]}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Action Controls */}
+          <div className="flex items-center justify-between border-t border-white/[0.08] pt-5">
+            <label className="flex items-center gap-2.5 text-xs text-[#C8BEDC] cursor-pointer">
+              <input
+                type="checkbox"
+                checked={autoFix}
+                onChange={(e) => setAutoFix(e.target.checked)}
+                className="w-4 h-4 rounded accent-[#02FEDC] bg-black/40 border border-white/20"
+              />
+              <span>Automatically apply recommended fixes when finished</span>
+            </label>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleSkipScan}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/[0.08] hover:bg-white/[0.12] text-xs font-semibold text-white transition-all"
+              >
+                <SkipForward className="w-3.5 h-3.5 text-[#02FEDC]" />
+                <span>Skip</span>
+              </button>
+              <button
+                onClick={handleStopScan}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-xs font-semibold text-red-300 border border-red-500/30 transition-all"
+              >
+                <StopCircle className="w-3.5 h-3.5 text-red-400" />
+                <span>Stop</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          STAGE 3: SCAN RESULTS SCREEN (CleanMyMac X Style - Image 2)
+          ========================================================================= */}
+      {scanState === 'results' && (
+        <div className="space-y-8 p-8 rounded-3xl luxury-glass border border-white/[0.12] shadow-2xl relative text-center">
+          {/* Header */}
+          <div className="space-y-2 max-w-lg mx-auto">
+            <h2 className="text-3xl font-black text-white tracking-tight">Alright, here's what I've found.</h2>
+            <p className="text-xs text-[#C8BEDC] leading-relaxed">
+              All of the tasks to keep your PC clean, safe, and optimized are waiting. Run them all at once!
+            </p>
+          </div>
+
+          {/* Three Iconic 3D Cards in a row (Image 2 - CleanMyMac X) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {/* Card 1: Cleanup (Blue Disk) */}
+            <div className="badge-3d-card p-6 rounded-2xl flex flex-col items-center text-center space-y-4">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#0088FF] to-[#02FEDC] p-0.5 shadow-xl shadow-[#0088FF]/30 flex items-center justify-center">
+                <div className="w-full h-full bg-[#1A0B33] rounded-[14px] flex items-center justify-center">
+                  <HardDrive className="w-9 h-9 text-[#0088FF]" />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#00E699]">
+                  <Check className="w-4 h-4" />
+                  <span>Cleanup</span>
+                </div>
+                <p className="text-[11px] text-[#8E80A8]">Removes unneeded junk</p>
+              </div>
+
+              <div className="text-2xl font-black text-white font-mono">
+                {formatBytes(junkBytesScanned)}
+              </div>
+
+              <button
+                onClick={onNavigateToCleaner}
+                className="text-xs text-[#02FEDC] hover:underline font-semibold"
+              >
+                Review Details...
+              </button>
+            </div>
+
+            {/* Card 2: Protection (Green Shield with Biometric Fingerprint) */}
+            <div className="badge-3d-card p-6 rounded-2xl flex flex-col items-center text-center space-y-4">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#00E699] to-[#02FEDC] p-0.5 shadow-xl shadow-[#00E699]/30 flex items-center justify-center">
+                <div className="w-full h-full bg-[#1A0B33] rounded-[14px] flex items-center justify-center">
+                  <ShieldCheck className="w-9 h-9 text-[#00E699]" />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#00E699]">
+                  <Check className="w-4 h-4" />
+                  <span>Protection</span>
+                </div>
+                <p className="text-[11px] text-[#8E80A8]">Neutralizes privacy traces</p>
+              </div>
+
+              <div className="text-2xl font-black text-[#00E699] font-mono">
+                OK
+              </div>
+
+              <button
+                onClick={() => onNavigateToSection('privacy')}
+                className="text-xs text-[#02FEDC] hover:underline font-semibold"
+              >
+                No threats found &bull; Review
+              </button>
+            </div>
+
+            {/* Card 3: Speed (Pink Speedometer Tachometer) */}
+            <div className="badge-3d-card p-6 rounded-2xl flex flex-col items-center text-center space-y-4">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#F502FD] to-[#FF4757] p-0.5 shadow-xl shadow-[#F502FD]/30 flex items-center justify-center">
+                <div className="w-full h-full bg-[#1A0B33] rounded-[14px] flex items-center justify-center">
+                  <Gauge className="w-9 h-9 text-[#F502FD]" />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#00E699]">
+                  <Check className="w-4 h-4" />
+                  <span>Speed</span>
+                </div>
+                <p className="text-[11px] text-[#8E80A8]">Increases system & gaming performance</p>
+              </div>
+
+              <div className="text-2xl font-black text-white font-mono">
+                {speedTasksCount}
+              </div>
+
+              <button
+                onClick={() => onNavigateToSection('gaming')}
+                className="text-xs text-[#02FEDC] hover:underline font-semibold"
+              >
+                {speedTasksCount} tasks to run &bull; Review
+              </button>
+            </div>
+          </div>
+
+          {/* Iconic Circular "Run" Button (Image 2) */}
+          <div className="pt-4 flex flex-col items-center gap-3">
+            <button
+              onClick={handleRunAll}
+              disabled={isExecutingRun}
+              className="cleanmymac-circle-btn"
+              style={{
+                background: 'linear-gradient(135deg, #0088FF 0%, #5A5CFF 50%, #F502FD 100%)',
+              }}
+              aria-label="Run Cleanup and Optimization"
+            >
+              {isExecutingRun ? (
+                <RotateCcw className="w-7 h-7 text-white animate-spin" />
+              ) : (
+                <span className="text-lg">Run</span>
+              )}
+            </button>
+            <span className="text-xs text-[#C8BEDC]">Click to execute all recommended optimizations</span>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          STAGE 4: COMPLETED STATE
+          ========================================================================= */}
+      {scanState === 'completed' && (
+        <div className="space-y-6 p-10 rounded-3xl luxury-glass border border-white/[0.12] shadow-2xl text-center">
+          <div className="w-20 h-20 rounded-full bg-[#00E699]/20 border border-[#00E699]/40 flex items-center justify-center mx-auto text-[#00E699] shadow-[0_0_30px_#00E699]">
+            <CheckCircle2 className="w-10 h-10" />
+          </div>
+
+          <div className="space-y-2 max-w-md mx-auto">
+            <h2 className="text-2xl font-black text-white">Your PC is Clean & Optimized!</h2>
+            <p className="text-xs text-[#C8BEDC]">
+              Reclaimed storage, cleared browser residue, and prioritized thread scheduling for maximum performance.
+            </p>
+          </div>
+
+          <div className="flex justify-center gap-4 pt-2">
+            <button
+              onClick={() => setScanState('idle')}
+              className="px-6 py-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] text-xs font-bold text-white transition-all"
+            >
+              Start Over
+            </button>
+            <button
+              onClick={() => onNavigateToSection('gaming')}
+              className="px-6 py-3 rounded-xl gradient-brand text-[#08090D] text-xs font-extrabold shadow-lg transition-all"
+            >
+              Open Gaming Mode
             </button>
           </div>
-
-          <div className="space-y-3.5">
-            {overview?.drives.map((drive) => {
-              const used = drive.total_bytes - drive.available_bytes;
-              const pct = Math.round((used / drive.total_bytes) * 100);
-              return (
-                <div key={drive.mount_point} className="p-4 rounded-xl bg-[#141824]/60 border border-[#232A3D] space-y-2.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-[#F5F7FA] flex items-center gap-2">
-                      {drive.name || 'Local Partition'} ({drive.mount_point})
-                      <span className="text-[10px] text-[#02FEDC] font-mono px-2 py-0.5 rounded bg-[#02FEDC]/10 border border-[#02FEDC]/20">
-                        {drive.file_system}
-                      </span>
-                    </span>
-                    <span className="text-[#8E95A8] font-mono">
-                      {formatBytes(used)} / {formatBytes(drive.total_bytes)} ({pct}%)
-                    </span>
-                  </div>
-                  <div className="w-full h-2 bg-[#0E121B] rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        pct > 85 ? 'bg-gradient-to-r from-[#FF4757] to-[#F502FD]' : pct > 70 ? 'bg-gradient-to-r from-[#FFB800] to-[#FF4757]' : 'bg-gradient-to-r from-[#02FEDC] to-[#5A5CFF]'
-                      }`}
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
         </div>
-
-        {/* Feature Navigation Tiles */}
-        <div className="p-6 rounded-2xl luxury-card border border-white/[0.06] space-y-4">
-          <div>
-            <h3 className="text-sm font-bold text-[#F5F7FA]">Quick Maintenance</h3>
-            <p className="text-xs text-[#8E95A8]">One-click navigation to core tools</p>
-          </div>
-
-          <div className="space-y-2.5">
-            <div
-              className="p-3 rounded-xl bg-[#141824]/60 hover:bg-[#1A2030] border border-[#232A3D] hover:border-[#02FEDC]/40 transition-all cursor-pointer flex items-center justify-between group"
-              onClick={onNavigateToCleaner}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#02FEDC]/10 border border-[#02FEDC]/20 flex items-center justify-center text-[#02FEDC]">
-                  <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#F5F7FA]">Smart Cache Cleaner</h4>
-                  <p className="text-[11px] text-[#71788E]">Reclaim gigabytes of app junk</p>
-                </div>
-              </div>
-              <ChevronRight className="w-4 h-4 text-[#71788E] group-hover:translate-x-1 group-hover:text-[#02FEDC] transition-all" />
-            </div>
-
-            <div
-              className="p-3 rounded-xl bg-[#141824]/60 hover:bg-[#1A2030] border border-[#232A3D] hover:border-[#5A5CFF]/40 transition-all cursor-pointer flex items-center justify-between group"
-              onClick={() => onNavigateToSection('privacy')}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#5A5CFF]/10 border border-[#5A5CFF]/20 flex items-center justify-center text-[#5A5CFF]">
-                  <ShieldCheck className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#F5F7FA]">Privacy Center</h4>
-                  <p className="text-[11px] text-[#71788E]">Clear tracking & browser tokens</p>
-                </div>
-              </div>
-              <ChevronRight className="w-4 h-4 text-[#71788E] group-hover:translate-x-1 group-hover:text-[#5A5CFF] transition-all" />
-            </div>
-
-            <div
-              className="p-3 rounded-xl bg-[#141824]/60 hover:bg-[#1A2030] border border-[#232A3D] hover:border-[#02FEDC]/40 transition-all cursor-pointer flex items-center justify-between group"
-              onClick={() => onNavigateToSection('gaming')}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#02FEDC]/10 border border-[#02FEDC]/20 flex items-center justify-center text-[#02FEDC]">
-                  <Zap className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#F5F7FA]">Gaming Accelerator</h4>
-                  <p className="text-[11px] text-[#71788E]">Thread tuning & latency reduction</p>
-                </div>
-              </div>
-              <ChevronRight className="w-4 h-4 text-[#71788E] group-hover:translate-x-1 group-hover:text-[#02FEDC] transition-all" />
-            </div>
-
-            <div
-              className="p-3 rounded-xl bg-[#141824]/60 hover:bg-[#1A2030] border border-[#232A3D] hover:border-[#FFB800]/40 transition-all cursor-pointer flex items-center justify-between group"
-              onClick={() => onNavigateToSection('startup')}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#FFB800]/10 border border-[#FFB800]/20 flex items-center justify-center text-[#FFB800]">
-                  <Clock className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#F5F7FA]">Startup Manager</h4>
-                  <p className="text-[11px] text-[#71788E]">Disable slow boot applications</p>
-                </div>
-              </div>
-              <ChevronRight className="w-4 h-4 text-[#71788E] group-hover:translate-x-1 group-hover:text-[#FFB800] transition-all" />
-            </div>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

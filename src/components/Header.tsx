@@ -55,36 +55,36 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, metrics, onQuick
     : 0;
 
   return (
-    <header className="h-16 bg-[#090c13]/80 backdrop-blur-xl border-b border-[#1D2230]/70 px-6 flex items-center justify-between select-none z-10 relative">
+    <header className="h-16 bg-[#16082A]/85 backdrop-blur-2xl border-b border-white/[0.08] px-6 flex items-center justify-between select-none z-10 relative">
       <div className="space-y-0.5">
-        <h2 className="text-sm font-bold text-[#F5F7FA] tracking-tight">{sectionMeta.title}</h2>
-        <p className="text-[11px] text-[#868D9F]">{sectionMeta.subtitle}</p>
+        <h2 className="text-sm font-bold text-white tracking-tight">{sectionMeta.title}</h2>
+        <p className="text-[11px] text-[#C8BEDC]">{sectionMeta.subtitle}</p>
       </div>
 
       <div className="flex items-center gap-3.5">
         {/* Real-time Telemetry Capsule */}
         {metrics && (
-          <div className="flex items-center gap-3.5 bg-gradient-to-r from-[#111522] to-[#0e121c] border border-[#232A3D] px-4 py-1.5 rounded-full text-xs shadow-inner">
+          <div className="flex items-center gap-3.5 bg-gradient-to-r from-[#2A1248] to-[#1A0B33] border border-white/[0.1] px-4 py-1.5 rounded-full text-xs shadow-inner">
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#02FEDC] shadow-[0_0_6px_#02FEDC]" />
               <Cpu className="w-3.5 h-3.5 text-[#02FEDC]" />
-              <span className="text-[#868D9F] font-medium text-[11px]">CPU</span>
-              <span className="font-mono text-[#F5F7FA] font-bold text-xs">{Math.round(metrics.cpu_usage_pct)}%</span>
+              <span className="text-[#C8BEDC] font-medium text-[11px]">CPU</span>
+              <span className="font-mono text-white font-bold text-xs">{Math.round(metrics.cpu_usage_pct)}%</span>
             </div>
-            <div className="w-[1px] h-3 bg-[#232A3D]" />
+            <div className="w-[1px] h-3 bg-white/10" />
             <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#5A5CFF] shadow-[0_0_6px_#5A5CFF]" />
-              <HardDrive className="w-3.5 h-3.5 text-[#5A5CFF]" />
-              <span className="text-[#868D9F] font-medium text-[11px]">RAM</span>
-              <span className="font-mono text-[#F5F7FA] font-bold text-xs">{memoryPct}%</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F502FD] shadow-[0_0_6px_#F502FD]" />
+              <HardDrive className="w-3.5 h-3.5 text-[#F502FD]" />
+              <span className="text-[#C8BEDC] font-medium text-[11px]">RAM</span>
+              <span className="font-mono text-white font-bold text-xs">{memoryPct}%</span>
             </div>
           </div>
         )}
 
         {/* Protection Shield Indicator */}
-        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#00E699]/10 border border-[#00E699]/25 text-[11px] font-semibold text-[#00E699] shadow-[0_0_12px_rgba(0,230,153,0.15)]">
+        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#00E699]/15 border border-[#00E699]/30 text-[11px] font-semibold text-[#00E699] shadow-[0_0_12px_rgba(0,230,153,0.2)]">
           <ShieldCheck className="w-3.5 h-3.5 text-[#00E699]" />
-          <span>Shield Active</span>
+          <span>Protection Active</span>
         </div>
 
         {/* Theme Switcher */}

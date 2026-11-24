@@ -4,18 +4,20 @@
 
 @layer base {
   :root {
-    --bg-primary: #08090D;
-    --bg-surface: #0E1119;
-    --bg-card: #11131A;
-    --bg-hover: #171A24;
-    --border-subtle: #1D2230;
-    --border-strong: #2A3246;
-    --text-primary: #F5F7FA;
-    --text-secondary: #969BAA;
-    --text-muted: #656C80;
+    --bg-primary: #120924;
+    --bg-surface: #1E0F38;
+    --bg-card: #271448;
+    --bg-hover: #351C5E;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --text-primary: #FFFFFF;
+    --text-secondary: #C8BEDC;
+    --text-muted: #8E80A8;
     --accent-cyan: #02FEDC;
-    --accent-indigo: #5A5CFF;
+    --accent-indigo: #6E56FF;
     --accent-magenta: #F502FD;
+    --accent-blue: #0088FF;
+    --accent-green: #00E699;
   }
 
   .light {
@@ -40,7 +42,7 @@
   /* Accessible focus rings */
   *:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px #08090D, 0 0 0 4px #02FEDC;
+    box-shadow: 0 0 0 2px #120924, 0 0 0 4px #02FEDC;
   }
 
   /* Custom scrollbars */
@@ -52,58 +54,138 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #232838;
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #323A50;
+    background: rgba(255, 255, 255, 0.28);
   }
 }
 
-/* Glassmorphism and Luxury Acrylic layering */
+/* CleanMyMac & Cosmic Purple Acrylic layering */
+.cleanmymac-bg {
+  background: radial-gradient(circle at 50% 20%, #301458 0%, #1A0B33 45%, #0F051C 100%);
+}
+
 .acrylic-surface {
-  background: rgba(14, 17, 25, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.acrylic-card {
-  background: rgba(17, 19, 26, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.acrylic-card:hover {
-  background: rgba(22, 26, 38, 0.85);
-  border-color: rgba(2, 254, 220, 0.35);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(2, 254, 220, 0.08);
-  transform: translateY(-1.5px);
+  background: rgba(26, 13, 46, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .luxury-glass {
-  background: linear-gradient(135deg, rgba(18, 22, 34, 0.82) 0%, rgba(11, 14, 22, 0.72) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(46, 22, 78, 0.72) 0%, rgba(26, 12, 48, 0.78) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
 .luxury-card {
-  background: linear-gradient(180deg, rgba(19, 23, 35, 0.75) 0%, rgba(13, 16, 24, 0.8) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(180deg, rgba(42, 20, 72, 0.65) 0%, rgba(28, 13, 50, 0.75) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .luxury-card:hover {
-  border-color: rgba(2, 254, 220, 0.3);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(2, 254, 220, 0.1);
+  border-color: rgba(245, 2, 253, 0.35);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(245, 2, 253, 0.18);
   transform: translateY(-2px);
+}
+
+/* 3D Glassmorphic Badge Cards (CleanMyMac X Results Screen) */
+.badge-3d-card {
+  background: linear-gradient(180deg, rgba(48, 24, 82, 0.55) 0%, rgba(24, 11, 45, 0.65) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.badge-3d-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 35px rgba(245, 2, 253, 0.2);
+}
+
+/* CleanMyMac X Circular Pulsing Scan/Run Button */
+.cleanmymac-circle-btn {
+  width: 90px;
+  height: 90px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #F502FD 0%, #A210F5 50%, #5A5CFF 100%);
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 40px rgba(245, 2, 253, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cleanmymac-circle-btn::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 9999px;
+  border: 2px solid rgba(245, 2, 253, 0.4);
+  animation: cleanmymacPulse 2.5s infinite;
+}
+
+.cleanmymac-circle-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 16px 55px rgba(245, 2, 253, 0.75), inset 0 2px 6px rgba(255, 255, 255, 0.6);
+}
+
+.cleanmymac-circle-btn:active {
+  transform: scale(0.96);
+}
+
+@keyframes cleanmymacPulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.18); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* Wiper Animation for 3D Monitor Artwork */
+@keyframes wiperSwipe {
+  0% { transform: rotate(-35deg); }
+  50% { transform: rotate(35deg); }
+  100% { transform: rotate(-35deg); }
+}
+
+.animate-wiper {
+  transform-origin: bottom center;
+  animation: wiperSwipe 3s ease-in-out infinite;
+}
+
+/* Space Lens Celestial Floating Bubbles */
+.space-lens-bubble {
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 35%, rgba(140, 70, 255, 0.85) 0%, rgba(55, 20, 110, 0.9) 70%, rgba(20, 8, 45, 0.95) 100%);
+  border: 1.5px solid rgba(245, 2, 253, 0.35);
+  box-shadow: 0 12px 35px rgba(90, 20, 160, 0.45), inset 0 4px 8px rgba(255, 255, 255, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.space-lens-bubble:hover {
+  transform: scale(1.08);
+  border-color: rgba(2, 254, 220, 0.75);
+  box-shadow: 0 18px 50px rgba(2, 254, 220, 0.35), inset 0 4px 10px rgba(255, 255, 255, 0.4);
 }
 
 /* Brand Gradients */

@@ -59,12 +59,16 @@ export const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex h-screen w-screen bg-[#08090D] text-[#F5F7FA] overflow-hidden select-none font-sans">
+    <div className="flex h-screen w-screen cleanmymac-bg text-white overflow-hidden select-none font-sans relative">
+      {/* Ambient background glows */}
+      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-b from-[#F502FD]/10 via-[#6E56FF]/15 to-transparent blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/3 w-[500px] h-[500px] rounded-full bg-gradient-to-t from-[#02FEDC]/10 via-[#6E56FF]/10 to-transparent blur-[100px] pointer-events-none" />
+
       {/* Sidebar Navigation */}
       <Sidebar currentSection={currentSection} onSelectSection={setCurrentSection} />
 
       {/* Main View Area */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#08090D]">
+      <div className="flex-1 flex flex-col h-full overflow-hidden bg-transparent z-10">
         <Header
           currentSection={currentSection}
           metrics={metrics}

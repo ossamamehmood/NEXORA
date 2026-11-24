@@ -61,18 +61,41 @@
       </div>
 
       <!-- Download Options with 3D Tilt Cards -->
-      <div class="grid-2" style="margin-bottom: 48px;">
+      <div class="grid-3" style="margin-bottom: 48px;">
+        <!-- Portable Standalone Card -->
+        <div class="card tilt-card spotlight-card" style="border-color: rgba(0, 230, 153, 0.4);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <span style="font-size: 11px; font-weight: 700; color: #00E699; text-transform: uppercase; letter-spacing: 0.08em;">
+              Portable &bull; Zero Installation
+            </span>
+            <span style="font-size: 11px; font-family: monospace; color: #969BAA; background: #11131A; padding: 2px 8px; border-radius: 6px;">
+              6.89 MiB
+            </span>
+          </div>
+          <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 8px; color: #F5F7FA;">Portable Package (.zip)</h2>
+          <p style="font-size: 13px; color: #969BAA; margin-bottom: 24px; line-height: 1.6;">
+            Extract and test immediately. No installer wizard, zero administrator privileges, and no system registry modifications.
+          </p>
+          <a href="downloads/NEXORA_1.0.0_Portable_x64.zip" class="btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px; background: linear-gradient(135deg, #00E699 0%, #02FEDC 100%); color: #07090E; border: none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Portable (.zip)
+          </a>
+          <div style="font-size: 11px; color: #656C80; font-family: monospace;">
+            File: <code>NEXORA_1.0.0_Portable_x64.zip</code>
+          </div>
+        </div>
+
         <!-- Consumer Setup Card -->
         <div class="card tilt-card spotlight-card" style="border-color: rgba(2, 254, 220, 0.4);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
             <span style="font-size: 11px; font-weight: 700; color: #02FEDC; text-transform: uppercase; letter-spacing: 0.08em;">
-              Consumer Setup &bull; Recommended
+              Standard Setup &bull; Desktop App
             </span>
             <span style="font-size: 11px; font-family: monospace; color: #969BAA; background: #11131A; padding: 2px 8px; border-radius: 6px;">
               4.72 MiB
             </span>
           </div>
-          <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 8px; color: #F5F7FA;">Windows Setup (.exe)</h2>
+          <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 8px; color: #F5F7FA;">Windows Setup (.exe)</h2>
           <p style="font-size: 13px; color: #969BAA; margin-bottom: 24px; line-height: 1.6;">
             Single-click desktop installer with Start Menu integration, Desktop shortcut, and registered Windows uninstaller.
           </p>
@@ -95,7 +118,7 @@
               7.12 MiB
             </span>
           </div>
-          <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 8px; color: #F5F7FA;">Windows Installer (.msi)</h2>
+          <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 8px; color: #F5F7FA;">Windows Installer (.msi)</h2>
           <p style="font-size: 13px; color: #969BAA; margin-bottom: 24px; line-height: 1.6;">
             Standard MSI database compiled with WiX Toolset for automated enterprise rollouts, Microsoft Intune, and Active Directory GPO.
           </p>
@@ -123,7 +146,17 @@
 
         <div style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
-            <span><strong>NEXORA_1.0.0_x64-setup.exe</strong> (Consumer):</span>
+            <span><strong>NEXORA_1.0.0_Portable_x64.zip</strong> (Portable Standalone):</span>
+          </div>
+          <div class="code-box">
+            <span>44122799DEC316E012095B1921E1065FAAF66D4DD316540D41855C59ED4532BC</span>
+            <button class="btn-copy" data-copy-hash="44122799DEC316E012095B1921E1065FAAF66D4DD316540D41855C59ED4532BC">Copy Hash</button>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+            <span><strong>NEXORA_1.0.0_x64-setup.exe</strong> (Consumer Setup):</span>
           </div>
           <div class="code-box">
             <span>2BC3B91F3BEF76589AA0976CB1852A91839F4261C110A96006C9ACCFB8088811</span>
@@ -133,7 +166,7 @@
 
         <div style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
-            <span><strong>NEXORA_1.0.0_x64_en-US.msi</strong> (Enterprise):</span>
+            <span><strong>NEXORA_1.0.0_x64_en-US.msi</strong> (Enterprise MSI):</span>
           </div>
           <div class="code-box">
             <span>2622BC8FB24FA03880EED2446B7B565C48CAB10F928C5D3B8D26B71ADBDB1ADC</span>
@@ -143,7 +176,7 @@
 
         <div style="background: #040507; border: 1px solid var(--border-subtle); padding: 14px; border-radius: 10px; font-size: 12px; color: #969BAA;">
           <strong>PowerShell Verification Command:</strong>
-          <pre style="margin-top: 6px; color: #02FEDC; font-family: monospace;">Get-FileHash -Path .\NEXORA_1.0.0_x64-setup.exe -Algorithm SHA256</pre>
+          <pre style="margin-top: 6px; color: #02FEDC; font-family: monospace;">Get-FileHash -Path .\NEXORA_1.0.0_Portable_x64.zip -Algorithm SHA256</pre>
         </div>
       </div>
 
@@ -182,25 +215,31 @@
       <div class="card spotlight-card" style="margin-bottom: 48px;">
         <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 18px; color: #F5F7FA;">Deployment & Administration Manual</h3>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
           <div>
-            <h4 style="font-size: 14px; font-weight: 700; color: #02FEDC; margin-bottom: 8px;">1. Standard Interactive Setup</h4>
+            <h4 style="font-size: 14px; font-weight: 700; color: #00E699; margin-bottom: 8px;">1. Instant Portable Run</h4>
             <p style="font-size: 13px; color: #969BAA; line-height: 1.6;">
-              Run <code>NEXORA_1.0.0_x64-setup.exe</code>. The branded wizard configures desktop shortcuts and Start Menu entries cleanly.
+              Extract <code>NEXORA_1.0.0_Portable_x64.zip</code> and run <code>NEXORA.exe</code>. Test all features with zero installation or system modifications.
             </p>
           </div>
           <div>
-            <h4 style="font-size: 14px; font-weight: 700; color: #5A5CFF; margin-bottom: 8px;">2. Silent Unattended CLI</h4>
+            <h4 style="font-size: 14px; font-weight: 700; color: #02FEDC; margin-bottom: 8px;">2. Standard Interactive Setup</h4>
             <p style="font-size: 13px; color: #969BAA; line-height: 1.6;">
-              For scripts, MDM, or automated deployment:
+              Run <code>NEXORA_1.0.0_x64-setup.exe</code>. Configures desktop shortcuts, Start Menu entries, and uninstaller.
+            </p>
+          </div>
+          <div>
+            <h4 style="font-size: 14px; font-weight: 700; color: #5A5CFF; margin-bottom: 8px;">3. Silent Unattended CLI</h4>
+            <p style="font-size: 13px; color: #969BAA; line-height: 1.6;">
+              For automated deployment:
               <br><code style="color: #02FEDC; font-size: 12px;">.\NEXORA_1.0.0_x64-setup.exe /S</code>
               <br><code style="color: #5A5CFF; font-size: 12px;">msiexec /i NEXORA_1.0.0_x64_en-US.msi /qn</code>
             </p>
           </div>
           <div>
-            <h4 style="font-size: 14px; font-weight: 700; color: #00E699; margin-bottom: 8px;">3. Complete Uninstallation</h4>
+            <h4 style="font-size: 14px; font-weight: 700; color: #F502FD; margin-bottom: 8px;">4. Clean Removal</h4>
             <p style="font-size: 13px; color: #969BAA; line-height: 1.6;">
-              Uninstall cleanly via Windows Settings &rarr; Apps &rarr; Installed Apps &rarr; NEXORA. Unlinks all application binaries without leaving lingering registry artifacts.
+              For Portable, simply delete the folder. For Setup, uninstall via Windows Settings &rarr; Installed Apps &rarr; NEXORA.
             </p>
           </div>
         </div>

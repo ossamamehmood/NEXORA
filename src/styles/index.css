@@ -157,6 +157,17 @@
 }
 
 /* Wiper Animation for 3D Monitor Artwork */
+@keyframes wiperKinematic {
+  0% { transform: rotate(-36deg); }
+  50% { transform: rotate(36deg); }
+  100% { transform: rotate(-36deg); }
+}
+
+.animate-wiper-sweep {
+  transform-origin: top center;
+  animation: wiperKinematic 3.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
 @keyframes wiperSwipe {
   0% { transform: rotate(-35deg); }
   50% { transform: rotate(35deg); }

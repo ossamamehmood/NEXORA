@@ -80,8 +80,15 @@ const navCategories: NavCategory[] = [
 export const Sidebar: React.FC<SidebarProps> = ({ currentSection, onSelectSection }) => {
   return (
     <aside className="w-64 bg-gradient-to-b from-[#180A2E] via-[#120624] to-[#0B0418] border-r border-white/[0.08] flex flex-col h-full select-none shadow-2xl relative z-20">
+      {/* Window Controls (CleanMyMac X Traffic Lights) */}
+      <div className="flex items-center gap-2 px-5 pt-4 pb-2">
+        <span className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] shadow-sm hover:opacity-80 cursor-pointer" title="Close" />
+        <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123] shadow-sm hover:opacity-80 cursor-pointer" title="Minimize" />
+        <span className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29] shadow-sm hover:opacity-80 cursor-pointer" title="Expand" />
+      </div>
+
       {/* Brand Header */}
-      <div className="p-5 flex items-center gap-3 border-b border-white/[0.08] bg-white/[0.02]">
+      <div className="px-5 py-3 flex items-center gap-3 border-b border-white/[0.08] bg-white/[0.02]">
         <div className="relative group">
           <div className="w-10 h-10 rounded-xl gradient-brand flex items-center justify-center p-0.5 shadow-lg shadow-[#F502FD]/20 transition-transform group-hover:scale-105">
             <div className="w-full h-full bg-[#1A0B33] rounded-[10px] flex items-center justify-center">

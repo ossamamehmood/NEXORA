@@ -21,6 +21,10 @@ import {
 } from 'lucide-react';
 import { RealtimeMetrics, SystemOverview } from '../../types';
 import { NexoraApi } from '../../services/api';
+import { EmblemBlueDrive } from '../../components/emblems/EmblemBlueDrive';
+import { EmblemGreenShield } from '../../components/emblems/EmblemGreenShield';
+import { EmblemSpeedometer } from '../../components/emblems/EmblemSpeedometer';
+import { Emblem3DMonitor } from '../../components/emblems/Emblem3DMonitor';
 
 interface OverviewViewProps {
   overview: SystemOverview | null;
@@ -206,40 +210,13 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           </div>
 
           {/* CleanMyMac X Hero Centerpiece: 3D Monitor Artwork + Pulse Scan Button */}
-          <div className="relative rounded-3xl luxury-glass p-10 overflow-hidden shadow-2xl border border-white/[0.12] text-center flex flex-col items-center justify-center min-h-[440px]">
+          <div className="relative rounded-3xl luxury-glass p-8 md:p-12 overflow-hidden shadow-2xl border border-white/[0.12] text-center flex flex-col items-center justify-center min-h-[480px]">
             {/* Radiant Ambient Orb Lights */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-[#F502FD]/20 via-[#6E56FF]/25 to-[#02FEDC]/15 blur-3xl pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-gradient-to-tr from-[#F502FD]/20 via-[#6E56FF]/25 to-[#02FEDC]/15 blur-3xl pointer-events-none" />
 
-            {/* Central 3D Computer Artwork with Wiper & Holographic Glow (Image 4 & Image 6) */}
-            <div className="relative mb-6 group cursor-pointer" onClick={handleStartScan}>
-              {/* Outer Pulsing Aura Ring */}
-              <div className="absolute -inset-6 rounded-full border-2 border-[#F502FD]/30 animate-pulse-glow pointer-events-none" />
-              <div className="absolute -inset-12 rounded-full border border-[#02FEDC]/20 pointer-events-none" />
-
-              {/* 3D Device Screen Container */}
-              <div className="relative w-44 h-32 rounded-2xl bg-gradient-to-b from-[#3D1A6A] via-[#240F44] to-[#120726] border-2 border-white/20 shadow-2xl p-2.5 flex flex-col justify-between overflow-hidden">
-                {/* Screen Gloss Reflection */}
-                <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
-                
-                {/* Top Camera Notch */}
-                <div className="w-2 h-2 rounded-full bg-white/40 mx-auto" />
-
-                {/* Animated Wiper Blade (Image 4) */}
-                <div className="relative w-full h-16 flex items-center justify-center">
-                  <div className="w-28 h-1 bg-gradient-to-r from-transparent via-[#02FEDC] to-white rounded-full shadow-[0_0_12px_#02FEDC] animate-wiper" />
-                  <Sparkles className="absolute right-6 top-2 w-5 h-5 text-[#F502FD] animate-bounce" />
-                </div>
-
-                {/* Screen Bottom Bar */}
-                <div className="flex items-center justify-between text-[9px] font-mono text-[#02FEDC] px-1">
-                  <span>PC HEALTH</span>
-                  <span className="text-[#00E699] font-bold">READY</span>
-                </div>
-              </div>
-
-              {/* Laptop / Monitor Base Stand */}
-              <div className="w-16 h-3 mx-auto bg-gradient-to-b from-[#4A2080] to-[#1E0938] rounded-b-md border-x border-b border-white/20 shadow-md" />
-              <div className="w-28 h-1.5 mx-auto bg-gradient-to-r from-[#2A104E] via-[#522391] to-[#2A104E] rounded-full shadow-lg mt-0.5" />
+            {/* Bespoke 3D Hardware Display with Animated Wiper Blade */}
+            <div className="mb-6 z-10">
+              <Emblem3DMonitor onClick={handleStartScan} />
             </div>
 
             {/* Headline and Subtext */}
@@ -252,7 +229,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               </p>
             </div>
 
-            {/* Glowing Circular Scan Button (Image 4) */}
+            {/* Glowing Circular Scan Button (CleanMyMac X Signature) */}
             <div className="z-10 flex flex-col items-center gap-3">
               <button
                 onClick={handleStartScan}
@@ -339,102 +316,114 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             </span>
           </div>
 
-          {/* Center Scan Area: Left Checklist + Right Radial Percentage Gauge */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center py-6">
-            {/* Left Checklist (Image 1 - Advanced SystemCare) */}
-            <div className="space-y-3.5 pr-4 border-r border-white/[0.06]">
-              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-                <span className="text-[#C8BEDC]">Startup items</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-white font-mono font-bold text-[11px]">
-                  {startupItemsCount}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-                <span className="text-[#C8BEDC]">Privacy traces</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-[#5A5CFF]/20 text-[#5A5CFF] border border-[#5A5CFF]/30 font-mono font-bold text-[11px]">
-                  {privacyTracesCount}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-                <span className="text-[#C8BEDC]">Junk files</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-[#F502FD]/20 text-[#F502FD] border border-[#F502FD]/30 font-mono font-bold text-[11px]">
-                  {formatBytes(junkBytesScanned)}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-                <span className="text-[#C8BEDC]">Invalid shortcuts & registry cache</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-white font-mono font-bold text-[11px]">
-                  37
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-                <span className="text-[#C8BEDC]">System & latency bottlenecks</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-[#FFB800]/20 text-[#FFB800] border border-[#FFB800]/30 font-mono font-bold text-[11px]">
-                  4
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-                <span className="text-[#C8BEDC]">Gaming performance headroom</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-[#00E699]/20 text-[#00E699] border border-[#00E699]/30 font-mono font-bold text-[11px]">
-                  {speedTasksCount} Targets
-                </span>
-              </div>
+          {/* Center Scan Area: Left Checklist + Right Radial Percentage Gauge (Advanced SystemCare Style) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center py-6">
+            {/* Left Checklist (Advanced SystemCare HUD) */}
+            <div className="space-y-3 pr-4 border-r border-white/[0.08]">
+              {[
+                { label: 'Startup items', count: startupItemsCount, color: '#FFFFFF', done: scanProgress > 15 },
+                { label: 'Privacy traces', count: privacyTracesCount, color: '#5A5CFF', done: scanProgress > 35 },
+                { label: 'Junk files', count: formatBytes(junkBytesScanned), color: '#F502FD', done: scanProgress > 55 },
+                { label: 'Invalid shortcuts & cache', count: '37', color: '#02FEDC', done: scanProgress > 70 },
+                { label: 'System & latency bottlenecks', count: '4', color: '#FFB800', done: scanProgress > 85 },
+                { label: 'Gaming performance headroom', count: `${speedTasksCount} Targets`, color: '#00E699', done: scanProgress >= 100 },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`flex items-center justify-between text-xs px-3.5 py-2.5 rounded-xl transition-all ${
+                    item.done
+                      ? 'bg-white/[0.04] border border-white/[0.08]'
+                      : 'bg-white/[0.01] border border-white/[0.03] opacity-60'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    {item.done ? (
+                      <span className="w-2 h-2 rounded-full bg-[#00E699] shadow-[0_0_8px_#00E699]" />
+                    ) : (
+                      <span className="w-2 h-2 rounded-full border border-white/30 animate-spin" />
+                    )}
+                    <span className="text-[#F5F7FA] font-medium">{item.label}</span>
+                  </div>
+                  <span
+                    className="px-2.5 py-0.5 rounded-full font-mono font-bold text-[11px] border"
+                    style={{
+                      backgroundColor: `${item.color}15`,
+                      color: item.color,
+                      borderColor: `${item.color}35`,
+                    }}
+                  >
+                    {item.count}
+                  </span>
+                </div>
+              ))}
             </div>
 
-            {/* Right Side: Glowing Neon Percentage Ring (Image 1) */}
-            <div className="flex flex-col items-center justify-center text-center space-y-4">
-              <div className="relative w-48 h-48 flex items-center justify-center">
-                {/* Background Ring */}
-                <svg className="w-full h-full transform -rotate-90">
+            {/* Right Side: Advanced SystemCare Glowing Circular Gauge */}
+            <div className="flex flex-col items-center justify-center text-center space-y-5">
+              <div className="relative w-56 h-56 flex items-center justify-center">
+                {/* Ambient Radial Backlight */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#02FEDC]/20 via-[#1B6DFB]/30 to-[#F502FD]/25 blur-2xl pointer-events-none" />
+
+                {/* SVG Radial Meter */}
+                <svg className="w-full h-full transform -rotate-90 overflow-visible">
+                  {/* Outer Faint Guide Track */}
                   <circle
-                    cx="96"
-                    cy="96"
-                    r="80"
+                    cx="112"
+                    cy="112"
+                    r="92"
                     stroke="rgba(255, 255, 255, 0.08)"
-                    strokeWidth="10"
+                    strokeWidth="12"
                     fill="transparent"
                   />
+                  {/* Glowing Progress Arc */}
                   <circle
-                    cx="96"
-                    cy="96"
-                    r="80"
-                    stroke="url(#scanGrad)"
-                    strokeWidth="10"
-                    strokeDasharray="502"
-                    strokeDashoffset={502 - (502 * scanProgress) / 100}
+                    cx="112"
+                    cy="112"
+                    r="92"
+                    stroke="url(#ascNeonGrad)"
+                    strokeWidth="12"
+                    strokeDasharray="578"
+                    strokeDashoffset={578 - (578 * scanProgress) / 100}
                     strokeLinecap="round"
                     fill="transparent"
+                    style={{
+                      filter: 'drop-shadow(0 0 12px rgba(2, 254, 220, 0.6))',
+                    }}
                     className="transition-all duration-200 ease-out"
                   />
                   <defs>
-                    <linearGradient id="scanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient id="ascNeonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#02FEDC" />
-                      <stop offset="50%" stopColor="#6E56FF" />
+                      <stop offset="40%" stopColor="#1B6DFB" />
+                      <stop offset="70%" stopColor="#8A2BE2" />
                       <stop offset="100%" stopColor="#F502FD" />
                     </linearGradient>
                   </defs>
                 </svg>
 
-                {/* Inner Percentage Display */}
+                {/* Center Percentage HUD Display */}
                 <div className="absolute flex flex-col items-center justify-center">
-                  <span className="text-4xl font-black text-white font-mono tracking-tight">
-                    {scanProgress}<span className="text-lg text-[#02FEDC]">%</span>
+                  <div className="flex items-baseline">
+                    <span className="text-5xl font-black text-white font-mono tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
+                      {scanProgress}
+                    </span>
+                    <span className="text-xl font-bold text-[#02FEDC] ml-0.5">%</span>
+                  </div>
+                  <span className="text-[10px] text-[#02FEDC] uppercase tracking-widest font-mono font-bold mt-1 bg-[#02FEDC]/10 px-2 py-0.5 rounded-full border border-[#02FEDC]/30">
+                    SCANNING
                   </span>
-                  <span className="text-[10px] text-[#C8BEDC] uppercase tracking-widest mt-1">Analyzing</span>
                 </div>
               </div>
 
-              {/* Live Streaming File Path */}
-              <div className="w-full max-w-sm space-y-1">
-                <p className="text-xs font-bold text-white">Scanning file entries & caches</p>
-                <p className="text-[11px] font-mono text-[#02FEDC] truncate px-3 py-1.5 rounded-lg bg-black/40 border border-white/[0.08]">
-                  {mockScanPaths[currentPathIndex]}
-                </p>
+              {/* Streaming Monospace File Path Capsule */}
+              <div className="w-full max-w-sm space-y-1.5">
+                <p className="text-xs font-bold text-white tracking-wide">Scanning system entries & caches</p>
+                <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-black/60 border border-white/[0.1] shadow-inner">
+                  <span className="w-2 h-2 rounded-full bg-[#02FEDC] animate-ping" />
+                  <p className="text-[11px] font-mono text-[#02FEDC] truncate text-left">
+                    {mockScanPaths[currentPathIndex]}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -484,111 +473,111 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             </p>
           </div>
 
-          {/* Three Iconic 3D Cards in a row (Image 2 - CleanMyMac X) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {/* Card 1: Cleanup (Blue Disk) */}
-            <div className="badge-3d-card p-6 rounded-2xl flex flex-col items-center text-center space-y-4">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#0088FF] to-[#02FEDC] p-0.5 shadow-xl shadow-[#0088FF]/30 flex items-center justify-center">
-                <div className="w-full h-full bg-[#1A0B33] rounded-[14px] flex items-center justify-center">
-                  <HardDrive className="w-9 h-9 text-[#0088FF]" />
-                </div>
+          {/* Three Iconic 3D Cards in a row (CleanMyMac X Signature) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto py-4">
+            {/* Card 1: Cleanup (3D Blue Metallic Drive) */}
+            <div className="badge-3d-card p-7 rounded-3xl flex flex-col items-center text-center space-y-4 relative overflow-hidden group">
+              <div className="my-2">
+                <EmblemBlueDrive size={115} />
               </div>
 
               <div className="space-y-1">
-                <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#00E699]">
-                  <Check className="w-4 h-4" />
+                <div className="inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-[#0088FF]/15 border border-[#0088FF]/30 text-xs font-bold text-[#4FA8FF]">
+                  <Check className="w-3.5 h-3.5 text-[#00E699]" />
                   <span>Cleanup</span>
                 </div>
-                <p className="text-[11px] text-[#8E80A8]">Removes unneeded junk</p>
+                <p className="text-xs text-[#8E80A8] pt-1">Removes unneeded junk</p>
               </div>
 
-              <div className="text-2xl font-black text-white font-mono">
+              <div className="text-3xl font-black text-white font-mono tracking-tight">
                 {formatBytes(junkBytesScanned)}
               </div>
 
               <button
                 onClick={onNavigateToCleaner}
-                className="text-xs text-[#02FEDC] hover:underline font-semibold"
+                className="text-xs text-[#02FEDC] hover:text-white transition-colors font-semibold tracking-wide"
               >
                 Review Details...
               </button>
             </div>
 
-            {/* Card 2: Protection (Green Shield with Biometric Fingerprint) */}
-            <div className="badge-3d-card p-6 rounded-2xl flex flex-col items-center text-center space-y-4">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#00E699] to-[#02FEDC] p-0.5 shadow-xl shadow-[#00E699]/30 flex items-center justify-center">
-                <div className="w-full h-full bg-[#1A0B33] rounded-[14px] flex items-center justify-center">
-                  <ShieldCheck className="w-9 h-9 text-[#00E699]" />
-                </div>
+            {/* Card 2: Protection (3D Emerald Biometric Shield) */}
+            <div className="badge-3d-card p-7 rounded-3xl flex flex-col items-center text-center space-y-4 relative overflow-hidden group">
+              <div className="my-2">
+                <EmblemGreenShield size={115} />
               </div>
 
               <div className="space-y-1">
-                <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#00E699]">
-                  <Check className="w-4 h-4" />
+                <div className="inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-[#00E699]/15 border border-[#00E699]/30 text-xs font-bold text-[#00E699]">
+                  <Check className="w-3.5 h-3.5 text-[#00E699]" />
                   <span>Protection</span>
                 </div>
-                <p className="text-[11px] text-[#8E80A8]">Neutralizes privacy traces</p>
+                <p className="text-xs text-[#8E80A8] pt-1">Neutralizes potential threats</p>
               </div>
 
-              <div className="text-2xl font-black text-[#00E699] font-mono">
+              <div className="text-3xl font-black text-[#00E699] font-mono tracking-tight">
                 OK
               </div>
 
               <button
                 onClick={() => onNavigateToSection('privacy')}
-                className="text-xs text-[#02FEDC] hover:underline font-semibold"
+                className="text-xs text-[#02FEDC] hover:text-white transition-colors font-semibold tracking-wide"
               >
-                No threats found &bull; Review
+                No threats found
               </button>
             </div>
 
-            {/* Card 3: Speed (Pink Speedometer Tachometer) */}
-            <div className="badge-3d-card p-6 rounded-2xl flex flex-col items-center text-center space-y-4">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#F502FD] to-[#FF4757] p-0.5 shadow-xl shadow-[#F502FD]/30 flex items-center justify-center">
-                <div className="w-full h-full bg-[#1A0B33] rounded-[14px] flex items-center justify-center">
-                  <Gauge className="w-9 h-9 text-[#F502FD]" />
-                </div>
+            {/* Card 3: Speed (3D Ruby Tachometer / Speedometer) */}
+            <div className="badge-3d-card p-7 rounded-3xl flex flex-col items-center text-center space-y-4 relative overflow-hidden group">
+              <div className="my-2">
+                <EmblemSpeedometer size={115} />
               </div>
 
               <div className="space-y-1">
-                <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#00E699]">
-                  <Check className="w-4 h-4" />
+                <div className="inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-[#FF3366]/15 border border-[#FF3366]/30 text-xs font-bold text-[#FF6B8B]">
+                  <Check className="w-3.5 h-3.5 text-[#00E699]" />
                   <span>Speed</span>
                 </div>
-                <p className="text-[11px] text-[#8E80A8]">Increases system & gaming performance</p>
+                <p className="text-xs text-[#8E80A8] pt-1">Increases system performance</p>
               </div>
 
-              <div className="text-2xl font-black text-white font-mono">
+              <div className="text-3xl font-black text-white font-mono tracking-tight">
                 {speedTasksCount}
               </div>
 
               <button
                 onClick={() => onNavigateToSection('gaming')}
-                className="text-xs text-[#02FEDC] hover:underline font-semibold"
+                className="text-xs text-[#02FEDC] hover:text-white transition-colors font-semibold tracking-wide"
               >
-                {speedTasksCount} tasks to run &bull; Review
+                {speedTasksCount} tasks to run
               </button>
             </div>
           </div>
 
-          {/* Iconic Circular "Run" Button (Image 2) */}
-          <div className="pt-4 flex flex-col items-center gap-3">
+          {/* Iconic Circular "Run" Button (CleanMyMac X Signature) */}
+          <div className="pt-6 flex flex-col items-center gap-3">
             <button
               onClick={handleRunAll}
               disabled={isExecutingRun}
-              className="cleanmymac-circle-btn"
+              className="cleanmymac-circle-btn group"
               style={{
-                background: 'linear-gradient(135deg, #0088FF 0%, #5A5CFF 50%, #F502FD 100%)',
+                width: '96px',
+                height: '96px',
+                background: 'linear-gradient(135deg, #1B6DFB 0%, #A210F5 50%, #F502FD 100%)',
               }}
               aria-label="Run Cleanup and Optimization"
             >
-              {isExecutingRun ? (
-                <RotateCcw className="w-7 h-7 text-white animate-spin" />
-              ) : (
-                <span className="text-lg">Run</span>
-              )}
+              <div className="flex flex-col items-center justify-center">
+                {isExecutingRun ? (
+                  <RotateCcw className="w-7 h-7 text-white animate-spin" />
+                ) : (
+                  <span className="text-lg font-black tracking-wider group-hover:scale-110 transition-transform">Run</span>
+                )}
+              </div>
             </button>
-            <span className="text-xs text-[#C8BEDC]">Click to execute all recommended optimizations</span>
+            <span className="text-xs text-[#C8BEDC] font-medium tracking-wide">
+              {isExecutingRun ? 'Executing optimizations...' : 'Click to execute all recommended optimizations'}
+            </span>
           </div>
         </div>
       )}

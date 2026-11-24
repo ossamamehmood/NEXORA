@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/dev/crates/tauri-cli/schema.json",
   "productName": "NEXORA",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "identifier": "app.nexora.desktop",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "NEXORA (Release Candidate v1.0.0-rc.1)",
+        "title": "NEXORA — Next-Gen Windows Performance & Care",
         "width": 1280,
         "height": 840,
         "minWidth": 1024,
@@ -44,7 +44,7 @@
         "headerImage": "icons/nsis-header.bmp",
         "sidebarImage": "icons/nsis-sidebar.bmp",
         "installerIcon": "icons/icon.ico",
-        "installMode": "both",
+        "installMode": "currentUser",
         "displayLanguageSelector": false
       },
       "wix": {

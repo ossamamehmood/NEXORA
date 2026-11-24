@@ -96,7 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentSection, onSelectSectio
               NEX<span className="text-gradient">ORA</span>
             </h1>
             <span className="px-1.5 py-0.5 rounded text-[8px] font-black tracking-widest uppercase bg-[#02FEDC]/15 text-[#02FEDC] border border-[#02FEDC]/30 shadow-[0_0_10px_rgba(2,254,220,0.2)]">
-              v1.0.0
+              v1.0.1
             </span>
           </div>
           <p className="text-[10px] tracking-wider text-[#C8BEDC] uppercase font-medium truncate">System Under Control</p>
